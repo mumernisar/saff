@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:saff_app/features/alarms/views/reliability_view.dart';
 import 'package:saff_app/features/chat/views/chat_view.dart';
 import 'package:saff_app/features/learn/views/learn_view.dart';
 import 'package:saff_app/features/settings/views/settings_view.dart';
@@ -23,6 +24,12 @@ GoRouter buildRouter() => GoRouter(
                 GoRoute(
                   path: 'settings',
                   builder: (context, state) => const SettingsView(),
+                  routes: [
+                    GoRoute(
+                      path: 'alarm',
+                      builder: (context, state) => const ReliabilityView(),
+                    ),
+                  ],
                 ),
               ],
             ),

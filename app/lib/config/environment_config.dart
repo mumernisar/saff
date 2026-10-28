@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart' show appFlavor;
 import 'package:saff_domain/saff_domain.dart';
 
 /// Which build the app is (`docs/REPOSITORY.md` §1, `docs/DEV_RELAXATIONS.md`).
@@ -47,6 +48,12 @@ final class EnvironmentConfig {
         ),
         demoTiming: const bool.fromEnvironment('DEMO_TIMING'),
       );
+
+  /// Reads the flavor Flutter was built with (`--flavor`), for entrypoints
+  /// that don't know it statically, such as the wake engine.
+  factory EnvironmentConfig.fromBuildFlavor() => EnvironmentConfig.fromDefines(
+    appFlavor == 'prod' ? Flavor.prod : Flavor.dev,
+  );
 
   /// Applies the flavor rules to raw values.
   factory EnvironmentConfig.resolve({

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:saff_app/features/today/view_models/emulator_status_view_model.dart';
 import 'package:saff_app/l10n/app_localizations.dart';
 
@@ -14,7 +15,16 @@ class TodayView extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final status = ref.watch(emulatorStatusProvider);
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.tabToday)),
+      appBar: AppBar(
+        title: Text(l10n.tabToday),
+        actions: [
+          IconButton(
+            key: const ValueKey('open-settings'),
+            icon: const Icon(Icons.settings),
+            onPressed: () => context.go('/today/settings'),
+          ),
+        ],
+      ),
       body: Center(
         child: status.when(
           loading: () => const CircularProgressIndicator(),

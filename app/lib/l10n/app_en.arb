@@ -87,5 +87,22 @@
   "errorSkipTooLate": "Skips need 8 hours' notice. This morning is too close.",
   "errorStorageFull": "Your phone is out of space.",
   "errorUnauthenticated": "Sign in to continue.",
-  "errorUnknown": "Something went wrong. Try again in a moment."
+  "errorUnknown": "Something went wrong. Try again in a moment.",
+  "ringingNoAlarm": "Alarm",
+  "ringingStarted": "Round started",
+  "holdToStart": "Hold to start",
+  "snooze": "Snooze 5 min",
+  "alarmSetupTitle": "Alarm reliability",
+  "alarmTestIn10": "Test alarm in 10 seconds",
+  "alarmTestScheduled": "Lock your phone. It will ring in 10 seconds.",
+  "alarmRingNow": "Ring now",
+  "alarmForceFallback": "Force native fallback (next ring)",
+  "alarmClearFallback": "Clear fallback flag",
+  "alarmRingLog": "Ring log",
+  "alarmReadinessExact": "Alarms & reminders",
+  "alarmReadinessFullScreen": "Full-screen alerts",
+  "alarmReadinessNotifications": "Notifications",
+  "alarmReadinessBattery": "Battery optimisation off",
+  "alarmOk": "OK",
+  "alarmFix": "Fix"
 }

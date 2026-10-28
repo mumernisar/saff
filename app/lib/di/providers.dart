@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:saff_app/config/environment_config.dart';
 import 'package:saff_app/data/errors/failure_mapper_factory.dart';
+import 'package:saff_app/data/repositories/alarm_repository.dart';
 import 'package:saff_app/data/repositories/emulator_status_repository.dart';
+import 'package:saff_app/data/services/alarm_service.dart';
 import 'package:saff_app/data/services/crash_reporter.dart';
 import 'package:saff_app/data/services/emulator_probe_service.dart';
 import 'package:saff_core/saff_core.dart';
@@ -19,6 +21,17 @@ final crashReporterProvider = Provider<CrashReporter>(
 /// The shared exception-to-failure mapper chain.
 final failureMapperProvider = Provider<FailureMapper>(
   (ref) => buildFailureMapper(),
+);
+
+/// The native alarm module.
+final alarmServiceProvider = Provider<AlarmService>((ref) => AlarmService());
+
+/// Native alarm state.
+final alarmRepositoryProvider = Provider<AlarmRepository>(
+  (ref) => AlarmRepositoryImpl(
+    ref.watch(alarmServiceProvider),
+    ref.watch(failureMapperProvider),
+  ),
 );
 
 /// Probes emulator ports.

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:saff_app/features/settings/view_models/crash_test_view_model.dart';
 import 'package:saff_app/l10n/app_localizations.dart';
 
@@ -16,6 +17,11 @@ class SettingsView extends ConsumerWidget {
       appBar: AppBar(title: Text(l10n.settingsTitle)),
       body: ListView(
         children: [
+          ListTile(
+            leading: const Icon(Icons.alarm),
+            title: Text(l10n.alarmSetupTitle),
+            onTap: () => context.go('/today/settings/alarm'),
+          ),
           if (crash.available)
             ListTile(
               key: const ValueKey('trigger-test-crash'),
