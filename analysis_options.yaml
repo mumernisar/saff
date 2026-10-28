@@ -6,6 +6,7 @@ analyzer:
     - "**/*.freezed.dart"
     - "**/*.drift.dart"
     - "**/*.pigeon.dart"
+    - "app/lib/l10n/app_localizations*.dart"
 
 linter:
   rules:

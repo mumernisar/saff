@@ -15,8 +15,6 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "app.saff.saff_app"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
@@ -27,6 +25,20 @@ android {
         // flag during build.
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+    }
+
+    flavorDimensions += "env"
+    productFlavors {
+        create("dev") {
+            dimension = "env"
+            applicationId = "app.saff.dev"
+            resValue("string", "app_name", "Saff Dev")
+        }
+        create("prod") {
+            dimension = "env"
+            applicationId = "app.saff"
+            resValue("string", "app_name", "Saff")
+        }
     }
 
     buildTypes {

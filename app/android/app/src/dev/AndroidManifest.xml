@@ -1,0 +1,6 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Dev only (docs/DEV_RELAXATIONS.md R-4): cleartext to the laptop's emulators. -->
+    <application
+        android:networkSecurityConfig="@xml/network_security_config"
+        />
+</manifest>
