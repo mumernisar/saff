@@ -1,0 +1,14 @@
+name: saff_core
+description: Result, AppFailure hierarchy, Log, Clock and helpers. Pure Dart.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ^3.13.7
+resolution: workspace
+
+dependencies:
+
+dev_dependencies:
+  test: ^1.25.6
+  very_good_analysis: ^10.0.0

@@ -13,3 +13,10 @@ functions/.secret.local
 
 # Session handoff note (read then delete)
 NEXT_AGENT.md
+
+# Dart / Flutter / Gradle build output
+.dart_tool/
+build/
+.gradle/
+local.properties
+.flutter-plugins-dependencies

@@ -1,0 +1,38 @@
+name: saff_workspace
+description: Saff workspace root. Holds the pub workspace and Melos scripts; contains no code.
+publish_to: none
+
+environment:
+  sdk: ^3.13.7
+
+workspace:
+  - app
+  - packages/saff_core
+  - packages/saff_domain
+  - packages/saff_ui
+  - packages/saff_alarm
+  - packages/saff_modes
+  - packages/mode_card_duel
+  - packages/mode_word
+  - packages/mode_arcade
+  - packages/mode_selfie
+
+dev_dependencies:
+  melos: ^8.10.0
+
+melos:
+  scripts:
+    format:
+      description: Format all Dart code.
+      run: dart format .
+    format:check:
+      description: Fail if any Dart file is unformatted.
+      run: dart format --output=none --set-exit-if-changed .
+    analyze:
+      description: Analyzer on every package.
+      run: dart analyze --fatal-infos
+    test:
+      description: Unit and widget tests in every package that has them.
+      exec: flutter test
+      packageFilters:
+        dirExists: test

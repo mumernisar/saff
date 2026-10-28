@@ -1,0 +1,15 @@
+name: saff_domain
+description: Domain models and generated constants. Pure Dart.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ^3.13.7
+resolution: workspace
+
+dependencies:
+  saff_core: any
+
+dev_dependencies:
+  test: ^1.25.6
+  very_good_analysis: ^10.0.0

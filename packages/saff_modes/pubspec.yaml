@@ -1,0 +1,21 @@
+name: saff_modes
+description: GameMode contract, mode registry and shared mode chrome.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ^3.13.7
+  flutter: ">=3.3.0"
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  saff_core: any
+  saff_domain: any
+  saff_ui: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: ^10.0.0
