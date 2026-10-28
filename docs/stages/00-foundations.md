@@ -107,7 +107,7 @@ Steps:
     proves it with unit and emulator tests; the real simulated-message test runs on `saff-dev` when it moves
     to Blaze at the **start of Stage 5** (STAGES Stage 5).
 
-Approved by owner on: YYYY-MM-DD
+Approved by owner on: 2026-10-29
 
 ## 3. What was done
 **Docs (before any code):**
