@@ -64,7 +64,7 @@
 | Function | Schedule | Does |
 |---|---|---|
 | `planOccurrences` | daily 00:15 UTC | For each active alarm, ensure occurrences and tasks exist for the next 48 h |
-| `sweeper` | every 15 min | Delete selfies whose round was revealed more than 24 h ago (marks the doc `expired`); find occurrences whose tasks should have run (`lockAt`/`deadlineAt` passed, wrong status) and run the handler directly; on the first run of each hour, send 9 pm local learning reminders |
+| `sweeper` | every 15 min | Delete selfies whose round was revealed more than 24 h ago (marks the doc `expired`); find occurrences whose tasks should have run (`lockAt`/`deadlineAt` passed, wrong status) and run the handler directly; after an outage (e.g. billing disabled), reconcile everything missed: ungraded results, overdue reveals, expired proposals; on the first run of each hour, send 9 pm local learning reminders |
 | `cleanup` | daily | Purge expired presence/requests; delete orphaned import files; **entitlement check**: move entitlements past `expiresAt` to `grace`, past `graceUntil` to `expired`, recompute owned saffs' `memberLimit`/`overLimit`, notify owners |
 
 ### Storage trigger

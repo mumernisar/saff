@@ -310,6 +310,9 @@ notifications" pattern:
   $10 before the cut. With billing removed the project falls back to the free (Spark) limits: functions,
   tasks and scheduled jobs stop. Google warns that resources may be deleted if billing stays disabled, so
   the owner investigates and re-links billing by hand; nothing re-enables it automatically.
+- Chat is not paused: it reads and writes Firestore directly, so it keeps working; clients show
+  "notifications paused" (`ERRORS.md` §7a). When billing is back, the `sweeper` reconciles everything missed
+  while functions were down (ungraded results, overdue reveals, expired proposals).
 - While a project is on Spark (no billing account), there is nothing to cap; the budget and `capBilling`
   are set up when the project moves to Blaze.
 

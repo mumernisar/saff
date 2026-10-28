@@ -10,3 +10,6 @@ env/*.json
 functions/.env.local
 functions/.secret.local
 .emulator-data/
+
+# Session handoff note (read then delete)
+NEXT_AGENT.md

@@ -31,16 +31,10 @@ Each one is switched on by at least one of:
 | R-7 | App Check enforced on Firestore, Storage, Functions (`SECURITY.md` §3) | Not enforced by the emulators; the dev flavor uses the debug provider. | emulators + dev flavor | Prod uses Play Integrity and enforcement is on in the console. |
 | R-8 | Functions, task queues, Storage and the billing cap run on Blaze (`ARCHITECTURE.md` §9a) | While `saff-dev` is on **Spark**, they run only in the emulators; nothing is deployed and there's no billing to cap. FCM, Auth and Crashlytics use the real `saff-dev` project. | project plan | Move to Blaze, deploy, set up the budget and `capBilling`. |
 | R-9 | Data lives in Firestore | Emulator data persists between sessions in `.emulator-data/` (`--import` / `--export-on-exit`), gitignored. | local files | Nothing ships. |
-
-### Proposed, not yet approved
-Added to make short demos possible without a menu. **Not active until the owner approves them.**
-
-| # | Relaxed rule | Dev / demo behaviour | Why |
-|---|---|---|---|
-| R-P1 | `ALARM_CONFLICT_WINDOW` 30 min | 2 min | Several demo alarms within half an hour. |
-| R-P2 | `SKIP_MIN_NOTICE` 8 h | 2 min | To demo skipping a morning. |
-| R-P3 | `SNOOZE_DURATION` 5 min | 1 min | To demo a snooze without a 5-minute wait. |
-| R-P4 | Alarm time picker steps by 5 min (mockup 6h) | Steps by 1 min | To propose an alarm 3–4 minutes ahead. |
+| R-P1 | `ALARM_CONFLICT_WINDOW` 30 min (`PRODUCT.md` §14) | **2 min** in the demo-timing profile, so several demo alarms fit within half an hour. | emulators + dev flavor (`DEMO_TIMING`) | Same as R-1: value only in `constants.demo.json`; the prod test asserts 30 min. |
+| R-P2 | `SKIP_MIN_NOTICE` 8 h | **2 min**, to demo skipping a morning. | emulators + dev flavor (`DEMO_TIMING`) | Same as R-1 (prod test asserts 8 h). |
+| R-P3 | `SNOOZE_DURATION` 5 min | **1 min**, to demo a snooze without a 5-minute wait. | emulators + dev flavor (`DEMO_TIMING`) | Same as R-1 (prod test asserts 5 min). |
+| R-P4 | Alarm time picker steps by 5 min (mockup 6h) | **Steps by 1 min**, to propose an alarm 3–4 minutes ahead. | dev flavor (`DEMO_TIMING`) | The prod build keeps the 5-minute step (test on the picker config). |
 
 ## Not relaxations (dev tooling only)
 - `tools/demo/adb_reverse.sh`: forwards the emulator ports over USB for every connected phone.

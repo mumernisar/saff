@@ -94,6 +94,16 @@ final class FailureMapper {
 }
 ```
 
+**Where mappers live.** `saff_core` stays plain Dart, so it holds only mappers that need no Flutter or
+Firebase types: `AppFailureMapper`, `NetworkExceptionMapper` (`dart:io` / `dart:async` types only),
+`HttpStatusMapper` and `FormatExceptionMapper`. Everything else lives in the app, in
+`app/lib/data/errors/`: `FunctionsExceptionMapper`, `FirestoreExceptionMapper`, `AuthExceptionMapper`,
+`StorageExceptionMapper`, `PlatformExceptionMapper`, `DriftExceptionMapper`, plus `HttpClientExceptionMapper`
+(`package:http`'s `ClientException`, mapped to `NetworkFailure`) and `JsonExceptionMapper`
+(`CheckedFromJsonException`, mapped to `DATA_MALFORMED`). `saff_alarm` exports its own mapper for its Pigeon
+errors (`AlarmExceptionMapper`); the app registers it in the chain, so `PlatformExceptionMapper` handles
+only other platform channels (billing, device).
+
 **Mappers (in order):**
 | Mapper | Recognises | Produces |
 |---|---|---|
@@ -198,12 +208,14 @@ the state like being offline (failure code `BACKEND_DISABLED`, not retryable unt
 - **Still works:** alarms ring, because they're scheduled on the phone. Rounds already locked and stored
   on the phone still play; mornings without a locked round play the arcade fallback (unranked, `PRODUCT.md`
   §6.6). Answers are saved locally and sent once the backend is back.
-- **Paused:** chat, proposals, reveals, imports and selfies. Their controls are disabled, never failing
-  one by one.
-- **Shown:** an offline-style banner ("Saff's server is paused. Alarms still ring; results will come in
+- **Keeps working:** chat, because it talks to Firestore directly, not through functions.
+- **Paused:** proposals, reveals, imports and selfies (they need functions). Their controls are disabled,
+  never failing one by one.
+- **Shown:** an offline-style banner ("Notifications paused. Alarms still ring; results will come in
   later."), never a dialog, and nothing in the wake flow beyond the one-line note at the end.
 - When billing is re-linked, the owner resets the status document; queued results upload and the sweeper
-  catches up on missed tasks.
+  reconciles everything missed while functions were down: ungraded results, overdue reveals and expired
+  proposals.
 
 ---
 

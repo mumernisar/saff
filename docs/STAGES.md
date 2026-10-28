@@ -12,7 +12,7 @@ before the morning loop.
 **Starts from:** these docs, the mockups, an empty repo.
 **Builds:** workspace + Melos scripts; all packages as empty shells with lints; `contracts/` with
 `constants.json` and `errors.json` + `tools/gen_contracts` generating Dart and TS; `tools/check_imports`;
-`saff_core` (`Result`, `AppFailure` hierarchy, `FailureMapper` + all mappers, `Log`, `Clock`, retry
+`saff_core` (`Result`, `AppFailure` hierarchy, `FailureMapper` + the pure-Dart mappers (Firebase / Platform / Drift mappers live in `app/lib/data/errors/`, `ERRORS.md` §4), `Log`, `Clock`, retry
 helper); flavors dev/prod; Firebase projects wired (Auth, Firestore, Functions, Storage, FCM, App Check,
 Crashlytics); `bootstrap.dart` with global error handlers; empty app shell with the 4 tabs; functions
 skeleton (`core/errors`, logger, zod, idempotency helper); rules skeleton (deny all) + rules test harness;
@@ -21,14 +21,14 @@ plus a billing cap, `capBilling`, a function subscribed to the budget's Pub/Sub 
 billing on the project when spend passes $10 (Google's documented "cap costs" pattern); physical-phone
 dev setup (`DEMO.md`, `DEV_RELAXATIONS.md`): `EMULATOR_HOST` in `env/dev.json` (the laptop's LAN IP),
 emulators bound to `0.0.0.0`, `tools/demo/adb_reverse.sh` for USB, and the demo-timing overlay
-`contracts/constants.demo.json` generated next to the real constants.
+`contracts/constants.demo.json` (R-1, R-P1–R-P3) generated next to the real constants.
 **Exit criteria:**
 - `melos run ci` green in GitHub Actions.
 - Generated contracts identical in Dart and TS (a test compares both against `contracts/`).
 - A deliberate thrown `StateError` reaches Crashlytics in a dev build; a mapped `SocketException`
   becomes `NetworkFailure(NETWORK_OFFLINE)` (unit test).
 - Import-boundary check fails on a planted violation.
-- A simulated budget message disables billing on `saff-dev`.
+- `capBilling` is proven by unit tests (fake billing client) and an emulator test with a sample budget message; the real simulated-message test on `saff-dev` runs when it moves to Blaze, at the start of Stage 5.
 - A dev build on a physical phone reaches the laptop's emulators over Wi-Fi (`EMULATOR_HOST`) and over USB
   (`adb reverse`).
 
@@ -75,7 +75,7 @@ on one phone can't be within 30 minutes of each other (conflict fixtures incl. d
 limits enforced; chat states covered by tests.
 
 ## Stage 5: Server timing, packs and content
-**Builds:** `planOccurrences`, task queues (`lockRound` with a stub round, `offlineCheck`, `deadline`),
+**Builds:** `saff-dev` moves to Blaze (first task of the stage): budget alerts, the `billing-budget` topic and `capBilling` are deployed, and the real simulated budget message is run against `saff-dev` (completes Stage 0 E5); `planOccurrences`, task queues (`lockRound` with a stub round, `offlineCheck`, `deadline`),
 `sweeper`; occurrence fixtures incl. DST; packs sync on the client (`PackService`, Drift tables) and server
 pack cache; content gateway (`/ayah`, `/surah`, `/words`, `/hadith`, `/resolve`) with Quran Foundation
 adapter, CDN caching, App Check; `roundLocked` push → background download + resolve into Drift; demo timing applied by the server in the
