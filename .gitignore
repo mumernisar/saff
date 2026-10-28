@@ -1,0 +1,11 @@
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
+*.iml
+
+# Environment config and local credentials (see docs/DEV_RELAXATIONS.md)
+env/*.json
+!env/example.json
+functions/.env.local
+functions/.secret.local
