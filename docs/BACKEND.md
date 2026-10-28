@@ -76,6 +76,7 @@
 | Trigger | Does |
 |---|---|
 | `onPlayNotification` (topic for Play real-time developer notifications) | Looks up the user by token hash, re-fetches the subscription from the Play API (never trusts the message body alone), updates purchase + entitlement (renewed, in grace, on hold, cancelled, expired, revoked/refunded), recomputes owned saffs' limits |
+| `capBilling` (topic `billing-budget`, Cloud Billing budget messages) | When `costAmount` passes `BILLING_CAP_USD` ($10): writes `config/backend.status = 'billingDisabled'`, then removes the project's billing account (`ARCHITECTURE.md` §9a). Ignores amounts under the cap; no-op if billing is already disabled |
 
 ### HTTPS
 | Function | Route | Does |

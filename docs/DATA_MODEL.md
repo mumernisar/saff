@@ -180,6 +180,11 @@ calendar (per day: status, per-member woke/missed/skipped, winner).
 (`notes, cards, skipped`), `warnings` (codes), `errorCode?`, `packId?`, timestamps. Client creates it
 (status `uploaded`) right before uploading the file to `imports/{uid}/{importId}`.
 
+### `config/backend` `[S]`
+`status` (`ok · billingDisabled`), `updatedAt`. Written by `capBilling` before it disables billing (reset by
+the owner afterwards); readable by any signed-in user. The app shows the paused-backend state while it
+isn't `ok` (`ERRORS.md` §7a).
+
 ### `requests/{requestId}` `[S]`
 Idempotency records for callables: `uid`, `fn`, `response`, `expiresAt` (TTL policy 24 h).
 

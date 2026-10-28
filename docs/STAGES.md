@@ -16,13 +16,16 @@ before the morning loop.
 helper); flavors dev/prod; Firebase projects wired (Auth, Firestore, Functions, Storage, FCM, App Check,
 Crashlytics); `bootstrap.dart` with global error handlers; empty app shell with the 4 tabs; functions
 skeleton (`core/errors`, logger, zod, idempotency helper); rules skeleton (deny all) + rules test harness;
-CI workflow.
+CI workflow; cost protection on both Firebase projects (`ARCHITECTURE.md` §9a): budget alerts at $1 and $5,
+plus a billing cap, `capBilling`, a function subscribed to the budget's Pub/Sub notifications that disables
+billing on the project when spend passes $10 (Google's documented "cap costs" pattern).
 **Exit criteria:**
 - `melos run ci` green in GitHub Actions.
 - Generated contracts identical in Dart and TS (a test compares both against `contracts/`).
 - A deliberate thrown `StateError` reaches Crashlytics in a dev build; a mapped `SocketException`
   becomes `NetworkFailure(NETWORK_OFFLINE)` (unit test).
 - Import-boundary check fails on a planted violation.
+- A simulated budget message disables billing on `saff-dev`.
 
 ## Stage 1: Alarm module
 **Starts from:** Stage 0 shell.

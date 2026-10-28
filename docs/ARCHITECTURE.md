@@ -265,7 +265,7 @@ Details in `BACKEND.md`.
 
 Firebase requires the pay-as-you-go (Blaze) plan for Cloud Functions, Cloud Tasks and new Storage buckets,
 but each product has a monthly no-cost allowance that this app stays far inside at the scale of friends
-and early users. **Set a budget alert at $1 and $5 on day one.**
+and early users. **Set a budget alert at $1 and $5 on day one, and deploy the billing cap (below).**
 
 | Product | No-cost allowance (check current numbers) | Our expected use |
 |---|---|---|
@@ -292,6 +292,26 @@ and early users. **Set a budget alert at $1 and $5 on day one.**
 - All products run in `us-central1`, where every no-cost allowance applies.
 - The Anki import function runs with 1 GiB memory only when a file arrives; a 50 MB deck costs roughly
   tens of GB-seconds, so thousands of imports fit in the monthly allowance.
+
+**Billing cap: alerts alone never stop spending.** A budget alert is only an email; a bug (a trigger that
+writes to the collection it listens to, a retry loop, a leaked key) keeps billing until someone reads it.
+So each project also has a hard cap, following Google's documented "cap (disable) billing usage with
+notifications" pattern:
+- Each project (`saff-dev`, `saff-prod`) has a Cloud Billing budget with alert thresholds at $1 and $5,
+  connected to a Pub/Sub topic (`billing-budget`).
+- `capBilling` (Pub/Sub-triggered function, `BACKEND.md` §2) reads `costAmount` from each budget message.
+  When it passes the cap (`BILLING_CAP_USD`, $10), it first writes `config/backend.status =
+  'billingDisabled'` (so clients can tell, `ERRORS.md` §7a), then removes the billing account from the
+  project through the Cloud Billing API. It ignores amounts under the cap and does nothing if billing is
+  already disabled, so repeated messages are harmless.
+- Its service account gets only what Google's guide requires to unlink billing; the Cloud Billing API is
+  enabled on the project.
+- Limits to know: budget messages arrive several times a day and cost data lags by hours, so spend can pass
+  $10 before the cut. With billing removed the project falls back to the free (Spark) limits: functions,
+  tasks and scheduled jobs stop. Google warns that resources may be deleted if billing stays disabled, so
+  the owner investigates and re-links billing by hand; nothing re-enables it automatically.
+- While a project is on Spark (no billing account), there is nothing to cap; the budget and `capBilling`
+  are set up when the project moves to Blaze.
 
 **Render or Heroku instead?** Not needed. They would add a second platform to deploy, monitor and secure,
 and the free tiers sleep or expire; the Firebase allowances already cover every server job here. They
@@ -331,6 +351,8 @@ Verify each package's current version, licence and maintenance at the start of t
 - **Alternatives:** native Kotlin (best alarm control, but iOS means a second app); React Native
   (weaker for games and heavy native work); Kotlin Multiplatform (shared logic, but UI twice).
 - **Why:** one UI codebase, strong game support (Flame), first-class native bridging for the alarm.
+- **Status:** Flutter is a **hard project requirement** set by the owner (2026-10-28), not only a
+  preference. The client framework is not open for change; proposals to replace it won't be considered.
 
 ### D2. Firebase as the backend
 - **Chosen:** Firebase (Auth, Firestore, Functions, FCM, Storage, Hosting, App Check, Crashlytics).

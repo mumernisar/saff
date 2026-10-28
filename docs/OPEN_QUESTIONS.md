@@ -25,6 +25,7 @@ Docs mark these as **OPEN (Q-n)**. Don't implement them until answered.
 | Region `us-central1` for everything (all free allowances apply) | 2026-10-28 |
 | UI language English for v1 | 2026-10-28 |
 | Android only for now | 2026-10-25 |
+| Flutter is a hard requirement for the client; the framework is not open for change (`ARCHITECTURE.md` D1) | 2026-10-28 |
 | Stay on Firebase within free allowances; no Render/Heroku | 2026-10-25 |
 | New mode: Selfie (every participant posts a selfie; revealed together; unranked) | 2026-10-28 |
 | Selfies deleted from the server 24 h after the reveal; members can save them to their gallery | 2026-10-28 |
