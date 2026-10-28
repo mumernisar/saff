@@ -1,0 +1,177 @@
+{
+  "MAX_SAFF_SIZE_FREE": {
+    "value": 4,
+    "unit": "count",
+    "description": "Members per saff on the free plan."
+  },
+  "MAX_SAFF_SIZE_PLUS": {
+    "value": 10,
+    "unit": "count",
+    "description": "Members per saff with Saff Plus."
+  },
+  "MAX_SAFFS_PER_USER_FREE": {
+    "value": 2,
+    "unit": "count",
+    "description": "Saffs a free user may be in."
+  },
+  "MAX_SAFFS_PER_USER_PLUS": {
+    "value": 25,
+    "unit": "count",
+    "description": "Saffs a Plus user may be in (abuse cap; \"unlimited\" in the product)."
+  },
+  "STATS_HISTORY_FREE_DAYS": {
+    "value": 30,
+    "unit": "days",
+    "description": "Days of stats history on the free plan."
+  },
+  "PLUS_GRACE_DAYS": {
+    "value": 7,
+    "unit": "days",
+    "description": "Days of Plus kept after a lapse."
+  },
+  "MAX_ALARMS_PER_SAFF": {
+    "value": 3,
+    "unit": "count",
+    "description": "Alarms per saff."
+  },
+  "NIGHT_LOCK_LEAD": {
+    "value": 3600000,
+    "unit": "ms",
+    "description": "How long before the alarm the round locks."
+  },
+  "RAMP_DURATION": {
+    "value": 30000,
+    "unit": "ms",
+    "description": "Volume ramp-up of the ring."
+  },
+  "HOLD_TO_START": {
+    "value": 600,
+    "unit": "ms",
+    "description": "Hold time on the start control."
+  },
+  "SNOOZE_DURATION": {
+    "value": 300000,
+    "unit": "ms",
+    "description": "Snooze length (allowed once)."
+  },
+  "IDLE_RERING": {
+    "value": 60000,
+    "unit": "ms",
+    "description": "Idle time before the alarm rings again."
+  },
+  "OFFLINE_CHECK_DELAY": {
+    "value": 120000,
+    "unit": "ms",
+    "description": "Delay before the offline check on a missed start."
+  },
+  "REVEAL_DEADLINE": {
+    "value": 1800000,
+    "unit": "ms",
+    "description": "Time after the occurrence when results reveal."
+  },
+  "NUDGES_PER_TARGET": {
+    "value": 3,
+    "unit": "count",
+    "description": "Nudges per sender per target per occurrence."
+  },
+  "NUDGE_INTERVAL": {
+    "value": 120000,
+    "unit": "ms",
+    "description": "Minimum time between nudges."
+  },
+  "SKIP_MIN_NOTICE": {
+    "value": 28800000,
+    "unit": "ms",
+    "description": "Notice needed to skip a morning."
+  },
+  "SKIPS_PER_MONTH": {
+    "value": 2,
+    "unit": "count",
+    "description": "Skips per month."
+  },
+  "CARDS_PER_ROUND": {
+    "value": 8,
+    "unit": "count",
+    "description": "Cards in a round."
+  },
+  "CARD_SECONDS": {
+    "value": 25000,
+    "unit": "ms",
+    "description": "Time limit per card."
+  },
+  "PLANTS_PER_NIGHT": {
+    "value": 2,
+    "unit": "count",
+    "description": "Plants per night (pairs only)."
+  },
+  "PLANT_MAX_CHARS": {
+    "value": 200,
+    "unit": "count",
+    "description": "Max characters of a plant."
+  },
+  "REVENGE_DELAY": {
+    "value": 604800000,
+    "unit": "ms",
+    "description": "Delay before a revenge round."
+  },
+  "MAX_REVIEWS_PER_DAY": {
+    "value": 10,
+    "unit": "count",
+    "description": "Reviews per day (morning Learning Duel plus Learn tab)."
+  },
+  "LEARNING_DUEL_MIN_CARDS": {
+    "value": 4,
+    "unit": "count",
+    "description": "Eligible cards (for at least 2 participants) needed for a Learning Duel."
+  },
+  "MIN_GROUP_ALARM_PARTICIPANTS": {
+    "value": 2,
+    "unit": "count",
+    "description": "Participants needed to start a group alarm (may continue with 1)."
+  },
+  "SELFIE_MAX_PX": {
+    "value": 1080,
+    "unit": "px",
+    "description": "Long edge of a selfie."
+  },
+  "SELFIE_JPEG_QUALITY": {
+    "value": 80,
+    "unit": "percent",
+    "description": "JPEG quality of a selfie."
+  },
+  "SELFIE_RETENTION": {
+    "value": 86400000,
+    "unit": "ms",
+    "description": "How long a selfie is kept after the reveal."
+  },
+  "ALARM_CONFLICT_WINDOW": {
+    "value": 1800000,
+    "unit": "ms",
+    "description": "Alarms closer than this conflict across saffs."
+  },
+  "ALARM_PICKER_STEP": {
+    "value": 300000,
+    "unit": "ms",
+    "description": "Step of the alarm time picker."
+  },
+  "INACTIVE_MISSED_MORNINGS": {
+    "value": 5,
+    "unit": "count",
+    "description": "Missed mornings before a member counts as inactive."
+  },
+  "IMPORT_MAX_CARDS": {
+    "value": 2000,
+    "unit": "count",
+    "description": "Cards per import."
+  },
+  "IMPORT_MAX_FILE": {
+    "value": 52428800,
+    "unit": "bytes",
+    "description": "Largest import file (50 MiB)."
+  },
+  "IMPORTS_PER_SAFF": {
+    "value": 10,
+    "unit": "count",
+    "description": "Imports per saff."
+  }
+}

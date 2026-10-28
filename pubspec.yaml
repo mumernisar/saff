@@ -7,6 +7,7 @@ environment:
 
 workspace:
   - app
+  - tools/gen_contracts
   - packages/saff_core
   - packages/saff_domain
   - packages/saff_ui
@@ -22,6 +23,9 @@ dev_dependencies:
 
 melos:
   scripts:
+    generate:
+      description: Regenerate Dart, TypeScript and ARB output from /contracts.
+      run: dart run tools/gen_contracts/bin/gen_contracts.dart . && dart format packages app tools
     format:
       description: Format all Dart code.
       run: dart format .

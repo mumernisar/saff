@@ -414,6 +414,7 @@ alarm screen with the phone locked) → start a saff / join with a code.
 | `SELFIE_MAX_PX` / `SELFIE_JPEG_QUALITY` | 1080 px long edge / 80 |
 | `SELFIE_RETENTION` | 24 h after the reveal (users can save to their gallery) |
 | `ALARM_CONFLICT_WINDOW` | 30 min |
+| `ALARM_PICKER_STEP` | 5 min (mockup 6h; added in Stage 0 so the demo profile can relax it, R-P4) |
 | `INACTIVE_MISSED_MORNINGS` | 5 |
 | `IMPORT_MAX_CARDS` | 2,000 per import |
 | `IMPORT_MAX_FILE` | 50 MB |

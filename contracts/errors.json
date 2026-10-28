@@ -1,0 +1,677 @@
+{
+  "UNKNOWN": {
+    "kind": "unknown",
+    "severity": "error",
+    "retryable": false,
+    "httpsCode": "unknown",
+    "messageKey": "errorUnknown",
+    "description": "Anything the mappers do not recognise. Always reported.",
+    "message": "Something went wrong. Try again in a moment."
+  },
+  "NETWORK_OFFLINE": {
+    "kind": "network",
+    "severity": "info",
+    "retryable": true,
+    "httpsCode": "unavailable",
+    "messageKey": "errorNetworkOffline",
+    "description": "No connection.",
+    "message": "You're offline. Your round is saved and will send when you reconnect."
+  },
+  "NETWORK_TIMEOUT": {
+    "kind": "network",
+    "severity": "info",
+    "retryable": true,
+    "httpsCode": "deadline-exceeded",
+    "messageKey": "errorNetworkTimeout",
+    "description": "A request timed out.",
+    "message": "That took too long. Check your connection and try again."
+  },
+  "SERVER_UNAVAILABLE": {
+    "kind": "backend",
+    "severity": "warning",
+    "retryable": true,
+    "httpsCode": "unavailable",
+    "messageKey": "errorServerUnavailable",
+    "description": "The backend is temporarily unavailable.",
+    "message": "Saff's server is busy. Try again in a moment."
+  },
+  "SERVER_INTERNAL": {
+    "kind": "backend",
+    "severity": "error",
+    "retryable": false,
+    "httpsCode": "internal",
+    "messageKey": "errorServerInternal",
+    "description": "The backend failed unexpectedly. Reported.",
+    "message": "Something went wrong on our side. Try again later."
+  },
+  "PERMISSION_DENIED": {
+    "kind": "backend",
+    "severity": "warning",
+    "retryable": false,
+    "httpsCode": "permission-denied",
+    "messageKey": "errorPermissionDenied",
+    "description": "The caller may not do this.",
+    "message": "You can't do that here."
+  },
+  "UNAUTHENTICATED": {
+    "kind": "backend",
+    "severity": "warning",
+    "retryable": false,
+    "httpsCode": "unauthenticated",
+    "messageKey": "errorUnauthenticated",
+    "description": "No valid sign-in.",
+    "message": "Sign in to continue."
+  },
+  "NOT_FOUND": {
+    "kind": "backend",
+    "severity": "warning",
+    "retryable": false,
+    "httpsCode": "not-found",
+    "messageKey": "errorNotFound",
+    "description": "The requested thing does not exist.",
+    "message": "We couldn't find that. It may have been removed."
+  },
+  "CONFLICT": {
+    "kind": "backend",
+    "severity": "warning",
+    "retryable": true,
+    "httpsCode": "aborted",
+    "messageKey": "errorConflict",
+    "description": "A concurrent change won; retry with fresh data.",
+    "message": "That changed while you were working. Try again."
+  },
+  "RATE_LIMITED": {
+    "kind": "backend",
+    "severity": "warning",
+    "retryable": true,
+    "httpsCode": "resource-exhausted",
+    "messageKey": "errorRateLimited",
+    "description": "Too many requests.",
+    "message": "Too many tries. Wait a moment and try again."
+  },
+  "APP_UPDATE_REQUIRED": {
+    "kind": "backend",
+    "severity": "warning",
+    "retryable": false,
+    "httpsCode": "failed-precondition",
+    "messageKey": "errorAppUpdateRequired",
+    "description": "The app version is too old for this backend.",
+    "message": "Update Saff to keep going."
+  },
+  "INVALID_ARGUMENT": {
+    "kind": "backend",
+    "severity": "error",
+    "retryable": false,
+    "httpsCode": "invalid-argument",
+    "messageKey": "errorInvalidArgument",
+    "description": "A callable received invalid input. Usually a bug.",
+    "message": "That didn't look right. Check it and try again."
+  },
+  "BACKEND_DISABLED": {
+    "kind": "backend",
+    "severity": "warning",
+    "retryable": false,
+    "httpsCode": "failed-precondition",
+    "messageKey": "errorBackendDisabled",
+    "description": "Billing is disabled by the cost cap; config/backend.status is billingDisabled.",
+    "message": "Notifications paused. Alarms still ring; results will come in later."
+  },
+  "AUTH_CANCELLED": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": null,
+    "messageKey": "errorAuthCancelled",
+    "description": "The user closed the sign-in sheet.",
+    "message": "Sign-in was cancelled."
+  },
+  "AUTH_LINK_EXPIRED": {
+    "kind": "domain",
+    "severity": "warning",
+    "retryable": false,
+    "httpsCode": "failed-precondition",
+    "messageKey": "errorAuthLinkExpired",
+    "description": "The email sign-in link has expired.",
+    "message": "That sign-in link has expired. Ask for a new one."
+  },
+  "AUTH_LINK_INVALID": {
+    "kind": "domain",
+    "severity": "warning",
+    "retryable": false,
+    "httpsCode": "invalid-argument",
+    "messageKey": "errorAuthLinkInvalid",
+    "description": "The email sign-in link is malformed or already used.",
+    "message": "That sign-in link doesn't work. Ask for a new one."
+  },
+  "AUTH_ACCOUNT_DISABLED": {
+    "kind": "domain",
+    "severity": "warning",
+    "retryable": false,
+    "httpsCode": "permission-denied",
+    "messageKey": "errorAuthAccountDisabled",
+    "description": "The account is disabled.",
+    "message": "This account is disabled."
+  },
+  "PROFILE_NAME_INVALID": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "invalid-argument",
+    "messageKey": "errorProfileNameInvalid",
+    "description": "Display name fails validation.",
+    "message": "Pick a name between 1 and 30 characters."
+  },
+  "PHONE_INVALID": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "invalid-argument",
+    "messageKey": "errorPhoneInvalid",
+    "description": "Phone number fails validation.",
+    "message": "That phone number doesn't look right."
+  },
+  "SAFF_FULL": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "failed-precondition",
+    "messageKey": "errorSaffFull",
+    "description": "The saff is at its member limit.",
+    "message": "This saff is full."
+  },
+  "SAFF_NOT_FOUND": {
+    "kind": "domain",
+    "severity": "warning",
+    "retryable": false,
+    "httpsCode": "not-found",
+    "messageKey": "errorSaffNotFound",
+    "description": "No such saff.",
+    "message": "We couldn't find that saff."
+  },
+  "SAFF_LIMIT": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "failed-precondition",
+    "messageKey": "errorSaffLimit",
+    "description": "The user is in the maximum number of saffs for their plan.",
+    "message": "You're in as many saffs as your plan allows."
+  },
+  "INVITE_INVALID": {
+    "kind": "domain",
+    "severity": "warning",
+    "retryable": false,
+    "httpsCode": "not-found",
+    "messageKey": "errorInviteInvalid",
+    "description": "Invite code or link is unknown or revoked.",
+    "message": "That invite doesn't work any more."
+  },
+  "ALREADY_MEMBER": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "already-exists",
+    "messageKey": "errorAlreadyMember",
+    "description": "The user is already in this saff.",
+    "message": "You're already in this saff."
+  },
+  "NOT_SAFF_OWNER": {
+    "kind": "domain",
+    "severity": "warning",
+    "retryable": false,
+    "httpsCode": "permission-denied",
+    "messageKey": "errorNotSaffOwner",
+    "description": "Only the owner may do this.",
+    "message": "Only the saff's owner can do that."
+  },
+  "SAFF_TOO_SMALL": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "failed-precondition",
+    "messageKey": "errorSaffTooSmall",
+    "description": "The saff has too few members for this action.",
+    "message": "You need at least one more member for that."
+  },
+  "ALARM_LIMIT": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "failed-precondition",
+    "messageKey": "errorAlarmLimit",
+    "description": "MAX_ALARMS_PER_SAFF reached.",
+    "message": "This saff already has the most alarms it can hold."
+  },
+  "ALARM_INVALID": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "invalid-argument",
+    "messageKey": "errorAlarmInvalid",
+    "description": "Alarm fields fail validation.",
+    "message": "That alarm isn't valid. Check the time and days."
+  },
+  "ALARM_CONFLICT": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "failed-precondition",
+    "messageKey": "errorAlarmConflict",
+    "description": "Another alarm is within ALARM_CONFLICT_WINDOW.",
+    "message": "Another of your alarms is too close to this time."
+  },
+  "NOT_PARTICIPANT": {
+    "kind": "domain",
+    "severity": "warning",
+    "retryable": false,
+    "httpsCode": "permission-denied",
+    "messageKey": "errorNotParticipant",
+    "description": "The user is not a participant of this alarm.",
+    "message": "You're not part of this alarm."
+  },
+  "PROPOSAL_EXPIRED": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "failed-precondition",
+    "messageKey": "errorProposalExpired",
+    "description": "The proposal has expired.",
+    "message": "That proposal has expired."
+  },
+  "PROPOSAL_SUPERSEDED": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "failed-precondition",
+    "messageKey": "errorProposalSuperseded",
+    "description": "A newer proposal replaced this one.",
+    "message": "A newer proposal replaced that one."
+  },
+  "PROPOSAL_NOT_PENDING": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "failed-precondition",
+    "messageKey": "errorProposalNotPending",
+    "description": "The proposal is already decided.",
+    "message": "That proposal is already decided."
+  },
+  "SKIP_TOO_LATE": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "failed-precondition",
+    "messageKey": "errorSkipTooLate",
+    "description": "Skip requested less than SKIP_MIN_NOTICE before the occurrence.",
+    "message": "Skips need 8 hours' notice. This morning is too close."
+  },
+  "SKIP_LIMIT": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "failed-precondition",
+    "messageKey": "errorSkipLimit",
+    "description": "SKIPS_PER_MONTH reached.",
+    "message": "You've used all your skips this month."
+  },
+  "ROUND_LOCKED": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "failed-precondition",
+    "messageKey": "errorRoundLocked",
+    "description": "The round is locked; no more changes.",
+    "message": "That round is locked."
+  },
+  "ROUND_NOT_READY": {
+    "kind": "domain",
+    "severity": "warning",
+    "retryable": true,
+    "httpsCode": "failed-precondition",
+    "messageKey": "errorRoundNotReady",
+    "description": "The round has not been assembled yet.",
+    "message": "Tonight's round isn't ready yet."
+  },
+  "ROUND_CLOSED": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "failed-precondition",
+    "messageKey": "errorRoundClosed",
+    "description": "The round is revealed or expired.",
+    "message": "That round is already closed."
+  },
+  "RESULT_ALREADY_SUBMITTED": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "already-exists",
+    "messageKey": "errorResultAlreadySubmitted",
+    "description": "A result for this round was already stored.",
+    "message": "Your result for this round is already in."
+  },
+  "NUDGE_TOO_SOON": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "resource-exhausted",
+    "messageKey": "errorNudgeTooSoon",
+    "description": "NUDGE_INTERVAL has not elapsed.",
+    "message": "Give them a moment before nudging again."
+  },
+  "NUDGE_LIMIT": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "resource-exhausted",
+    "messageKey": "errorNudgeLimit",
+    "description": "NUDGES_PER_TARGET reached.",
+    "message": "You've nudged them enough for today."
+  },
+  "NUDGE_TARGET_DONE": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "failed-precondition",
+    "messageKey": "errorNudgeTargetDone",
+    "description": "The target is already awake.",
+    "message": "They're already up."
+  },
+  "PLANT_LIMIT": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "resource-exhausted",
+    "messageKey": "errorPlantLimit",
+    "description": "PLANTS_PER_NIGHT reached.",
+    "message": "You've planted all you can tonight."
+  },
+  "PLANT_TOO_LONG": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "invalid-argument",
+    "messageKey": "errorPlantTooLong",
+    "description": "Plant text exceeds PLANT_MAX_CHARS.",
+    "message": "That message is too long."
+  },
+  "PLANT_PAIRS_ONLY": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "failed-precondition",
+    "messageKey": "errorPlantPairsOnly",
+    "description": "Planting is for two-person saffs.",
+    "message": "Planting is only for two-person saffs."
+  },
+  "SELFIE_UPLOAD_FAILED": {
+    "kind": "network",
+    "severity": "warning",
+    "retryable": true,
+    "httpsCode": "unavailable",
+    "messageKey": "errorSelfieUploadFailed",
+    "description": "The selfie upload failed.",
+    "message": "Your selfie didn't upload. We'll try again."
+  },
+  "REVIEW_LIMIT": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "resource-exhausted",
+    "messageKey": "errorReviewLimit",
+    "description": "MAX_REVIEWS_PER_DAY reached.",
+    "message": "That's all your reviews for today."
+  },
+  "CONTENT_UNAVAILABLE": {
+    "kind": "backend",
+    "severity": "warning",
+    "retryable": true,
+    "httpsCode": "unavailable",
+    "messageKey": "errorContentUnavailable",
+    "description": "The content gateway could not resolve the text.",
+    "message": "We couldn't load the text. Try again in a moment."
+  },
+  "PACK_CHECKSUM_MISMATCH": {
+    "kind": "data",
+    "severity": "error",
+    "retryable": false,
+    "httpsCode": null,
+    "messageKey": "errorPackChecksumMismatch",
+    "description": "A downloaded pack does not match its checksum.",
+    "message": "That pack didn't download correctly. We'll try again."
+  },
+  "PACK_VERSION_UNSUPPORTED": {
+    "kind": "data",
+    "severity": "warning",
+    "retryable": false,
+    "httpsCode": null,
+    "messageKey": "errorPackVersionUnsupported",
+    "description": "The pack needs a newer app.",
+    "message": "Update Saff to use this pack."
+  },
+  "PLACEHOLDER_UNRESOLVED": {
+    "kind": "data",
+    "severity": "error",
+    "retryable": false,
+    "httpsCode": null,
+    "messageKey": "errorPlaceholderUnresolved",
+    "description": "A card placeholder could not be resolved offline.",
+    "message": "One card couldn't load, so it was skipped."
+  },
+  "IMPORT_TOO_LARGE": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "invalid-argument",
+    "messageKey": "errorImportTooLarge",
+    "description": "The import exceeds IMPORT_MAX_FILE.",
+    "message": "That file is too large to import."
+  },
+  "IMPORT_UNSUPPORTED_FORMAT": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "invalid-argument",
+    "messageKey": "errorImportUnsupportedFormat",
+    "description": "The file format is not supported.",
+    "message": "We can't read that kind of file."
+  },
+  "IMPORT_EMPTY": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "invalid-argument",
+    "messageKey": "errorImportEmpty",
+    "description": "The file held no usable cards.",
+    "message": "We found no cards in that file."
+  },
+  "IMPORT_LIMIT": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "resource-exhausted",
+    "messageKey": "errorImportLimit",
+    "description": "IMPORTS_PER_SAFF or IMPORT_MAX_CARDS reached.",
+    "message": "This saff has reached its import limit."
+  },
+  "IMPORT_CORRUPT": {
+    "kind": "domain",
+    "severity": "warning",
+    "retryable": false,
+    "httpsCode": "invalid-argument",
+    "messageKey": "errorImportCorrupt",
+    "description": "The file is damaged.",
+    "message": "That file looks damaged."
+  },
+  "ALARM_PERMISSION_MISSING": {
+    "kind": "device",
+    "severity": "error",
+    "retryable": false,
+    "httpsCode": null,
+    "messageKey": "errorAlarmPermissionMissing",
+    "description": "Exact-alarm permission is missing.",
+    "message": "Allow alarms and reminders so Saff can wake you."
+  },
+  "NOTIFICATIONS_DISABLED": {
+    "kind": "device",
+    "severity": "warning",
+    "retryable": false,
+    "httpsCode": null,
+    "messageKey": "errorNotificationsDisabled",
+    "description": "Notifications are off.",
+    "message": "Turn on notifications so your saff can reach you."
+  },
+  "FULL_SCREEN_DENIED": {
+    "kind": "device",
+    "severity": "warning",
+    "retryable": false,
+    "httpsCode": null,
+    "messageKey": "errorFullScreenDenied",
+    "description": "Full-screen intent permission is denied.",
+    "message": "Allow full-screen alerts so the alarm can open over the lock screen."
+  },
+  "BATTERY_OPTIMISED": {
+    "kind": "device",
+    "severity": "warning",
+    "retryable": false,
+    "httpsCode": null,
+    "messageKey": "errorBatteryOptimised",
+    "description": "Battery optimisation may delay the alarm.",
+    "message": "Remove battery limits for Saff so alarms ring on time."
+  },
+  "STORAGE_FULL": {
+    "kind": "device",
+    "severity": "warning",
+    "retryable": false,
+    "httpsCode": null,
+    "messageKey": "errorStorageFull",
+    "description": "The device is out of storage.",
+    "message": "Your phone is out of space."
+  },
+  "AUDIO_UNAVAILABLE": {
+    "kind": "device",
+    "severity": "warning",
+    "retryable": true,
+    "httpsCode": null,
+    "messageKey": "errorAudioUnavailable",
+    "description": "Audio could not be played.",
+    "message": "Sound isn't available right now."
+  },
+  "CAMERA_PERMISSION_DENIED": {
+    "kind": "device",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": null,
+    "messageKey": "errorCameraPermissionDenied",
+    "description": "Camera permission was denied.",
+    "message": "Allow the camera to take your selfie."
+  },
+  "CAMERA_UNAVAILABLE": {
+    "kind": "device",
+    "severity": "warning",
+    "retryable": true,
+    "httpsCode": null,
+    "messageKey": "errorCameraUnavailable",
+    "description": "The camera could not be opened.",
+    "message": "The camera isn't available right now."
+  },
+  "LOCAL_DB_CORRUPT": {
+    "kind": "data",
+    "severity": "critical",
+    "retryable": false,
+    "httpsCode": null,
+    "messageKey": "errorLocalDbCorrupt",
+    "description": "The local database is corrupt.",
+    "message": "Saved data on this phone is damaged. We'll rebuild it."
+  },
+  "LOCAL_DB_MIGRATION_FAILED": {
+    "kind": "data",
+    "severity": "critical",
+    "retryable": false,
+    "httpsCode": null,
+    "messageKey": "errorLocalDbMigrationFailed",
+    "description": "A local schema migration failed.",
+    "message": "Saff couldn't update its saved data."
+  },
+  "DATA_MALFORMED": {
+    "kind": "data",
+    "severity": "error",
+    "retryable": false,
+    "httpsCode": null,
+    "messageKey": "errorDataMalformed",
+    "description": "JSON or a document did not match its schema.",
+    "message": "Some data looked wrong, so we skipped it."
+  },
+  "PURCHASE_CANCELLED": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": null,
+    "messageKey": "errorPurchaseCancelled",
+    "description": "The user cancelled the purchase.",
+    "message": "Purchase cancelled."
+  },
+  "PURCHASE_FAILED": {
+    "kind": "backend",
+    "severity": "warning",
+    "retryable": true,
+    "httpsCode": null,
+    "messageKey": "errorPurchaseFailed",
+    "description": "The store reported a failure.",
+    "message": "The purchase didn't go through. Try again."
+  },
+  "PURCHASE_PENDING": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": null,
+    "messageKey": "errorPurchasePending",
+    "description": "The purchase is pending approval.",
+    "message": "Your purchase is waiting for approval."
+  },
+  "PURCHASE_INVALID": {
+    "kind": "backend",
+    "severity": "error",
+    "retryable": false,
+    "httpsCode": "failed-precondition",
+    "messageKey": "errorPurchaseInvalid",
+    "description": "The server rejected the purchase token.",
+    "message": "We couldn't confirm that purchase."
+  },
+  "BILLING_UNAVAILABLE": {
+    "kind": "backend",
+    "severity": "warning",
+    "retryable": true,
+    "httpsCode": null,
+    "messageKey": "errorBillingUnavailable",
+    "description": "Google Play Billing is unavailable.",
+    "message": "Purchases aren't available right now."
+  },
+  "PLUS_REQUIRED": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "failed-precondition",
+    "messageKey": "errorPlusRequired",
+    "description": "The action needs Saff Plus.",
+    "message": "That needs Saff Plus."
+  },
+  "SAFF_OVER_LIMIT": {
+    "kind": "domain",
+    "severity": "warning",
+    "retryable": false,
+    "httpsCode": "failed-precondition",
+    "messageKey": "errorSaffOverLimit",
+    "description": "The saff is over the free limits after a lapse.",
+    "message": "This saff is over the free limits."
+  },
+  "SAFF_NOT_OVER_LIMIT": {
+    "kind": "domain",
+    "severity": "info",
+    "retryable": false,
+    "httpsCode": "failed-precondition",
+    "messageKey": "errorSaffNotOverLimit",
+    "description": "The saff is within limits; nothing to trim.",
+    "message": "This saff is within your plan."
+  }
+}

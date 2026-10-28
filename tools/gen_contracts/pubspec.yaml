@@ -1,0 +1,12 @@
+name: gen_contracts
+description: Generates Dart and TypeScript code from the contracts in /contracts.
+publish_to: none
+
+environment:
+  sdk: ^3.13.7
+
+resolution: workspace
+
+dev_dependencies:
+  test: ^1.25.6
+  very_good_analysis: ^10.0.0
