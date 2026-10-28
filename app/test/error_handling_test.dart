@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -29,14 +27,14 @@ void main() {
   });
 
   test('a StateError reaching FlutterError.onError is reported as fatal', () {
-    installGlobalErrorHandlers(reporter, releaseWidgets: false);
+    installGlobalErrorHandlers(reporter);
     final error = StateError('boom');
     FlutterError.onError!(FlutterErrorDetails(exception: error));
     expect(reporter.fatals, [error]);
   });
 
   test('an async error reaching PlatformDispatcher is fatal and handled', () {
-    installGlobalErrorHandlers(reporter, releaseWidgets: false);
+    installGlobalErrorHandlers(reporter);
     final error = StateError('async boom');
     final handled = PlatformDispatcher.instance.onError!(
       error,
@@ -48,7 +46,9 @@ void main() {
 
   test('release swaps in the calm error widget', () {
     installGlobalErrorHandlers(reporter, releaseWidgets: true);
-    final widget = ErrorWidget.builder(FlutterErrorDetails(exception: 'x'));
+    final widget = ErrorWidget.builder(
+      const FlutterErrorDetails(exception: 'x'),
+    );
     expect(widget, isA<BrokenScreen>());
   });
 
