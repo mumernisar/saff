@@ -1,0 +1,12 @@
+name: check_imports
+description: Enforces the import boundaries of docs/REPOSITORY.md section 4.
+publish_to: none
+
+environment:
+  sdk: ^3.13.7
+
+resolution: workspace
+
+dev_dependencies:
+  test: ^1.25.6
+  very_good_analysis: ^10.0.0

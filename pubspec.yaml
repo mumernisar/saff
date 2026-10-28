@@ -8,6 +8,7 @@ environment:
 workspace:
   - app
   - tools/gen_contracts
+  - tools/check_imports
   - packages/saff_core
   - packages/saff_domain
   - packages/saff_ui
@@ -34,7 +35,7 @@ melos:
       run: dart format --output=none --set-exit-if-changed .
     analyze:
       description: Analyzer on every package.
-      run: dart analyze --fatal-infos
+      run: dart analyze --fatal-infos && dart run tools/check_imports/bin/check_imports.dart .
     test:
       description: Unit and widget tests in every package that has them.
       exec: flutter test
