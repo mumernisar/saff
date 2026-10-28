@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>body{margin:0;background:#ECEEF2;font-family:'Geist',system-ui,sans-serif;color:#161A22;-webkit-font-smoothing:antialiased}a{color:#161A22}a:hover{color:#646B7A}</style>
+</helmet>
+<div style="padding:56px 56px 96px;display:flex;flex-direction:column;gap:72px">
+  <div style="display:flex;flex-direction:column;gap:8px;max-width:720px">
+    <div style="font-size:40px;line-height:44px;font-weight:600;letter-spacing:-0.01em">Saff · screens</div>
+    <div style="font-size:16px;line-height:24px;color:#646B7A;text-wrap:pretty">Wake flow, Today, Chat, Learn and Stats. The wake flow keeps its own palette in both themes; the other screens are shown light and dark. Every frame is the live prototype held at one state. To click through, open <a href="Duha Prototype.dc.html">the prototype</a>.</div>
+  </div>
+
+  <section data-screen-label="Wake light" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;flex-direction:column;gap:4px"><div style="font-size:24px;line-height:30px;font-weight:600">1 · Alarm ringing</div><div style="font-size:14px;line-height:20px;color:#646B7A">The background brightens night → fajr → dawn → duha with the volume. You are the sun in the bottom-right corner: swipe it up to wake. Ali peeks in from the left, asleep with z’s or awake with one eye open. While he sleeps, nudge him and get ahead.</div></div>
+    <div style="display:flex;flex-wrap:wrap;gap:32px">
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">1a · Night, 0 s</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="alarm-0" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">1b · Fajr, 10 s</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="alarm-1" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">1c · Dawn, 20 s</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="alarm-2" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">1d · Duha, 30 s · Ali is up</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="alarm-3" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">1e · Nudged</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="alarm-nudged" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">1f · Mid-swipe, the sun rises</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="alarm-swipe" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">1g · Ali woke first</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="alarm-ahead" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">1h · Ayah instead of dua</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="alarm-1" alarm-text="Ad-Duha 93:1–2" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">1i · Ali’s photo (drop one in)</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="alarm-1" buddy-photo="{{ true }}" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">1j · After snooze</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="alarm-snoozed" hint-size="436px,939px"></dc-import></div>
+    </div>
+  </section>
+  <section data-screen-label="Wake light · group" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;flex-direction:column;gap:4px"><div style="font-size:24px;line-height:30px;font-weight:600">1G · Alarm ringing, saff of 3 or more</div><div style="font-size:14px;line-height:20px;color:#646B7A;text-wrap:pretty">The peek gives way to the row itself. Everyone stands on one line: people who are up fill their place with their colour and open eyes, people still asleep are dashed gaps snoring z’s with a Nudge under them. You are the gold face in the corner: drag yourself into your dashed spot at the end of the row and it snaps in, then the morning blooms. Past five people the row keeps the first one up and the sleepers, and folds the rest into “+8 others” with one Nudge for all of them.</div></div>
+    <div style="display:flex;flex-wrap:wrap;gap:32px">
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">1Ga · Nobody up yet</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="alarm-group-0" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">1Gb · Sara up first</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="alarm-group" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">1Gc · Bilal nudged</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="alarm-group-nudged" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">1Gd · You are the last gap</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="alarm-group-last" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">1Gb2 · Dragging into your spot</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="alarm-group-drag" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">1Ge · Saff of 4</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="alarm-group-4" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">1Gf · Saff of 12 · +8 others</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="alarm-group-12" hint-size="436px,939px"></dc-import></div>
+    </div>
+  </section>
+
+  <section data-screen-label="Today's setup" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;flex-direction:column;gap:4px"><div style="font-size:24px;line-height:30px;font-weight:600">1H · Today’s setup</div><div style="font-size:14px;line-height:20px;color:#646B7A;text-wrap:pretty">Shown once the alarm is dismissed, on the same warm ground the light bloom ends on. It sets up the round: today’s game, the cards it pulls from, the goal, and who in the saff is up. Nothing starts until you tap.</div></div>
+    <div style="display:flex;flex-wrap:wrap;gap:32px">
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">1Ha · Card Duel · pair</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="brief" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">1Hb · Card Duel · saff of 3</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="brief-group" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">1Hc · Climber · Ali asleep</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="brief-climber" hint-size="436px,939px"></dc-import></div>
+    </div>
+  </section>
+
+  <section data-screen-label="Rounds" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;flex-direction:column;gap:4px"><div style="font-size:24px;line-height:30px;font-weight:600">2 · Rounds</div><div style="font-size:14px;line-height:20px;color:#646B7A">Card Duel: typed, multiple choice, ayah. 25 seconds per card; no right or wrong until the reveal. Climber: the sky brightens as you climb.</div></div>
+    <div style="display:flex;flex-wrap:wrap;gap:32px">
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">2a · Typed card</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="duel-0" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">2b · Multiple choice</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="duel-1" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">2c · Ayah card</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="duel-2" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">2d · Climber, playing</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="climber" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">2e · Climber, game over</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="climber-over" hint-size="436px,939px"></dc-import></div>
+    </div>
+  </section>
+
+  <section data-screen-label="Waiting" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;flex-direction:column;gap:4px"><div style="font-size:24px;line-height:30px;font-weight:600">3 · Waiting for Ali</div><div style="font-size:14px;line-height:20px;color:#646B7A">Ring again: 3 uses, 2 minutes apart. Offline hides it and makes the WhatsApp call primary.</div></div>
+    <div style="display:flex;flex-wrap:wrap;gap:32px">
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">3a · Ali is playing</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="waiting-playing" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">3b · Asleep, rang again</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="waiting-asleep" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">3c · Offline</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="waiting-offline" hint-size="436px,939px"></dc-import></div>
+    </div>
+  </section>
+
+  <section data-screen-label="Reveal" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;flex-direction:column;gap:4px"><div style="font-size:24px;line-height:30px;font-weight:600">4 · Reveal and cards</div><div style="font-size:14px;line-height:20px;color:#646B7A">Both scores count up together; the higher one settles a beat later and gains the gold underline. Cards swipe one per page.</div></div>
+    <div style="display:flex;flex-wrap:wrap;gap:32px">
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">4a · Reveal</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="reveal-win" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">4b · Reveal, missed (Climber)</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="reveal-missed" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">4c · Card review, 1 of 3</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="review-0" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">4d · Card review, last</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="review-2" hint-size="436px,939px"></dc-import></div>
+    </div>
+  </section>
+
+  <section data-screen-label="Home" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;flex-direction:column;gap:4px"><div style="font-size:24px;line-height:30px;font-weight:600">5 · Home</div><div style="font-size:14px;line-height:20px;color:#646B7A">Built to hold none, one or many saffs. The next alarm leads, with tonight’s actions for it; every saff is listed below.</div></div>
+    <div style="display:flex;flex-wrap:wrap;gap:32px">
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">5a · Several saffs · light</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="today" theme="Light" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">5b · Several saffs · dark</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="today" theme="Dark" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">5c · One saff</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="home-one" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">5d · No saffs yet</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="home-none" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">5e · Morning after</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="today-morning" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">5f · No saffs · dark</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="home-none" theme="Dark" hint-size="436px,939px"></dc-import></div>
+    </div>
+  </section>
+  <section data-screen-label="Chat" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;flex-direction:column;gap:4px"><div style="font-size:24px;line-height:30px;font-weight:600">6 · Chats and alarm proposals</div><div style="font-size:14px;line-height:20px;color:#646B7A">One chat per saff. Proposal cards carry pending, waiting, accepted, declined and replaced states.</div></div>
+    <div style="display:flex;flex-wrap:wrap;gap:32px">
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">6a · Chats list</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="chats" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">6b · Fajr with Ali · proposal pending</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="chat" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">6c · Group saff</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="chat-group" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">6d · Counter-proposal</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="chat-changed" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">6e · After the round</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="chat-morning" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">6f · Chat · dark</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="chat" theme="Dark" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">6g · + sheet</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="sheet-plus" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">6h · Change an alarm</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="sheet-propose" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">6i · Skip a morning</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="sheet-skip" hint-size="436px,939px"></dc-import></div>
+    </div>
+  </section>
+  <section data-screen-label="Plant" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;flex-direction:column;gap:4px"><div style="font-size:24px;line-height:30px;font-weight:600">9 · Leave a card</div><div style="font-size:14px;line-height:20px;color:#646B7A">One kind of card: your question, answered by text or multiple choice. The answer stays hidden until they try.</div></div>
+    <div style="display:flex;flex-wrap:wrap;gap:32px">
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">9a · Text answer</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="plant-1" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">9b · Multiple choice</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="plant-2" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">9c · Preview</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="plant-3" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">9d · Multiple choice · dark</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="plant-2" theme="Dark" hint-size="436px,939px"></dc-import></div>
+    </div>
+  </section>
+  <section data-screen-label="Saff setup" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;flex-direction:column;gap:4px"><div style="font-size:24px;line-height:30px;font-weight:600">10 · Start or join a saff</div><div style="font-size:14px;line-height:20px;color:#646B7A">Reached from the empty Home, Settings or “New saff”.</div></div>
+    <div style="display:flex;flex-wrap:wrap;gap:32px">
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">10a · Start or join</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="saff-choose" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">10b · Invite code</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="saff-code" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">10c · Enter a code</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="saff-join" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">10d · Paired</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="saff-paired" hint-size="436px,939px"></dc-import></div>
+    </div>
+  </section>
+  <section data-screen-label="Settings" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;flex-direction:column;gap:4px"><div style="font-size:24px;line-height:30px;font-weight:600">11 · Settings</div><div style="font-size:14px;line-height:20px;color:#646B7A">Grouped list from the avatar on Home.</div></div>
+    <div style="display:flex;flex-wrap:wrap;gap:32px">
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">11a · Settings · light</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="settings" theme="Light" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">11b · Settings · dark</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="settings" theme="Dark" hint-size="436px,939px"></dc-import></div>
+    </div>
+  </section>
+<section data-screen-label="Learn" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;flex-direction:column;gap:4px"><div style="font-size:24px;line-height:30px;font-weight:600">7 · Learn</div><div style="font-size:14px;line-height:20px;color:#646B7A">Each saff has its own material for its next alarm: surahs, hadith, duas, vocabulary, general knowledge.</div></div>
+    <div style="display:flex;flex-wrap:wrap;gap:32px">
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">7a · Learn by saff · light</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="learn-home" theme="Light" hint-size="436px,939px"></dc-import></div>
+            <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">7h · Card lesson (vocabulary)</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="learn-cards" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">7i · Short-surah path</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="learn-path" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">7b · Surah</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="learn-surah" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">7c · Lesson</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="learn-lesson" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">7d · Word popover</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="learn-word" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">7e · Marked learned</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="learn-done" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">7f · Path · dark</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="learn-path" theme="Dark" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">7g · Word popover · dark</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="learn-word" theme="Dark" hint-size="436px,939px"></dc-import></div>
+    </div>
+  </section>
+  <section data-screen-label="Stats" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;flex-direction:column;gap:4px"><div style="font-size:24px;line-height:30px;font-weight:600">8 · Stats</div><div style="font-size:14px;line-height:20px;color:#646B7A">“You” covers your own mornings and badges. Each saff gets its calendar and standings, for two people or four.</div></div>
+    <div style="display:flex;flex-wrap:wrap;gap:32px">
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">8a · You · light</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="stats" theme="Light" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">8b · Badges</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="stats-badges" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">8c · Badge sheet, nearly there</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="stats-badge" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">8d · Fajr saff</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="stats-me" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">8e · Group saff</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="stats-group" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">8f · Day sheet</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="stats-day" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">8g · You · dark</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="stats" theme="Dark" hint-size="436px,939px"></dc-import></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:500">8h · Group saff · dark</div><dc-import name="Duha Prototype" panel="{{ false }}" still="{{ true }}" preset="stats-group" theme="Dark" hint-size="436px,939px"></dc-import></div>
+    </div>
+  </section>
+</div>
+</x-dc>
+</body>
+</html>
