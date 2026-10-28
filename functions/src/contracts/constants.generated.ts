@@ -37,6 +37,7 @@ export interface Constants {
   readonly importMaxCards: number;
   readonly importMaxFile: number;
   readonly importsPerSaff: number;
+  readonly billingCapUsd: number;
 }
 
 /** The values every deployed function uses. */
@@ -76,6 +77,7 @@ export const PRODUCTION_CONSTANTS: Constants = {
   importMaxCards: 2000,
   importMaxFile: 52428800,
   importsPerSaff: 10,
+  billingCapUsd: 10,
 };
 
 /** Production values with the demo overlay applied. */
@@ -115,6 +117,7 @@ export const DEMO_CONSTANTS: Constants = {
   importMaxCards: 2000,
   importMaxFile: 52428800,
   importsPerSaff: 10,
+  billingCapUsd: 10,
 };
 
 /**

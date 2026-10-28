@@ -173,5 +173,10 @@
     "value": 10,
     "unit": "count",
     "description": "Imports per saff."
+  },
+  "BILLING_CAP_USD": {
+    "value": 10,
+    "unit": "usd",
+    "description": "Spend at which capBilling unlinks billing from the project."
   }
 }

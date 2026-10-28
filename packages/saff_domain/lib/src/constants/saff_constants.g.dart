@@ -42,6 +42,7 @@ final class SaffConstants {
     required this.importMaxCards,
     required this.importMaxFile,
     required this.importsPerSaff,
+    required this.billingCapUsd,
   });
 
   /// The values every release build uses.
@@ -81,6 +82,7 @@ final class SaffConstants {
     importMaxCards: 2000,
     importMaxFile: 52428800,
     importsPerSaff: 10,
+    billingCapUsd: 10,
   );
 
   /// [production] with `contracts/constants.demo.json` applied.
@@ -120,6 +122,7 @@ final class SaffConstants {
     importMaxCards: 2000,
     importMaxFile: 52428800,
     importsPerSaff: 10,
+    billingCapUsd: 10,
   );
 
   /// Picks the constants for a build.
@@ -236,4 +239,7 @@ final class SaffConstants {
 
   /// Imports per saff.
   final int importsPerSaff;
+
+  /// Spend at which capBilling unlinks billing from the project.
+  final int billingCapUsd;
 }

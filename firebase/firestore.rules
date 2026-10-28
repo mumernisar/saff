@@ -1,9 +1,15 @@
 rules_version = '2';
 
-// Stage 0: deny everything. Real rules arrive with the data model
+// Stage 0: deny everything except the backend status document. Real rules arrive with the data model
 // (docs/SECURITY.md); until then nothing may read or write.
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Written only by capBilling (Admin SDK); every signed-in user may read it.
+    match /config/backend {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }

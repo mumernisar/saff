@@ -41,7 +41,7 @@ describe("Stage 0 rules deny everything", () => {
     const db = env.authenticatedContext("u1").firestore();
     await assertFails(getDoc(doc(db, "users/u1")));
     await assertFails(setDoc(doc(db, "users/u1"), { name: "x" }));
-    await assertFails(getDoc(doc(db, "config/backend")));
+    await assertFails(setDoc(doc(db, "config/backend"), { status: "ok" }));
   });
 
   it("storage: anonymous and signed-in read and write fail", async () => {

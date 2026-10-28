@@ -150,6 +150,20 @@ Approved by owner on: 2026-10-29
 | GitHub CLI | 2.103.3 | MIT | Repo and CI | web UI |
 | JDK (Zulu) | 21 | GPLv2+CE | Gradle and Firebase emulators (Temurin 25 too new) | Temurin 21 |
 | Android SDK | platform 36, build-tools 36.0.0, platform-tools, emulator, arm64 `google_apis` image | Android SDK terms | Android builds and emulator | Android Studio |
+| *Dart (app):* | | | | |
+| `firebase_core` / `firebase_auth` / `cloud_firestore` / `cloud_functions` / `firebase_storage` / `firebase_messaging` / `firebase_app_check` / `firebase_crashlytics` | 5.1 / 7.0 / 7.1 / 7.0 / 14.0 / 17.0 / 0.5 / 6.0 | BSD-3 | FlutterFire, chosen in ARCHITECTURE §10 | none |
+| `flutter_riverpod` | 3.4 | MIT | State and DI (ARCHITECTURE §10); no codegen in the shell | Provider, Bloc |
+| `go_router` | 18.1 | BSD-3 | Navigation | auto_route |
+| `intl`, `flutter_localizations` | SDK-pinned | BSD-3 | ARB localisation | slang |
+| `very_good_analysis` | 10.x | MIT | Lint set (ARCHITECTURE §10) | flutter_lints |
+| `melos` | 8.10 | MIT | Workspace scripts | none |
+| *Functions:* | | | | |
+| `firebase-functions` / `firebase-admin` | 6 / 13 | MIT / Apache-2 | Functions v2 and Admin SDK | none |
+| `@google-cloud/billing` | 5 | Apache-2 | `capBilling` unlinks billing | raw REST call |
+| `zod` | 3 | MIT | Input validation (BACKEND §1); not used yet | valibot |
+| `typescript`, `eslint`, `typescript-eslint` | 5 / 9 / 8 | Apache-2 / MIT | Typecheck and lint | none |
+| *Rules tests:* | | | | |
+| `@firebase/rules-unit-testing`, `firebase`, `vitest` | 5 / 12 / 3 | Apache-2 / MIT | Rules tests against the emulator | jest |
 
 ## 6. Deviations from the docs
 - **No new tests (owner's instruction, 2026-10-29):** "dont write any tests whatsoever, focus on finishing the
