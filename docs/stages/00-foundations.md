@@ -125,6 +125,19 @@ Approved by owner on: 2026-10-29
 - Toolchain installed first (owner's instruction): FVM, Flutter 3.47.8, Node 22, GitHub CLI, Firebase CLI,
   JDK 21 (Zulu), Android SDK 36 + licenses. Firebase projects exist: `saff-dev-d9605` (no. 953758325356),
   `saff-prod` (no. 971274012156).
+- Stage 0 code (2026-10-29): pub workspace + Melos scripts + 9 package shells; `contracts/` (75 error codes,
+  35 constants, demo overlay) with `tools/gen_contracts` (Dart, TS, ARB); `tools/check_imports`; `saff_core`
+  (Result, failures, pure-Dart mappers, retry, clock, log); app shell (flavors, `EnvironmentConfig`, global
+  error handlers, router with 4 tabs, Settings with the dev crash trigger, emulator reachability on Today,
+  l10n); `firebase/` (emulators on 0.0.0.0, deny-all rules plus `config/backend` read, rules-test harness);
+  `functions/` (strict TS, errors, logger, idempotency, config, `capBilling`); CI workflow;
+  `tools/demo/adb_reverse.sh`.
+- **Console steps for cost protection** (owner, per project, when it moves to Blaze; E5 / Stage 5): enable
+  the Cloud Billing API; create a Pub/Sub topic `billing-budget`; create a Cloud Billing budget with alert
+  thresholds at $1 and $5 connected to that topic; grant the `capBilling` service account (the default
+  compute service account of the project) the **Billing Account Administrator** role on the billing
+  account (or the narrower Project Billing Manager on the project, as Google's guide describes); deploy
+  `capBilling`. Reset `config/backend.status` to `ok` after re-linking billing.
 - Two-phone demos: `DEMO.md`, `DEV_RELAXATIONS.md`, demo items folded into Stages 0, 3, 5, 7 and 14,
   plus `README.md`, `REPOSITORY.md` §6, `PRODUCT.md` §14 and a rule in `CLAUDE.md`.
 

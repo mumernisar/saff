@@ -24,6 +24,9 @@ dev_dependencies:
 
 melos:
   scripts:
+    ci:
+      description: Everything CI runs for Dart (Functions and rules have npm scripts).
+      run: melos run generate && git diff --exit-code && melos run format:check && melos run analyze && melos run test
     generate:
       description: Regenerate Dart, TypeScript and ARB output from /contracts.
       run: dart run tools/gen_contracts/bin/gen_contracts.dart . && dart format packages app tools
