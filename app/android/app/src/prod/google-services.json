@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "971274012156",
+    "project_id": "saff-prod",
+    "storage_bucket": "saff-prod.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:971274012156:android:0b5d2bd17d569d09cd1e79",
+        "android_client_info": {
+          "package_name": "app.saff"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOp6GCF4NGdsyb8fBGVe0HcAlq5HnmUbA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
