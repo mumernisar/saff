@@ -7,6 +7,7 @@ import 'package:saff_app/di/providers.dart';
 import 'package:saff_app/features/wake/view_models/ringing_view_model.dart';
 import 'package:saff_app/features/wake/widgets/hold_to_start_button.dart';
 import 'package:saff_app/l10n/app_localizations.dart';
+import 'package:saff_ui/saff_ui.dart';
 
 /// The screen the alarm activity shows while the alarm rings.
 class RingingView extends ConsumerStatefulWidget {
@@ -20,6 +21,7 @@ class RingingView extends ConsumerStatefulWidget {
 class _RingingViewState extends ConsumerState<RingingView> {
   late final Timer _tick;
   DateTime _now = DateTime.now();
+  DateTime _ringSeen = DateTime.now();
 
   @override
   void initState() {
@@ -42,62 +44,76 @@ class _RingingViewState extends ConsumerState<RingingView> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    ref.listen(ringingProvider.select((s) => s.ring?.ringStartedElapsedMs), (
+      _,
+      _,
+    ) {
+      _ringSeen = DateTime.now();
+    });
     final state = ref.watch(ringingProvider);
     final vm = ref.read(ringingProvider.notifier);
     final ring = state.ring;
+    final ramp = (ring?.rampMs ?? 30000).clamp(1, 1 << 30);
+    final progress = ring == null
+        ? 0.0
+        : _now.difference(_ringSeen).inMilliseconds / ramp;
+    final dark = WakePalette.darkText(progress);
     return Scaffold(
-      backgroundColor: const Color(0xFF0F1524),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Spacer(),
-              Text(
-                DateFormat.Hm().format(_now),
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 80,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFFEEF1F6),
-                ),
-              ),
-              Text(
-                ring?.alarmName ?? l10n.ringingNoAlarm,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 22, color: Color(0xFFF2B33D)),
-              ),
-              const Spacer(),
-              if (state.started)
+      body: WakeBackground(
+        progress: progress,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Spacer(),
                 Text(
-                  l10n.ringingStarted,
-                  style: const TextStyle(color: Colors.white70, fontSize: 18),
-                )
-              else if (ring != null) ...[
-                HoldToStartButton(
-                  label: l10n.holdToStart,
-                  onCompleted: () => unawaited(vm.start()),
-                ),
-                const SizedBox(height: 16),
-                if (!state.snoozed)
-                  TextButton(
-                    onPressed: () => unawaited(
-                      vm.snooze(
-                        ref
-                            .read(environmentConfigProvider)
-                            .constants
-                            .snoozeDuration
-                            .inMinutes,
-                      ),
-                    ),
-                    child: Text(
-                      l10n.snooze,
-                      style: const TextStyle(color: Colors.white70),
-                    ),
+                  DateFormat.Hm().format(_now),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 80,
+                    fontWeight: FontWeight.w700,
                   ),
+                ),
+                Text(
+                  ring?.alarmName ?? l10n.ringingNoAlarm,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 22,
+                    color: dark
+                        ? const Color(0xFF7A4A00)
+                        : const Color(0xFFF2B33D),
+                  ),
+                ),
+                const Spacer(),
+                if (state.started)
+                  Text(
+                    l10n.ringingStarted,
+                    style: const TextStyle(fontSize: 18),
+                  )
+                else if (ring != null) ...[
+                  HoldToStartButton(
+                    label: l10n.holdToStart,
+                    onCompleted: () => unawaited(vm.start()),
+                  ),
+                  const SizedBox(height: 16),
+                  if (!state.snoozed)
+                    TextButton(
+                      onPressed: () => unawaited(
+                        vm.snooze(
+                          ref
+                              .read(environmentConfigProvider)
+                              .constants
+                              .snoozeDuration
+                              .inMinutes,
+                        ),
+                      ),
+                      child: Text(l10n.snooze),
+                    ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),

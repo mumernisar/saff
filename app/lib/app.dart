@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:saff_app/l10n/app_localizations.dart';
 import 'package:saff_app/router.dart';
+import 'package:saff_ui/saff_ui.dart';
 
 /// The root widget.
 class SaffApp extends StatefulWidget {
@@ -30,9 +31,7 @@ class _SaffAppState extends State<SaffApp> {
       GlobalCupertinoLocalizations.delegate,
     ],
     supportedLocales: AppLocalizations.supportedLocales,
-    theme: ThemeData(
-      colorSchemeSeed: const Color(0xFF2E7D6B),
-      useMaterial3: true,
-    ),
+    theme: SaffTheme.light(),
+    darkTheme: SaffTheme.dark(),
   );
 }

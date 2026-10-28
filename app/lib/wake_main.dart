@@ -5,6 +5,7 @@ import 'package:saff_app/config/environment_config.dart';
 import 'package:saff_app/di/providers.dart';
 import 'package:saff_app/features/wake/views/ringing_view.dart';
 import 'package:saff_app/l10n/app_localizations.dart';
+import 'package:saff_ui/saff_ui.dart';
 
 /// Entrypoint of the wake engine, started by the native alarm activity
 /// (`docs/ARCHITECTURE.md` §7). Minimal providers; no Firebase until the
@@ -27,7 +28,7 @@ Future<void> wakeMain() async {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: AppLocalizations.supportedLocales,
-        theme: ThemeData.dark(useMaterial3: true),
+        theme: SaffTheme.dark(),
         home: const RingingView(),
       ),
     ),
