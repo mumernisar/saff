@@ -140,6 +140,16 @@ Approved by owner on: YYYY-MM-DD
 ## 5. Dependencies added
 | Package | Version | Licence | Why | Alternatives |
 |---|---|---|---|---|
+| *Tooling (machine, not in the repo):* | | | | |
+| FVM | 4.3.2 | MIT | Pin Flutter per repo (`.fvmrc`), same in CI | Manual SDK install |
+| Flutter / Dart | 3.47.8 / 3.13.7 | BSD-3 | App framework (hard requirement, ARCHITECTURE D1) | none |
+| Melos | 8.10.0 (docs said "7"; latest stable installed) | MIT | Workspace scripts | plain scripts |
+| FlutterFire CLI | 1.4.1 | BSD-3 | `flutterfire configure` per flavor | manual config |
+| Node | 22.23.4 (keg-only `node@22`) | MIT | Functions runtime (`.nvmrc` 22) | Node 24 (not supported by Functions) |
+| Firebase CLI | 15.34.1 | MIT | Emulators, deploy | none |
+| GitHub CLI | 2.103.3 | MIT | Repo and CI | web UI |
+| JDK (Zulu) | 21 | GPLv2+CE | Gradle and Firebase emulators (Temurin 25 too new) | Temurin 21 |
+| Android SDK | platform 36, build-tools 36.0.0, platform-tools, emulator, arm64 `google_apis` image | Android SDK terms | Android builds and emulator | Android Studio |
 
 ## 6. Deviations from the docs
 ## 7. Evidence of exit criteria
