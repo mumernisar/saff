@@ -36,7 +36,8 @@ saff/
 │   ├── saff_modes/
 │   ├── mode_card_duel/
 │   ├── mode_word/
-│   └── mode_arcade/
+│   ├── mode_arcade/
+│   └── mode_selfie/
 ├── functions/                           # Cloud Functions (TypeScript)
 │   ├── src/
 │   │   ├── index.ts                     # exports only
@@ -80,8 +81,9 @@ saff/
 
 ```
 saff_app ──► mode_card_duel ─┐
-         ──► mode_word ──────┼─► saff_modes ─► saff_ui ─► saff_core
-         ──► mode_arcade ────┘        │                     ▲
+         ──► mode_word ──────┤
+         ──► mode_arcade ────┼─► saff_modes ─► saff_ui ─► saff_core
+         ──► mode_selfie ────┘        │                     ▲
          ──► saff_alarm ──────────────┼─────────────────────┤
          ──► saff_domain ─────────────┴─────────────────────┘
 ```

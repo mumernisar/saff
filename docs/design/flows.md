@@ -257,9 +257,9 @@ Tabs (both docs and mockups): **Today · Chat · Learn · Stats**. Settings is p
 ### Between documents
 | # | Contradiction | Needed by |
 |---|---|---|
-| D-1 | `ARCHITECTURE.md` §4.1 lists the package `mode_selfie`; `REPOSITORY.md` §1 layout and §3 dependency graph don't. Stage 0 creates "all packages". | **Stage 0** |
+| D-1 | `ARCHITECTURE.md` §4.1 lists the package `mode_selfie`; `REPOSITORY.md` §1 layout and §3 dependency graph don't. Stage 0 creates "all packages". | **Resolved 2026-10-28:** `mode_selfie` added to `REPOSITORY.md` |
 | D-2 | `saff_core` "depends on nothing (pure Dart)" (ARCHITECTURE §4.1, REPOSITORY §3), but Stage 0 puts "`FailureMapper` + all mappers" there, and the mappers need `cloud_functions`, `cloud_firestore`, `firebase_auth`, `firebase_storage`, `package:http`, Flutter's `PlatformException` and `sqlite3`/`drift` types. | **Stage 0** |
-| D-3 | `ERRORS.md` §10 maps invalid callable input to `INVALID_ARGUMENT`, which isn't in the initial catalog (§5). | **Stage 0** |
+| D-3 | `ERRORS.md` §10 maps invalid callable input to `INVALID_ARGUMENT`, which isn't in the initial catalog (§5). | **Resolved 2026-10-28:** added to the Generic codes |
 | D-4 | `TESTING.md` §5: performance budgets "checked in Stage 12"; `STAGES.md` checks them in Stage 14. | Stage 14 |
 | D-5 | `README.md` terms: an alarm is "agreed by all members of a saff"; PRODUCT §4.2: group alarms are opt-in. | Stage 4 |
 | D-6 | PRODUCT §3: the owner can rename the saff; `SECURITY.md` rules let members update only `whatsappGroupLink`, and `BACKEND.md` has no rename callable. | Stage 3 |
