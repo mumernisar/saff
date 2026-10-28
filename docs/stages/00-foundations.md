@@ -152,6 +152,12 @@ Approved by owner on: 2026-10-29
 | Android SDK | platform 36, build-tools 36.0.0, platform-tools, emulator, arm64 `google_apis` image | Android SDK terms | Android builds and emulator | Android Studio |
 
 ## 6. Deviations from the docs
+- **No new tests (owner's instruction, 2026-10-29):** "dont write any tests whatsoever, focus on finishing the
+  functionality of the whole app, we'll go towards test later." From the end of step 7 on, nothing new is
+  tested; tests written before that stay. This breaks `CLAUDE.md` (tests per layer, every bug fix starts with
+  a failing test) and leaves these exit criteria unproven until the owner re-enables testing: E1 (coverage
+  gates), the Functions unit/emulator tests of steps 8-9 and the E5 tests, and E4 beyond the existing
+  import-check tests. Tracked in §8.
 ## 7. Evidence of exit criteria
 - [ ] E1 `melos run ci` green in GitHub Actions → link to the run
 - [ ] E2 Generated contracts identical in Dart and TS → contract test names (Dart + TS), CI diff step
@@ -162,6 +168,8 @@ Approved by owner on: 2026-10-29
 - [ ] E6 Physical phone reaches the emulators over Wi-Fi and over USB → device notes / screenshots
 
 ## 8. Known issues
+- Steps 8-10 (Functions skeleton, `capBilling`, CI) have no tests by the owner's instruction (§6); E5 and the
+  Functions coverage gates are open until testing resumes.
 ## 9. Follow-ups for later stages
 Demo work folded into later stages (see `STAGES.md`, `DEMO.md`, `DEV_RELAXATIONS.md`); copy these into
 each stage file at its start:

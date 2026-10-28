@@ -1,0 +1,9 @@
+{
+  "name": "saff",
+  "private": true,
+  "description": "Root scripts; the Dart workspace is in pubspec.yaml.",
+  "scripts": {
+    "emulators": "cd firebase && firebase emulators:start --project saff-dev-d9605",
+    "test:rules": "npm --prefix firebase/rules-tests run test:emulated"
+  }
+}

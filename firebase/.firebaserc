@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "default": "saff-dev-d9605",
+    "dev": "saff-dev-d9605",
+    "prod": "saff-prod"
+  }
+}
