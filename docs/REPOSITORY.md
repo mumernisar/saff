@@ -121,7 +121,9 @@ saff_app ──► mode_card_duel ─┐
 
 - Config via `--dart-define-from-file=env/<flavor>.json` (gitignored; `env/example.json` committed).
 - `EnvironmentConfig` exposes: flavor, content gateway base URL, packs index URL, emulator flag, log level.
-- Emulator mode (`USE_EMULATORS=true`) points Auth/Firestore/Functions/Storage at local emulators.
+- Emulator mode (`USE_EMULATORS=true`) points Auth/Firestore/Functions/Storage at local emulators on
+  `EMULATOR_HOST` (default `127.0.0.1`; the laptop's LAN IP for physical phones). Dev-only switches such as
+  `DEMO_TIMING` are listed in `DEV_RELAXATIONS.md`; the prod entrypoint ignores them.
 
 ## 7. Git workflow
 

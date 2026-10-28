@@ -420,7 +420,8 @@ alarm screen with the phone locked) → start a saff / join with a code.
 | `IMPORTS_PER_SAFF` | 10 |
 
 Constants live in `contracts/constants.json` and are generated into Dart and TypeScript so client and
-server never disagree.
+server never disagree. Shorter demo timings exist for development only (`DEV_RELAXATIONS.md` R-1); they
+never apply to the prod build.
 
 ---
 

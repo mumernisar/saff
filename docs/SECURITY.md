@@ -25,6 +25,7 @@ match /saffs/{saffId}/messages/{id} {
 match /saffs/{saffId}/rounds/{rid}/results/{uid} {
   allow create: if member(saffId) && request.auth.uid == uid && roundLocked(saffId, rid) && beforeDeadline(saffId, rid);
   allow read: if request.auth.uid == uid || (member(saffId) && roundRevealed(saffId, rid)); }
+match /config/backend { allow read: if signedIn(); allow write: if false; }   // billing-cap status, ERRORS.md §7a
 ... every other server-written collection: allow read: if member(saffId); allow write: if false;
 ```
 - Rules are tested for every collection with allowed and denied cases (`firebase/rules-tests/`).

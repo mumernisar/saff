@@ -18,7 +18,10 @@ Crashlytics); `bootstrap.dart` with global error handlers; empty app shell with 
 skeleton (`core/errors`, logger, zod, idempotency helper); rules skeleton (deny all) + rules test harness;
 CI workflow; cost protection on both Firebase projects (`ARCHITECTURE.md` §9a): budget alerts at $1 and $5,
 plus a billing cap, `capBilling`, a function subscribed to the budget's Pub/Sub notifications that disables
-billing on the project when spend passes $10 (Google's documented "cap costs" pattern).
+billing on the project when spend passes $10 (Google's documented "cap costs" pattern); physical-phone
+dev setup (`DEMO.md`, `DEV_RELAXATIONS.md`): `EMULATOR_HOST` in `env/dev.json` (the laptop's LAN IP),
+emulators bound to `0.0.0.0`, `tools/demo/adb_reverse.sh` for USB, and the demo-timing overlay
+`contracts/constants.demo.json` generated next to the real constants.
 **Exit criteria:**
 - `melos run ci` green in GitHub Actions.
 - Generated contracts identical in Dart and TS (a test compares both against `contracts/`).
@@ -26,6 +29,8 @@ billing on the project when spend passes $10 (Google's documented "cap costs" pa
   becomes `NetworkFailure(NETWORK_OFFLINE)` (unit test).
 - Import-boundary check fails on a planted violation.
 - A simulated budget message disables billing on `saff-dev`.
+- A dev build on a physical phone reaches the laptop's emulators over Wi-Fi (`EMULATOR_HOST`) and over USB
+  (`adb reverse`).
 
 ## Stage 1: Alarm module
 **Starts from:** Stage 0 shell.
@@ -47,11 +52,14 @@ dark; text scale 1.3 doesn't break layouts.
 **Builds:** sign-in (Google, email link), profile (name, WhatsApp), `createSaff`, `joinSaff` (code + App
 Link), `leaveSaff`, `removeMember`, `regenerateInvite`, members list, owner role, presence (online/last
 seen), **multiple saffs per user** (saff switcher, `SaffContextController`, saff-scoped routes), routing
-redirects; rules + rules tests for users/saffs/members; device registration for FCM.
+redirects; rules + rules tests for users/saffs/members; device registration for FCM; dev flavor only:
+"Sign in as test user" with seeded accounts (Hamza, Ali, Sara) and `tools/demo/seed`, which can also
+pre-create a pair or group saff with them (`DEV_RELAXATIONS.md` R-2, R-3).
 **Exit criteria:** two emulators: create, join by code and by link, leave, remove; a user in two saffs
 switches between them; free limits enforced on the server (group of 4, 2 saffs per user) with an
 `EntitlementRepository` that reads a server-written default free entitlement (Plus itself arrives in Stage
-13); full-saff and per-user-limit errors; rules tests for every allow/deny; integration test of the join flow.
+13); full-saff and per-user-limit errors; rules tests for every allow/deny; integration test of the join flow;
+two physical phones sign in as seeded users and see the same seeded saff (`DEMO.md`).
 
 ## Stage 4: Chat, proposals and local alarm scheduling
 **Builds:** chat (Flyer Chat on Firestore): text, seen-by-all ticks, typing, reply, delete within 1 h,
@@ -70,9 +78,12 @@ limits enforced; chat states covered by tests.
 **Builds:** `planOccurrences`, task queues (`lockRound` with a stub round, `offlineCheck`, `deadline`),
 `sweeper`; occurrence fixtures incl. DST; packs sync on the client (`PackService`, Drift tables) and server
 pack cache; content gateway (`/ayah`, `/surah`, `/words`, `/hadith`, `/resolve`) with Quran Foundation
-adapter, CDN caching, App Check; `roundLocked` push → background download + resolve into Drift.
+adapter, CDN caching, App Check; `roundLocked` push → background download + resolve into Drift; demo timing applied by the server in the
+emulator (`DEV_RELAXATIONS.md` R-1); the Functions emulator sends real FCM pushes with a local
+service-account key (R-5).
 **Exit criteria:** an alarm's occurrences and tasks appear 48 h ahead; killing a task is recovered by the
-sweeper; a locked round with placeholders is fully resolved on the phone in airplane mode afterwards.
+sweeper; a locked round with placeholders is fully resolved on the phone in airplane mode afterwards; with
+demo timing, two physical phones get the real "round locked" push from the emulator 1 min before the alarm.
 
 ## Stage 6: The morning loop with Card Duel
 **Builds:** round assembly (Card Duel lineup, seeded, seen-cards, difficulty mix); wake flow: ringing
@@ -87,7 +98,9 @@ happens exactly once under concurrent submissions (emulator test); answers survi
 per member and group link; offline alert; deadline reveal with missed members; offline arcade fallback
 (unranked); unresolvable card exclusion.
 **Exit criteria:** nudge re-rings a locked phone within 10 s (device checklist #9); limits enforced;
-deadline reveal verified; airplane-mode morning plays and syncs later.
+deadline reveal verified; airplane-mode morning plays and syncs later; the two-phone demo in `DEMO.md`
+runs end to end with demo timing (nudge via real FCM from the emulator, offline alert at 30 s, deadline
+reveal at 5 min).
 
 ## Stage 8: More modes
 **Builds:** `mode_word`, `mode_arcade` (Climber, Rapid Roll with seeded platforms and difficulty ramp),
@@ -142,6 +155,7 @@ members and alarms but blocks joins and new alarms; a Plus member claims ownersh
 ## Stage 14: Hardening and release
 **Builds:** performance budgets, accessibility pass (TalkBack, contrast, text scale), crash-free soak
 with a closed beta saff group for 2 weeks, Play Console declarations (exact alarm, full-screen intent,
-foreground service type), Data Safety form, store listing, release pipeline.
-**Exit criteria:** budgets met; zero open critical bugs; beta crash-free sessions ≥ 99.5%; internal track
+foreground service type), Data Safety form, store listing, release pipeline; every row of
+`DEV_RELAXATIONS.md` reverted or proven absent from the prod build.
+**Exit criteria:** every `DEV_RELAXATIONS.md` row has its revert evidence; budgets met; zero open critical bugs; beta crash-free sessions ≥ 99.5%; internal track
 release approved.

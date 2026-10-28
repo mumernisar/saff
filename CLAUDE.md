@@ -84,6 +84,8 @@ The project is built in stages (`docs/STAGES.md`). Never work outside the curren
 - Every public class and method in packages has a doc comment.
 - No `print`. Use the `Log` interface.
 - No secrets in the repo. Use `--dart-define-from-file` (gitignored) and Secret Manager on the server.
+- Every dev-only relaxation of a documented rule is listed in `docs/DEV_RELAXATIONS.md` before it is
+  built, with its gate and how to revert it for prod.
 
 **Tests**
 - Every bug fix starts with a failing test.

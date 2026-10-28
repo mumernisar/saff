@@ -9,3 +9,4 @@ env/*.json
 !env/example.json
 functions/.env.local
 functions/.secret.local
+.emulator-data/

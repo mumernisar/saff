@@ -14,6 +14,8 @@
 | `TESTING.md` | Test kinds per layer, fixtures, emulators, device matrix, CI gates |
 | `STAGES.md` | The build plan, stage by stage, with exit criteria |
 | `OPEN_QUESTIONS.md` | Questions waiting for the owner, and decisions already made |
+| `DEMO.md` | Two-phone demo on physical phones with the emulators: setup and script |
+| `DEV_RELAXATIONS.md` | Rules relaxed for development and demos, each with how to revert it for prod |
 | `stages/` | One file per completed stage: starting point, what was done, why |
 | `design/` | Exported mockups (source of truth for visuals) |
 
