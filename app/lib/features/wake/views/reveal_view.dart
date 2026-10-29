@@ -80,6 +80,8 @@ class RevealView extends ConsumerWidget {
                                 ? l10n.playedOffline
                                 : reveal.mode == 'climber'
                                 ? l10n.climberReached(r.points)
+                                : reveal.mode == 'rapidRoll'
+                                ? l10n.rollReached(r.points)
                                 : l10n.correctOf(r.correct, r.total),
                             style: TextStyle(color: c.muted),
                           ),

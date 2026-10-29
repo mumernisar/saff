@@ -41,6 +41,14 @@ class WakeFlowView extends ConsumerWidget {
     final vm = ref.read(wakeFlowProvider(key).notifier);
     final constants = ref.watch(environmentConfigProvider).constants;
     final registry = ModeRegistry([
+      RapidRollMode(
+        RapidRollStrings(
+          hint: l10n.rollHint,
+          reached: l10n.rollReached,
+          locked: l10n.rollLocked,
+          continueLabel: l10n.continueLabel,
+        ),
+      ),
       ClimberMode(
         ClimberStrings(
           hint: l10n.climberHint,

@@ -94,6 +94,31 @@ class _ReviewViewState extends ConsumerState<ReviewView> {
                     ],
                   ),
                 ),
+              if (card.type == 'ask' && card.authorId == uid) ...[
+                Text(l10n.askMeGradePrompt),
+                Row(
+                  children: [
+                    TextButton(
+                      onPressed: () => vm.gradeAskMe(card.id, correct: true),
+                      child: Text(l10n.correct),
+                    ),
+                    TextButton(
+                      onPressed: () => vm.gradeAskMe(card.id, correct: false),
+                      child: Text(l10n.wrong),
+                    ),
+                    if (state.askMeGrades.containsKey(card.id))
+                      Text(
+                        state.askMeGrades[card.id]! ? l10n.correct : l10n.wrong,
+                        style: TextStyle(color: c.muted),
+                      ),
+                  ],
+                ),
+              ] else if (card.type == 'ask' &&
+                  state.askMeGrades.containsKey(card.id))
+                Text(
+                  state.askMeGrades[card.id]! ? l10n.correct : l10n.wrong,
+                  style: TextStyle(color: c.muted),
+                ),
               const Divider(),
               Text(l10n.answerLabel, style: TextStyle(color: c.muted)),
               Text(

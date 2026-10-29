@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:saff_app/data/dto/mappers.dart';
 import 'package:saff_app/data/services/firebase_services.dart';
 import 'package:saff_core/saff_core.dart';
@@ -52,6 +53,19 @@ abstract interface class SaffRepository {
 
   /// Deletes the account and everything tied to it.
   Future<Result<void>> deleteAccount();
+
+  /// Notification category switches of the user (`settings.notifications`).
+  Stream<Map<String, bool>> watchNotificationSettings(String uid);
+
+  /// Turns a notification category on or off.
+  Future<Result<void>> setNotification(
+    String uid,
+    String key, {
+    required bool on,
+  });
+
+  /// Sends feedback with optional failure details.
+  Future<Result<void>> sendFeedback(String uid, String text, {String? details});
 }
 
 /// [SaffRepository] over Firestore and callables.
@@ -179,6 +193,40 @@ final class SaffRepositoryImpl implements SaffRepository {
   Future<Result<void>> rename(String saffId, String name) => _g(
     'renameSaff',
     () => _fn.call('renameSaff', {'saffId': saffId, 'name': name}),
+  );
+
+  @override
+  Stream<Map<String, bool>> watchNotificationSettings(String uid) =>
+      _fs.db.doc('users/$uid').snapshots().map((d) {
+        final n =
+            ((d.data()?['settings'] as Map?)?['notifications'] as Map?) ??
+            const {};
+        return {for (final e in n.entries) '${e.key}': e.value == true};
+      });
+
+  @override
+  Future<Result<void>> setNotification(
+    String uid,
+    String key, {
+    required bool on,
+  }) => _g(
+    'setNotification',
+    () => _fs.db.doc('users/$uid').update({'settings.notifications.$key': on}),
+  );
+
+  @override
+  Future<Result<void>> sendFeedback(
+    String uid,
+    String text, {
+    String? details,
+  }) => _g(
+    'sendFeedback',
+    () => _fs.db.collection('feedback').add({
+      'uid': uid,
+      'text': text,
+      if (details != null) 'details': details,
+      'createdAt': FieldValue.serverTimestamp(),
+    }),
   );
 
   @override

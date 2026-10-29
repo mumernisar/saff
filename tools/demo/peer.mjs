@@ -73,7 +73,7 @@ switch (cmd) {
   case "play": {
     const round = await getDoc(doc(fs, `saffs/${args[0]}/rounds/${args[1]}`));
     const cards = round.get("cards");
-    const arcade = round.get("mode") === "climber";
+    const arcade = ["climber", "rapidRoll"].includes(round.get("mode"));
     await setDoc(doc(fs, `saffs/${args[0]}/rounds/${args[1]}/presence/${uid}`), { status: "playing", updatedAt: serverTimestamp() });
     const answers = cards.map((c, i) => ({
       cardId: c.id,

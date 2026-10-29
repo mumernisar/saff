@@ -11,14 +11,15 @@ import { applyStats } from "./stats";
 import { pushToUser } from "./push";
 
 /** Modes the server can currently assemble and grade. */
-export const IMPLEMENTED_MODES = ["cardDuel", "climber"] as const;
+export const IMPLEMENTED_MODES = ["cardDuel", "climber", "rapidRoll"] as const;
 
 function pickMode(occId: string, schedule: { type?: string; single?: string } | undefined): string {
   if (schedule?.type === "single" && (IMPLEMENTED_MODES as readonly string[]).includes(schedule.single ?? "")) {
     return schedule.single!;
   }
   const rnd = mulberry32(hash32(`${occId}:mode`));
-  return rnd() < 30 / 45 ? "cardDuel" : "climber";
+  const r = rnd();
+  return r < 30 / 60 ? "cardDuel" : r < 45 / 60 ? "climber" : "rapidRoll";
 }
 
 /** Locks the round for [occId] if it is still planned (idempotent). */
@@ -181,7 +182,7 @@ export async function gradeResult(db: Firestore, saffId: string, occId: string, 
     return { cardId: card.id, correct, points, answered: !!a };
   });
   const offline = result.get("offlineFallback") === true;
-  if (round.get("mode") === "climber") {
+  if (["climber", "rapidRoll"].includes(round.get("mode") as string)) {
     const score = Math.max(0, Math.floor((result.get("arcadeScore") as number | undefined) ?? 0));
     await roundRef.collection("grades").doc(uid).set({
       points: score,

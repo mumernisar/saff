@@ -58,6 +58,12 @@ service cloud.firestore {
       }
     }
 
+    match /feedback/{id} {
+      allow create: if signedIn() && request.resource.data.uid == request.auth.uid
+        && request.resource.data.text is string && request.resource.data.text.size() <= 2000;
+      allow read, update, delete: if false;
+    }
+
     match /inviteCodes/{code} {
       allow read, write: if false;
     }
@@ -146,6 +152,10 @@ service cloud.firestore {
             && request.resource.data.status in ['asleep', 'snoozed', 'playing', 'done']
             && request.resource.data.updatedAt == request.time;
           allow delete: if false;
+        }
+        match /askMeGrades/{id} {
+          allow read: if member(saffId);
+          allow write: if false;
         }
         match /nudges/{id} {
           allow read: if member(saffId);

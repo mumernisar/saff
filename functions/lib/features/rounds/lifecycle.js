@@ -19,13 +19,14 @@ const packs_1 = require("./packs");
 const stats_1 = require("./stats");
 const push_1 = require("./push");
 /** Modes the server can currently assemble and grade. */
-exports.IMPLEMENTED_MODES = ["cardDuel", "climber"];
+exports.IMPLEMENTED_MODES = ["cardDuel", "climber", "rapidRoll"];
 function pickMode(occId, schedule) {
     if (schedule?.type === "single" && exports.IMPLEMENTED_MODES.includes(schedule.single ?? "")) {
         return schedule.single;
     }
     const rnd = (0, prng_1.mulberry32)((0, prng_1.hash32)(`${occId}:mode`));
-    return rnd() < 30 / 45 ? "cardDuel" : "climber";
+    const r = rnd();
+    return r < 30 / 60 ? "cardDuel" : r < 45 / 60 ? "climber" : "rapidRoll";
 }
 /** Locks the round for [occId] if it is still planned (idempotent). */
 async function lockRound(db, saffId, occId) {
@@ -165,7 +166,7 @@ async function gradeResult(db, saffId, occId, uid) {
         return { cardId: card.id, correct, points, answered: !!a };
     });
     const offline = result.get("offlineFallback") === true;
-    if (round.get("mode") === "climber") {
+    if (["climber", "rapidRoll"].includes(round.get("mode"))) {
         const score = Math.max(0, Math.floor(result.get("arcadeScore") ?? 0));
         await roundRef.collection("grades").doc(uid).set({
             points: score,

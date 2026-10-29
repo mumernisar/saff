@@ -662,5 +662,37 @@
   "learnEmptyTitle": "Learn it tonight, get quizzed in the morning",
   "learnEmptyBody": "Lessons and word-by-word study arrive once Quran text is connected.",
   "deleteAccount": "Delete account",
-  "deleteAccountBody": "This removes your profile and you leave every saff. Your messages stay and show as Deleted user. This can't be undone."
+  "deleteAccountBody": "This removes your profile and you leave every saff. Your messages stay and show as Deleted user. This can't be undone.",
+  "rollHint": "Drag to steer through the gaps",
+  "rollReached": "You went {m} m deep",
+  "@rollReached": {
+    "placeholders": {
+      "m": {
+        "type": "int"
+      }
+    }
+  },
+  "rollLocked": "Your depth is locked in.",
+  "notificationsTitle": "Notifications",
+  "notifProposals": "Alarm proposals",
+  "notifChat": "Messages",
+  "notifReveal": "Results",
+  "notifReminders": "Reminders",
+  "notifCritical": "Nudges and alarm alerts",
+  "notifCriticalBody": "Always on, so your saff can wake you.",
+  "themeTitle": "Appearance",
+  "themeSystem": "Match my phone",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "feedbackTitle": "Send feedback",
+  "feedbackHint": "What happened, or what would help?",
+  "feedbackSend": "Send",
+  "feedbackThanks": "Thanks, we got it.",
+  "aboutTitle": "About Saff",
+  "aboutBody": "Saff is an alarm for a small group who wake together into a short duel and a conversation.",
+  "attributionsTitle": "Content sources",
+  "attributionsBody": "Question cards come from the Duha packs. Quran text, translations and audio will be provided through the Quran Foundation API once connected, with the attribution it requires. Hadith references cite Sahih al-Bukhari and Sahih Muslim.",
+  "settingsApp": "APP",
+  "askMeGradePrompt": "Was their answer right?",
+  "plantTeaser": "Someone left you something for tomorrow's round."
 }

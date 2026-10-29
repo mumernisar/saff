@@ -13,6 +13,7 @@ final class RoundCard {
     this.source,
     this.difficulty = 'medium',
     this.fromName,
+    this.authorId,
   });
 
   /// Card id.
@@ -47,6 +48,9 @@ final class RoundCard {
 
   /// Who planted this card (bonus cards only).
   final String? fromName;
+
+  /// uid of who planted this card.
+  final String? authorId;
 
   /// Whether this is a planted bonus card (never scored).
   bool get isBonus => id.startsWith('plant_');

@@ -46,6 +46,7 @@ class WakeFlowState {
     this.idle = false,
     this.failure,
     this.members = const [],
+    this.askMeGrades = const {},
   });
 
   /// Current phase.
@@ -75,6 +76,9 @@ class WakeFlowState {
   /// Members of the saff.
   final List<Member> members;
 
+  /// Planter grades of ask-me cards.
+  final Map<String, bool> askMeGrades;
+
   /// A copy with changes.
   WakeFlowState copyWith({
     WakePhase? phase,
@@ -87,6 +91,7 @@ class WakeFlowState {
     AppFailure? failure,
     bool clearFailure = false,
     List<Member>? members,
+    Map<String, bool>? askMeGrades,
   }) => WakeFlowState(
     phase: phase ?? this.phase,
     round: round ?? this.round,
@@ -97,6 +102,7 @@ class WakeFlowState {
     idle: idle ?? this.idle,
     failure: clearFailure ? null : (failure ?? this.failure),
     members: members ?? this.members,
+    askMeGrades: askMeGrades ?? this.askMeGrades,
   );
 }
 
@@ -158,6 +164,11 @@ class WakeFlowViewModel extends Notifier<WakeFlowState> {
         rounds
             .watchSentNudges(_key.saffId, _key.occurrenceId, _uid)
             .listen((n) => state = state.copyWith(nudges: n)),
+      )
+      ..add(
+        rounds
+            .watchAskMeGrades(_key.saffId, _key.occurrenceId)
+            .listen((g) => state = state.copyWith(askMeGrades: g)),
       )
       ..add(
         rounds.watchReveal(_key.saffId, _key.occurrenceId).listen((rev) {
@@ -287,6 +298,13 @@ class WakeFlowViewModel extends Notifier<WakeFlowState> {
     state = r is Err<int>
         ? state.copyWith(failure: r.failure)
         : state.copyWith(clearFailure: true);
+  }
+
+  /// The planter grades an ask-me answer.
+  Future<void> gradeAskMe(String cardId, {required bool correct}) async {
+    await ref
+        .read(roundRepositoryProvider)
+        .gradeAskMe(_key.saffId, _key.occurrenceId, cardId, correct: correct);
   }
 
   /// Opens the card review.

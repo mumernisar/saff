@@ -96,6 +96,7 @@ Occurrence occurrenceFrom(
     participantIds: strings(m['participantIds']),
     skippedIds: strings(m['skippedIds']),
     date: (m['date'] as String?) ?? '',
+    teaserFor: strings(m['teaserFor']),
   );
 }
 
@@ -137,6 +138,7 @@ RoundCard roundCardFrom(Map<String, dynamic> m) => RoundCard(
   source: m['source'] as String?,
   difficulty: (m['difficulty'] as String?) ?? 'medium',
   fromName: m['fromName'] as String?,
+  authorId: m['authorId'] as String?,
 );
 
 /// Document → [Round].

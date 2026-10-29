@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:saff_app/l10n/app_localizations.dart';
+import 'package:saff_app/features/settings/view_models/settings_view_models.dart';
 import 'package:saff_app/router.dart';
 import 'package:saff_ui/saff_ui.dart';
 
@@ -32,5 +33,6 @@ class _SaffAppState extends ConsumerState<SaffApp> {
     supportedLocales: AppLocalizations.supportedLocales,
     theme: SaffTheme.light(),
     darkTheme: SaffTheme.dark(),
+    themeMode: ref.watch(themeModeProvider).value ?? ThemeMode.system,
   );
 }

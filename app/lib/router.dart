@@ -16,6 +16,7 @@ import 'package:saff_app/features/saff/views/saff_detail_view.dart';
 import 'package:saff_app/features/saff/views/saff_join_view.dart';
 import 'package:saff_app/features/saff/views/saff_new_view.dart';
 import 'package:saff_app/features/settings/view_models/device_registration.dart';
+import 'package:saff_app/features/settings/views/settings_pages.dart';
 import 'package:saff_app/features/settings/views/settings_view.dart';
 import 'package:saff_app/features/stats/views/stats_view.dart';
 import 'package:saff_app/features/today/views/today_view.dart';
@@ -118,6 +119,23 @@ final routerProvider = Provider<GoRouter>((ref) {
                     path: 'settings',
                     builder: (context, state) => const SettingsView(),
                     routes: [
+                      GoRoute(
+                        path: 'notifications',
+                        builder: (context, state) =>
+                            const NotificationSettingsView(),
+                      ),
+                      GoRoute(
+                        path: 'appearance',
+                        builder: (context, state) => const AppearanceView(),
+                      ),
+                      GoRoute(
+                        path: 'feedback',
+                        builder: (context, state) => const FeedbackView(),
+                      ),
+                      GoRoute(
+                        path: 'about',
+                        builder: (context, state) => const AboutView(),
+                      ),
                       GoRoute(
                         path: 'alarm',
                         builder: (context, state) => const ReliabilityView(),

@@ -38,6 +38,20 @@ abstract interface class RoundRepository {
     int? arcadeScore,
   });
 
+  /// The planter's grade for an ask-me card.
+  Future<Result<void>> gradeAskMe(
+    String saffId,
+    String occurrenceId,
+    String cardId, {
+    required bool correct,
+  });
+
+  /// Live ask-me grades: card id → correct.
+  Stream<Map<String, bool>> watchAskMeGrades(
+    String saffId,
+    String occurrenceId,
+  );
+
   /// Live reveal; null until revealed.
   Stream<Reveal?> watchReveal(String saffId, String occurrenceId);
 
@@ -145,6 +159,32 @@ final class RoundRepositoryImpl implements RoundRepository {
     _mapper,
     context: const {'op': 'submitResult'},
   );
+
+  @override
+  Future<Result<void>> gradeAskMe(
+    String saffId,
+    String occurrenceId,
+    String cardId, {
+    required bool correct,
+  }) => Result.guard(
+    () => _fn.call('gradeAskMe', {
+      'saffId': saffId,
+      'occurrenceId': occurrenceId,
+      'cardId': cardId,
+      'correct': correct,
+    }),
+    _mapper,
+    context: const {'op': 'gradeAskMe'},
+  );
+
+  @override
+  Stream<Map<String, bool>> watchAskMeGrades(
+    String saffId,
+    String occurrenceId,
+  ) => _round(saffId, occurrenceId)
+      .collection('askMeGrades')
+      .snapshots()
+      .map((s) => {for (final d in s.docs) d.id: d.data()['correct'] == true});
 
   @override
   Stream<Reveal?> watchReveal(String saffId, String occurrenceId) =>

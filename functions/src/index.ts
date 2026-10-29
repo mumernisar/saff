@@ -18,6 +18,7 @@ export {
   skipOccurrence,
   voteProposal,
 } from "./features/alarms/proposals";
+export { gradeAskMe } from "./features/rounds/ask_me";
 export { deleteAccount } from "./features/users/delete_account";
 export { plantCard } from "./features/rounds/plants";
 export { nudge, onResultCreated, sweeper, tick } from "./features/rounds/rounds";

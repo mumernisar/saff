@@ -113,7 +113,11 @@ final class Occurrence {
     required this.participantIds,
     required this.skippedIds,
     required this.date,
+    this.teaserFor = const [],
   });
+
+  /// Members who were left a planted card for this occurrence.
+  final List<String> teaserFor;
 
   /// `{alarmId}_{yyyyMMdd}`.
   final String id;
