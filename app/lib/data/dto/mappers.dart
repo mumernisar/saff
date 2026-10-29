@@ -136,6 +136,7 @@ RoundCard roundCardFrom(Map<String, dynamic> m) => RoundCard(
   talk: m['talk'] as String?,
   source: m['source'] as String?,
   difficulty: (m['difficulty'] as String?) ?? 'medium',
+  fromName: m['fromName'] as String?,
 );
 
 /// Document → [Round].
@@ -147,6 +148,9 @@ Round roundFrom(String saffId, DocumentSnapshot<Map<String, dynamic>> d) {
     mode: (m['mode'] as String?) ?? 'cardDuel',
     seed: (m['seed'] as int?) ?? 0,
     cards: ((m['cards'] as List?) ?? const [])
+        .map((c) => roundCardFrom((c as Map).cast<String, dynamic>()))
+        .toList(),
+    bonusCards: ((m['bonusCards'] as List?) ?? const [])
         .map((c) => roundCardFrom((c as Map).cast<String, dynamic>()))
         .toList(),
     status: (m['status'] as String?) ?? 'locked',
@@ -206,5 +210,8 @@ Reveal revealFrom(DocumentSnapshot<Map<String, dynamic>> d) {
     solo: (m['solo'] as bool?) ?? false,
     perCard: perCard,
     mode: (m['mode'] as String?) ?? 'cardDuel',
+    bonusCards: ((m['bonusCards'] as List?) ?? const [])
+        .map((c) => roundCardFrom((c as Map).cast<String, dynamic>()))
+        .toList(),
   );
 }

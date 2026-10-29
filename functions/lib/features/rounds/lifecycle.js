@@ -16,6 +16,7 @@ const normalise_1 = require("../../domain/rounds/normalise");
 const proposals_1 = require("../alarms/proposals");
 const planning_1 = require("../alarms/planning");
 const packs_1 = require("./packs");
+const stats_1 = require("./stats");
 const push_1 = require("./push");
 /** Modes the server can currently assemble and grade. */
 exports.IMPLEMENTED_MODES = ["cardDuel"];
@@ -26,10 +27,11 @@ async function lockRound(db, saffId, occId) {
     const saffRef = db.doc(`saffs/${saffId}`);
     const pool = await (0, packs_1.officialCards)();
     const locked = await db.runTransaction(async (tx) => {
-        const [occ, saff, seen] = await Promise.all([
+        const [occ, saff, seen, plantSnap] = await Promise.all([
             tx.get(occRef),
             tx.get(saffRef),
             tx.get(saffRef.collection("seenCards").doc("main")),
+            tx.get(occRef.collection("plants")),
         ]);
         if (!occ.exists || occ.get("status") !== "planned")
             return undefined;
@@ -56,7 +58,9 @@ async function lockRound(db, saffId, occId) {
             mode: "cardDuel",
             seed: (0, prng_1.hash32)(occId),
             cards,
-            bonusCards: [],
+            bonusCards: plantSnap.docs
+                .sort((a, b) => a.get("createdAt").toMillis() - b.get("createdAt").toMillis())
+                .map((d) => ({ ...d.get("card"), authorId: d.get("authorId") })),
             packVersions: {},
             lockedAt: firestore_1.FieldValue.serverTimestamp(),
             status: "locked",
@@ -158,7 +162,9 @@ async function gradeResult(db, saffId, occId, uid) {
         perCard,
         woke: true,
         ranked: !offline,
-        totalMs: answers.reduce((s, x) => s + (x.msToAnswer ?? 0), 0),
+        totalMs: answers
+            .filter((x) => cards.some((cd) => cd.id === x.cardId))
+            .reduce((s, x) => s + (x.msToAnswer ?? 0), 0),
         gradedAt: firestore_1.FieldValue.serverTimestamp(),
     });
     await roundRef.collection("presence").doc(uid).set({ status: "done", updatedAt: firestore_1.FieldValue.serverTimestamp() }, { merge: true });
@@ -190,6 +196,7 @@ async function reveal(db, saffId, occId, options = {}) {
         const resultById = new Map(results.docs.map((r) => [r.id, r]));
         const memberById = new Map(members.docs.map((m) => [m.id, m]));
         const cards = round.get("cards");
+        const bonus = round.get("bonusCards") ?? [];
         const rows = required.map((uid) => {
             const g = grades.docs.find((x) => x.id === uid);
             const r = resultById.get(uid);
@@ -224,11 +231,22 @@ async function reveal(db, saffId, occId, options = {}) {
         const everyoneWoke = required.length > 0 && rows.every((r) => r.woke);
         const streak = saff.get("streak") ?? {};
         const current = everyoneWoke ? (streak.current ?? 0) + 1 : 0;
-        const perCard = cards.map((card) => ({
+        const perCard = [...cards, ...bonus].map((card) => ({
             cardId: card.id,
             answers: required.map((uid) => {
                 const g = grades.docs.find((x) => x.id === uid);
-                const pc = g?.get("perCard")?.find((p) => p.cardId === card.id);
+                const bonusDef = bonus.find((b) => b.id === card.id);
+                const given = resultById.get(uid)?.get("answers")?.find((x) => x.cardId === card.id);
+                const pc = bonusDef
+                    ? {
+                        cardId: card.id,
+                        correct: bonusDef.type === "choice"
+                            ? given?.choiceIndex !== undefined && bonusDef.options?.[given.choiceIndex] === bonusDef.answer
+                            : bonusDef.type === "typed"
+                                ? !!given?.answer && (0, normalise_1.matchesTyped)(given.answer, [bonusDef.answer, ...(bonusDef.accept ?? [])])
+                                : false,
+                    }
+                    : g?.get("perCard")?.find((p) => p.cardId === card.id);
                 const a = resultById.get(uid)?.get("answers")?.find((x) => x.cardId === card.id);
                 return {
                     uid,
@@ -245,6 +263,7 @@ async function reveal(db, saffId, occId, options = {}) {
             streak: current,
             everyoneWoke,
             perCard,
+            bonusCards: bonus.map((b) => ({ ...b, fromName: memberById.get(b.authorId ?? "")?.get("displayName") ?? "" })),
             mode: round.get("mode"),
             solo: required.length === 1,
             revealedAt: firestore_1.FieldValue.serverTimestamp(),
@@ -273,6 +292,13 @@ async function reveal(db, saffId, occId, options = {}) {
     if (!revealed)
         return false;
     logger_1.log.info("round_revealed", { saffId, occurrenceId: occId });
+    try {
+        await (0, stats_1.applyStats)(db, saffId, occId);
+    }
+    catch (e) {
+        // Stats are rebuildable; never fail the reveal over them.
+        logger_1.log.error("stats_failed", { saffId, occurrenceId: occId, error: String(e) });
+    }
     for (const uid of revealed) {
         await (0, push_1.pushToUser)(db, uid, { type: "reveal", saffId, occurrenceId: occId, v: "1" }, {
             notification: { title: "Results are in", body: "See how the morning went" },

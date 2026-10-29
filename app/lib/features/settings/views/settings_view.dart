@@ -56,6 +56,11 @@ class SettingsView extends ConsumerWidget {
             title: Text(l10n.alarmSetupTitle),
             onTap: () => context.go('/today/settings/alarm'),
           ),
+          ListTile(
+            leading: const Icon(Icons.verified_user),
+            title: Text(l10n.permissionWalkthrough),
+            onTap: () => context.push('/onboarding'),
+          ),
           SectionHeader(l10n.settingsAccount),
           ListTile(
             leading: const Icon(Icons.logout),

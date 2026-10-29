@@ -16,7 +16,11 @@ class CardDuelStrings {
     required this.showAnswer,
     required this.timeUp,
     required this.yourAnswerSaved,
+    required this.fromName,
   });
+
+  /// "From Ali" label of planted cards.
+  final String Function(String name) fromName;
 
   /// "1 of 8".
   final String Function(int index, int total) cardOf;
@@ -64,7 +68,8 @@ class CardDuelMode implements GameMode {
     List<CardAnswer> answered,
     ModeCallbacks callbacks,
   ) => CardDuelPlay(
-    cards: round.cards,
+    cards: [...round.cards, ...round.bonusCards],
+    scored: round.cards.length,
     answered: answered,
     callbacks: callbacks,
     strings: strings,
@@ -81,10 +86,14 @@ class CardDuelPlay extends StatefulWidget {
     required this.callbacks,
     required this.strings,
     required this.cardTime,
+    this.scored,
     super.key,
   });
 
-  /// Scored cards.
+  /// How many of [cards] are scored; the rest are planted bonus cards.
+  final int? scored;
+
+  /// Scored cards followed by planted bonus cards.
   final List<RoundCard> cards;
 
   /// Answers already given.
@@ -160,7 +169,9 @@ class _CardDuelPlayState extends State<CardDuelPlay> {
         cardId: card.id,
         msToAnswer: timeout ? widget.cardTime.inMilliseconds : ms,
         answer:
-            card.type == 'typed' && !timeout && _typed.text.trim().isNotEmpty
+            (card.type == 'typed' || card.type == 'ask') &&
+                !timeout &&
+                _typed.text.trim().isNotEmpty
             ? _typed.text.trim()
             : null,
         choiceIndex: card.type == 'choice' ? _picked : null,
@@ -211,7 +222,9 @@ class _CardDuelPlayState extends State<CardDuelPlay> {
                 ),
                 const Spacer(),
                 Text(
-                  card.category.toUpperCase(),
+                  card.isBonus
+                      ? widget.strings.fromName(card.fromName ?? '')
+                      : card.category.toUpperCase(),
                   style: TextStyle(color: c.muted, fontSize: 12),
                 ),
               ],
@@ -284,6 +297,7 @@ class _CardDuelPlayState extends State<CardDuelPlay> {
           ],
         );
       case 'typed':
+      case 'ask':
         return Column(
           children: [
             TextField(

@@ -511,5 +511,97 @@
   "settingsReliability": "ALARM RELIABILITY",
   "settingsAccount": "ACCOUNT",
   "joinWithCode": "Join with a code",
-  "signOut": "Sign out"
+  "signOut": "Sign out",
+  "statsEmptyTitle": "Stats start with your first morning",
+  "statsEmptyBody": "Once your saff wakes up together, streaks and the calendar show here.",
+  "statDaysInARow": "Days in a row",
+  "statBestStreak": "Best streak",
+  "statAvgWake": "Avg time to wake",
+  "statAlarmsMade": "Alarms you made",
+  "statDayStreak": "Day streak",
+  "statLongest": "Longest",
+  "statEveryoneUp": "Everyone up",
+  "statRoundsPlayed": "Rounds played",
+  "badges": "BADGES",
+  "calendar": "CALENDAR",
+  "standings": "STANDINGS",
+  "firstWaker": "FIRST TO WAKE",
+  "headToHeadLine": "{wins} wins · {draws} draws · {losses} losses",
+  "@headToHeadLine": {
+    "placeholders": {
+      "wins": {
+        "type": "int"
+      },
+      "draws": {
+        "type": "int"
+      },
+      "losses": {
+        "type": "int"
+      }
+    }
+  },
+  "nudgedYou": "Rang you again {count}×",
+  "@nudgedYou": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "legendEveryoneUp": "Everyone up",
+  "legendMissed": "Missed",
+  "legendSkipped": "Skipped / cancelled",
+  "daySkipped": "Skipped this morning. Streak frozen, not broken.",
+  "dayUp": "Up after {time} · {points} pts",
+  "@dayUp": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      },
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "dayDidNotWake": "Didn't wake up",
+  "badgeFirstLight": "First Light",
+  "badgeStreak7": "One Week Strong",
+  "badgeStreak30": "A Month of Mornings",
+  "badgeStreak100": "100 Sunrises",
+  "badgeLightning": "Lightning",
+  "badgeZeroSnooze": "Zero Snooze",
+  "badgeFirstLightHow": "Wake up for your first saff morning.",
+  "badgeStreak7How": "Wake up together 7 mornings in a row.",
+  "badgeStreak30How": "Wake up together 30 mornings in a row.",
+  "badgeStreak100How": "Wake up together 100 mornings in a row.",
+  "badgeLightningHow": "Start within 15 seconds, 5 times.",
+  "badgeZeroSnoozeHow": "30 mornings without snoozing.",
+  "badgeEarned": "Earned",
+  "badgeProgress": "{current} of {target}",
+  "@badgeProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "onboardingTitle": "Make sure it rings",
+  "onboardingBody": "A few switches so your alarm rings on time, even with the phone locked. You can come back to this in Settings.",
+  "permNotificationsBody": "For the ongoing alarm and messages from your saff.",
+  "permExactBody": "So the alarm rings at the exact minute.",
+  "permFullScreenBody": "So the alarm opens over your lock screen.",
+  "permBatteryBody": "So the phone doesn't put Saff to sleep overnight.",
+  "onboardingDone": "Done, take me in",
+  "permissionWalkthrough": "Permission walkthrough",
+  "fromName": "From {name}",
+  "@fromName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }

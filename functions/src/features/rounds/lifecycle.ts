@@ -7,6 +7,7 @@ import { matchesTyped } from "../../domain/rounds/normalise";
 import { expireProposals } from "../alarms/proposals";
 import { planAlarm } from "../alarms/planning";
 import { officialCards } from "./packs";
+import { applyStats } from "./stats";
 import { pushToUser } from "./push";
 
 /** Modes the server can currently assemble and grade. */
@@ -19,10 +20,11 @@ export async function lockRound(db: Firestore, saffId: string, occId: string): P
   const saffRef = db.doc(`saffs/${saffId}`);
   const pool = await officialCards();
   const locked = await db.runTransaction(async (tx) => {
-    const [occ, saff, seen] = await Promise.all([
+    const [occ, saff, seen, plantSnap] = await Promise.all([
       tx.get(occRef),
       tx.get(saffRef),
       tx.get(saffRef.collection("seenCards").doc("main")),
+      tx.get(occRef.collection("plants")),
     ]);
     if (!occ.exists || occ.get("status") !== "planned") return undefined;
     const required = occ.get("requiredIds") as string[];
@@ -48,7 +50,9 @@ export async function lockRound(db: Firestore, saffId: string, occId: string): P
       mode: "cardDuel",
       seed: hash32(occId),
       cards,
-      bonusCards: [],
+      bonusCards: plantSnap.docs
+        .sort((a, b) => (a.get("createdAt") as Timestamp).toMillis() - (b.get("createdAt") as Timestamp).toMillis())
+        .map((d) => ({ ...(d.get("card") as object), authorId: d.get("authorId") })),
       packVersions: {},
       lockedAt: FieldValue.serverTimestamp(),
       status: "locked",
@@ -173,7 +177,9 @@ export async function gradeResult(db: Firestore, saffId: string, occId: string, 
     perCard,
     woke: true,
     ranked: !offline,
-    totalMs: answers.reduce((s, x) => s + (x.msToAnswer ?? 0), 0),
+    totalMs: answers
+      .filter((x) => cards.some((cd) => cd.id === x.cardId))
+      .reduce((s, x) => s + (x.msToAnswer ?? 0), 0),
     gradedAt: FieldValue.serverTimestamp(),
   });
   await roundRef.collection("presence").doc(uid).set(
@@ -213,6 +219,7 @@ export async function reveal(
     const resultById = new Map(results.docs.map((r) => [r.id, r]));
     const memberById = new Map(members.docs.map((m) => [m.id, m]));
     const cards = round.get("cards") as { id: string }[];
+    const bonus = (round.get("bonusCards") as { id: string; type: string; answer: string; options?: string[]; accept?: string[] }[]) ?? [];
     const rows = required.map((uid) => {
       const g = grades.docs.find((x) => x.id === uid);
       const r = resultById.get(uid);
@@ -247,13 +254,29 @@ export async function reveal(
     const streak = (saff.get("streak") as { current?: number; longest?: number }) ?? {};
     const current = everyoneWoke ? (streak.current ?? 0) + 1 : 0;
 
-    const perCard = cards.map((card) => ({
+    const perCard = [...cards, ...bonus].map((card) => ({
       cardId: card.id,
       answers: required.map((uid) => {
         const g = grades.docs.find((x) => x.id === uid);
-        const pc = (g?.get("perCard") as { cardId: string; correct: boolean }[] | undefined)?.find(
-          (p) => p.cardId === card.id,
-        );
+        const bonusDef = bonus.find((b) => b.id === card.id);
+        const given = (
+          resultById.get(uid)?.get("answers") as
+            | { cardId: string; answer?: string; choiceIndex?: number }[]
+            | undefined
+        )?.find((x) => x.cardId === card.id);
+        const pc = bonusDef
+          ? {
+              cardId: card.id,
+              correct:
+                bonusDef.type === "choice"
+                  ? given?.choiceIndex !== undefined && bonusDef.options?.[given.choiceIndex] === bonusDef.answer
+                  : bonusDef.type === "typed"
+                    ? !!given?.answer && matchesTyped(given.answer, [bonusDef.answer, ...(bonusDef.accept ?? [])])
+                    : false,
+            }
+          : (g?.get("perCard") as { cardId: string; correct: boolean }[] | undefined)?.find(
+              (p) => p.cardId === card.id,
+            );
         const a = (
           resultById.get(uid)?.get("answers") as
             | { cardId: string; answer?: string; choiceIndex?: number }[]
@@ -275,6 +298,7 @@ export async function reveal(
       streak: current,
       everyoneWoke,
       perCard,
+      bonusCards: bonus.map((b) => ({ ...b, fromName: memberById.get((b as { authorId?: string }).authorId ?? "")?.get("displayName") ?? "" })),
       mode: round.get("mode"),
       solo: required.length === 1,
       revealedAt: FieldValue.serverTimestamp(),
@@ -302,6 +326,12 @@ export async function reveal(
   });
   if (!revealed) return false;
   log.info("round_revealed", { saffId, occurrenceId: occId });
+  try {
+    await applyStats(db, saffId, occId);
+  } catch (e) {
+    // Stats are rebuildable; never fail the reveal over them.
+    log.error("stats_failed", { saffId, occurrenceId: occId, error: String(e) });
+  }
   for (const uid of revealed) {
     await pushToUser(db, uid, { type: "reveal", saffId, occurrenceId: occId, v: "1" }, {
       notification: { title: "Results are in", body: "See how the morning went" },

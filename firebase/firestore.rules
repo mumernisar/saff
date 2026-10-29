@@ -41,6 +41,14 @@ service cloud.firestore {
         allow read: if request.auth.uid == uid;
         allow write: if false;
       }
+      match /stats/{doc} {
+        allow read: if request.auth.uid == uid;
+        allow write: if false;
+      }
+      match /badges/{id} {
+        allow read: if request.auth.uid == uid;
+        allow write: if false;
+      }
       match /lessons/{id} {
         allow read, write: if request.auth.uid == uid;
       }
@@ -106,7 +114,7 @@ service cloud.firestore {
           allow write: if false;
         }
         match /plants/{pid} {
-          allow read: if member(saffId) && resource.data.authorId != request.auth.uid;
+          allow read: if member(saffId) && resource.data.authorId == request.auth.uid;
           allow write: if false;
         }
       }

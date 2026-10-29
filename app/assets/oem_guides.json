@@ -1,0 +1,47 @@
+{
+  "_note": "Brand-specific steps so alarms ring on time (docs/ALARM.md section 7). Data, not code: update without an app release.",
+  "default": {
+    "title": "Let Saff run in the background",
+    "steps": [
+      "Open Settings, then Apps, then Saff.",
+      "Set Battery to Unrestricted (or Don't optimise).",
+      "Allow notifications and alarms & reminders."
+    ]
+  },
+  "xiaomi": {
+    "title": "Xiaomi / Redmi / POCO",
+    "steps": [
+      "Settings, Apps, Manage apps, Saff, Autostart: turn on.",
+      "Battery saver for Saff: choose No restrictions.",
+      "Recent apps: long-press Saff and tap the lock icon."
+    ]
+  },
+  "samsung": {
+    "title": "Samsung",
+    "steps": [
+      "Settings, Battery, Background usage limits: remove Saff from Sleeping apps and Deep sleeping apps.",
+      "Settings, Apps, Saff, Battery: choose Unrestricted."
+    ]
+  },
+  "oppo": {
+    "title": "Oppo / Realme / OnePlus",
+    "steps": [
+      "Settings, Apps, App management, Saff, Battery usage: Allow background activity.",
+      "Turn on Auto-launch for Saff.",
+      "Recent apps: pull Saff down to lock it."
+    ]
+  },
+  "vivo": {
+    "title": "Vivo / iQOO",
+    "steps": [
+      "Settings, Battery, Background power consumption: allow Saff.",
+      "Settings, Apps, Autostart: turn on Saff."
+    ]
+  },
+  "huawei": {
+    "title": "Huawei / Honor",
+    "steps": [
+      "Settings, Battery, App launch: set Saff to Manage manually and allow Auto-launch, Secondary launch and Run in background."
+    ]
+  }
+}

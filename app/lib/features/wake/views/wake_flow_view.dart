@@ -51,6 +51,7 @@ class WakeFlowView extends ConsumerWidget {
           showAnswer: l10n.showAnswer,
           timeUp: l10n.timeUp,
           yourAnswerSaved: l10n.yourScoreLocked,
+          fromName: l10n.fromName,
         ),
       ),
     ]);

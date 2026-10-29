@@ -9,6 +9,7 @@ import 'package:saff_app/data/repositories/chat_repository.dart';
 import 'package:saff_app/data/repositories/emulator_status_repository.dart';
 import 'package:saff_app/data/repositories/round_repository.dart';
 import 'package:saff_app/data/repositories/saff_repository.dart';
+import 'package:saff_app/data/repositories/stats_repository.dart';
 import 'package:saff_app/data/services/alarm_service.dart';
 import 'package:saff_app/data/services/crash_reporter.dart';
 import 'package:saff_app/data/services/emulator_probe_service.dart';
@@ -177,4 +178,30 @@ final myUpcomingProvider = Provider<List<Occurrence>>((ref) {
   }
   out.sort((a, b) => a.ringAt.compareTo(b.ringAt));
   return out;
+});
+
+/// Stats.
+final statsRepositoryProvider = Provider<StatsRepository>(
+  (ref) => StatsRepositoryImpl(ref.watch(firestoreServiceProvider)),
+);
+
+/// Stats of one saff for the current and previous month.
+final saffStatsProvider = StreamProvider.autoDispose.family<SaffStats, String>((
+  ref,
+  saffId,
+) {
+  final now = DateTime.now();
+  final prev = DateTime(now.year, now.month - 1);
+  String key(DateTime d) => '${d.year}${d.month.toString().padLeft(2, '0')}';
+  return ref.watch(statsRepositoryProvider).watchSaff(saffId, [
+    key(prev),
+    key(now),
+  ]);
+});
+
+/// The user's counters and badges.
+final personalStatsProvider = StreamProvider<PersonalStats>((ref) {
+  final uid = ref.watch(uidProvider).value;
+  if (uid == null) return Stream.value(const PersonalStats());
+  return ref.watch(statsRepositoryProvider).watchPersonal(uid);
 });

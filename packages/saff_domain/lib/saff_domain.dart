@@ -6,4 +6,5 @@ export 'src/models/alarm.dart';
 export 'src/models/chat.dart';
 export 'src/models/round.dart';
 export 'src/models/saff.dart';
+export 'src/models/stats.dart';
 export 'src/package_info.dart';

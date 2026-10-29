@@ -12,6 +12,7 @@ final class RoundCard {
     this.talk,
     this.source,
     this.difficulty = 'medium',
+    this.fromName,
   });
 
   /// Card id.
@@ -43,6 +44,12 @@ final class RoundCard {
 
   /// easy / medium / hard.
   final String difficulty;
+
+  /// Who planted this card (bonus cards only).
+  final String? fromName;
+
+  /// Whether this is a planted bonus card (never scored).
+  bool get isBonus => id.startsWith('plant_');
 }
 
 /// A locked round.
@@ -54,6 +61,7 @@ final class Round {
     required this.mode,
     required this.seed,
     required this.cards,
+    required this.bonusCards,
     required this.status,
     required this.requiredIds,
     required this.alarmName,
@@ -75,6 +83,9 @@ final class Round {
 
   /// Scored cards.
   final List<RoundCard> cards;
+
+  /// Planted cards, played after the scored ones; never scored.
+  final List<RoundCard> bonusCards;
 
   /// `locked` or `revealed`.
   final String status;
@@ -216,6 +227,7 @@ final class Reveal {
     required this.solo,
     required this.perCard,
     required this.mode,
+    this.bonusCards = const [],
   });
 
   /// Ranked rows (unplayed members last).
@@ -235,6 +247,9 @@ final class Reveal {
 
   /// Mode id.
   final String mode;
+
+  /// Planted cards of the round, for the review.
+  final List<RoundCard> bonusCards;
 }
 
 /// A member's live status.

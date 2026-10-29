@@ -16,3 +16,10 @@ has the default I used. Reverse a default by telling me.
 6. **Play Console** (Stage 13/14): subscription products, declarations, service account for purchase verification.
 
 ## Decisions I made that the docs did not cover (change on request)
+- **Scope/timing**: sweeper runs every minute (Cloud Scheduler) and a dev ticker (`tools/demo/ticker.sh`, R-11) instead of Cloud Tasks; occurrences planned 7 days ahead, not 48 h.
+- **Proposals applied inside `voteProposal`/`createProposal`** (no `onVoteWritten` trigger); owner rename via new `renameSaff` callable (resolves D-6).
+- **Docs vs mockups**: PRODUCT.md wins on behaviour (hold to start, 8 cards, per-person learning), mockups on look.
+- **No codegen** (freezed/riverpod_generator/Drift): hand-written models, Firestore offline cache instead of Drift `locked_rounds`.
+- **Content**: only core-pack cards without gateway placeholders are playable; surah/learning content waits for Quran Foundation credentials.
+- **Planting**: server `plantCard` + bonus cards in rounds + review are built; client "Leave a card" UI and ask-me grading are NOT built yet.
+- **Not built**: Word/Climber/Rapid Roll/Selfie modes, Learning track, Anki import, Plus billing, account deletion, Google sign-in, packs by link, release pipeline, Drift, tests beyond the emulator smoke (`tools/demo/smoke.mjs`, `peer.mjs`).

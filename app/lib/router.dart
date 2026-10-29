@@ -8,6 +8,8 @@ import 'package:saff_app/features/auth/views/profile_setup_view.dart';
 import 'package:saff_app/features/auth/views/welcome_view.dart';
 import 'package:saff_app/features/chat/views/chat_view.dart';
 import 'package:saff_app/features/learn/views/learn_view.dart';
+import 'package:saff_app/features/onboarding/view_models/onboarding_view_model.dart';
+import 'package:saff_app/features/onboarding/views/onboarding_view.dart';
 import 'package:saff_app/features/saff/view_models/selected_saff.dart';
 import 'package:saff_app/features/saff/views/saff_detail_view.dart';
 import 'package:saff_app/features/saff/views/saff_join_view.dart';
@@ -31,6 +33,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   ref
     ..listen(uidProvider, (_, _) => refresh.ping())
     ..listen(profileProvider, (_, _) => refresh.ping())
+    ..listen(onboardedProvider, (_, _) => refresh.ping())
     ..onDispose(refresh.dispose);
 
   return GoRouter(
@@ -44,6 +47,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       final profile = ref.read(profileProvider);
       if (profile.isLoading) return null;
       if (profile.value == null) return at == '/profile' ? null : '/profile';
+      final onboarded = ref.read(onboardedProvider);
+      if (onboarded.isLoading) return null;
+      if (onboarded.value != true) {
+        return at == '/onboarding' ? null : '/onboarding';
+      }
       if (at == '/welcome' || at == '/profile') return '/today';
       return null;
     },
@@ -59,6 +67,10 @@ final routerProvider = Provider<GoRouter>((ref) {
             initialName: ref.watch(_testUserNameProvider),
           ),
         ),
+      ),
+      GoRoute(
+        path: '/onboarding',
+        builder: (context, state) => const OnboardingView(),
       ),
       GoRoute(
         path: '/saff/new',

@@ -18,4 +18,5 @@ export {
   skipOccurrence,
   voteProposal,
 } from "./features/alarms/proposals";
+export { plantCard } from "./features/rounds/plants";
 export { nudge, onResultCreated, sweeper, tick } from "./features/rounds/rounds";
