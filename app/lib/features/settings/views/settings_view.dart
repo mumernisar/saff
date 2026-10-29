@@ -61,6 +61,11 @@ class SettingsView extends ConsumerWidget {
             title: Text(l10n.permissionWalkthrough),
             onTap: () => context.push('/onboarding'),
           ),
+          ListTile(
+            leading: const Icon(Icons.workspace_premium),
+            title: Text(l10n.plusTitle),
+            onTap: () => context.push('/today/settings/plus'),
+          ),
           SectionHeader(l10n.settingsApp),
           ListTile(
             leading: const Icon(Icons.notifications),

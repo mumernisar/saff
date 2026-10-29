@@ -54,6 +54,17 @@ abstract interface class SaffRepository {
   /// Deletes the account and everything tied to it.
   Future<Result<void>> deleteAccount();
 
+  /// The user's plan and status, live.
+  Stream<({String plan, String status, bool imports})> watchEntitlement(
+    String uid,
+  );
+
+  /// Dev-only: grants or revokes Plus in the emulator.
+  Future<Result<void>> devSetPlus({required bool on});
+
+  /// A Plus member takes over an over-limit saff.
+  Future<Result<void>> claimOwnership(String saffId);
+
   /// Notification category switches of the user (`settings.notifications`).
   Stream<Map<String, bool>> watchNotificationSettings(String uid);
 
@@ -227,6 +238,28 @@ final class SaffRepositoryImpl implements SaffRepository {
       if (details != null) 'details': details,
       'createdAt': FieldValue.serverTimestamp(),
     }),
+  );
+
+  @override
+  Stream<({String plan, String status, bool imports})> watchEntitlement(
+    String uid,
+  ) => _fs.db.doc('users/$uid/entitlement/current').snapshots().map((d) {
+    final m = d.data() ?? const <String, dynamic>{};
+    return (
+      plan: (m['plan'] as String?) ?? 'free',
+      status: (m['status'] as String?) ?? 'none',
+      imports: ((m['limits'] as Map?)?['imports'] as bool?) ?? false,
+    );
+  });
+
+  @override
+  Future<Result<void>> devSetPlus({required bool on}) =>
+      _g('devSetPlus', () => _fn.call('devSetPlus', {'on': on}));
+
+  @override
+  Future<Result<void>> claimOwnership(String saffId) => _g(
+    'claimOwnership',
+    () => _fn.call('claimOwnership', {'saffId': saffId}),
   );
 
   @override

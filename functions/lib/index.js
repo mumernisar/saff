@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.tick = exports.sweeper = exports.onResultCreated = exports.nudge = exports.plantCard = exports.deleteAccount = exports.gradeAskMe = exports.updateSaffSettings = exports.onImportUploaded = exports.deletePack = exports.voteProposal = exports.skipOccurrence = exports.leaveAlarm = exports.joinAlarm = exports.createProposal = exports.setProfile = exports.renameSaff = exports.removeMember = exports.registerDevice = exports.regenerateInvite = exports.previewInvite = exports.leaveSaff = exports.joinSaff = exports.createSaff = exports.capBilling = void 0;
+exports.tick = exports.sweeper = exports.onResultCreated = exports.nudge = exports.plantCard = exports.deleteAccount = exports.gradeAskMe = exports.updateSaffSettings = exports.onImportUploaded = exports.deletePack = exports.verifyPurchase = exports.devSetPlus = exports.claimOwnership = exports.voteProposal = exports.skipOccurrence = exports.leaveAlarm = exports.joinAlarm = exports.createProposal = exports.setProfile = exports.renameSaff = exports.removeMember = exports.registerDevice = exports.regenerateInvite = exports.previewInvite = exports.leaveSaff = exports.joinSaff = exports.createSaff = exports.capBilling = void 0;
 // Exports only: every function lives under features/ or triggers/.
 var cap_billing_1 = require("./triggers/cap_billing");
 Object.defineProperty(exports, "capBilling", { enumerable: true, get: function () { return cap_billing_1.capBilling; } });
@@ -20,6 +20,10 @@ Object.defineProperty(exports, "joinAlarm", { enumerable: true, get: function ()
 Object.defineProperty(exports, "leaveAlarm", { enumerable: true, get: function () { return proposals_1.leaveAlarm; } });
 Object.defineProperty(exports, "skipOccurrence", { enumerable: true, get: function () { return proposals_1.skipOccurrence; } });
 Object.defineProperty(exports, "voteProposal", { enumerable: true, get: function () { return proposals_1.voteProposal; } });
+var plus_1 = require("./features/billing/plus");
+Object.defineProperty(exports, "claimOwnership", { enumerable: true, get: function () { return plus_1.claimOwnership; } });
+Object.defineProperty(exports, "devSetPlus", { enumerable: true, get: function () { return plus_1.devSetPlus; } });
+Object.defineProperty(exports, "verifyPurchase", { enumerable: true, get: function () { return plus_1.verifyPurchase; } });
 var imports_1 = require("./features/imports/imports");
 Object.defineProperty(exports, "deletePack", { enumerable: true, get: function () { return imports_1.deletePack; } });
 Object.defineProperty(exports, "onImportUploaded", { enumerable: true, get: function () { return imports_1.onImportUploaded; } });

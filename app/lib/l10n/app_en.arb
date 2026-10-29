@@ -739,5 +739,14 @@
         "type": "int"
       }
     }
-  }
+  },
+  "plusTitle": "Saff Plus",
+  "plusFree": "You're on the free plan.",
+  "plusActive": "Saff Plus is active.",
+  "plusGrace": "Saff Plus is in its grace period.",
+  "plusBenefits": "Plus raises the size of saffs you own to 10, lets you be in more saffs, imports Anki decks, shows your full stats history and adds themes and tones. Quran and learning content are always free.",
+  "plusNoPurchaseYet": "Subscriptions open once the Play Store listing is ready.",
+  "devGrantPlus": "Grant Plus (dev)",
+  "devRevokePlus": "Revoke Plus (dev)",
+  "claimOwnership": "Take over this saff (Plus)"
 }

@@ -17,6 +17,7 @@ import 'package:saff_app/features/saff/views/saff_detail_view.dart';
 import 'package:saff_app/features/saff/views/saff_join_view.dart';
 import 'package:saff_app/features/saff/views/saff_new_view.dart';
 import 'package:saff_app/features/settings/view_models/device_registration.dart';
+import 'package:saff_app/features/settings/views/plus_view.dart';
 import 'package:saff_app/features/settings/views/settings_pages.dart';
 import 'package:saff_app/features/settings/views/settings_view.dart';
 import 'package:saff_app/features/stats/views/stats_view.dart';
@@ -137,6 +138,10 @@ final routerProvider = Provider<GoRouter>((ref) {
                       GoRoute(
                         path: 'feedback',
                         builder: (context, state) => const FeedbackView(),
+                      ),
+                      GoRoute(
+                        path: 'plus',
+                        builder: (context, state) => const PlusView(),
                       ),
                       GoRoute(
                         path: 'about',

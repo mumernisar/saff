@@ -124,6 +124,13 @@ class SaffDetailView extends ConsumerWidget {
                     )
                   : null,
             ),
+          if (saff.overLimit && !owner)
+            ListTile(
+              leading: const Icon(Icons.workspace_premium),
+              title: Text(l10n.claimOwnership),
+              onTap: () =>
+                  ref.read(saffRepositoryProvider).claimOwnership(saffId),
+            ),
           SectionHeader(l10n.inviteTitle),
           ListTile(
             title: Text(

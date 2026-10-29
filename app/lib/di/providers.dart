@@ -224,3 +224,13 @@ final importRepositoryProvider = Provider<ImportRepository>(
     ref.watch(failureMapperProvider),
   ),
 );
+
+/// The user's plan.
+final entitlementProvider =
+    StreamProvider<({String plan, String status, bool imports})>((ref) {
+      final uid = ref.watch(uidProvider).value;
+      if (uid == null) {
+        return Stream.value((plan: 'free', status: 'none', imports: false));
+      }
+      return ref.watch(saffRepositoryProvider).watchEntitlement(uid);
+    });

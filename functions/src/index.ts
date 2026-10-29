@@ -18,6 +18,7 @@ export {
   skipOccurrence,
   voteProposal,
 } from "./features/alarms/proposals";
+export { claimOwnership, devSetPlus, verifyPurchase } from "./features/billing/plus";
 export { deletePack, onImportUploaded, updateSaffSettings } from "./features/imports/imports";
 export { gradeAskMe } from "./features/rounds/ask_me";
 export { deleteAccount } from "./features/users/delete_account";
