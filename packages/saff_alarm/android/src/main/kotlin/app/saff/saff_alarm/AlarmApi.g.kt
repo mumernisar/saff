@@ -426,7 +426,9 @@ data class ActiveRing (
   val saffId: String,
   val ringStartedElapsedMs: Long,
   val rampMs: Long,
-  val reason: RingReason
+  val reason: RingReason,
+  /** The device's monotonic clock when this object was built. */
+  val nowElapsedMs: Long
 )
  {
   companion object {
@@ -437,7 +439,8 @@ data class ActiveRing (
       val ringStartedElapsedMs = pigeonVar_list[3] as Long
       val rampMs = pigeonVar_list[4] as Long
       val reason = pigeonVar_list[5] as RingReason
-      return ActiveRing(occurrenceId, alarmName, saffId, ringStartedElapsedMs, rampMs, reason)
+      val nowElapsedMs = pigeonVar_list[6] as Long
+      return ActiveRing(occurrenceId, alarmName, saffId, ringStartedElapsedMs, rampMs, reason, nowElapsedMs)
     }
   }
   fun toList(): List<Any?> {
@@ -448,6 +451,7 @@ data class ActiveRing (
       ringStartedElapsedMs,
       rampMs,
       reason,
+      nowElapsedMs,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -458,7 +462,7 @@ data class ActiveRing (
       return true
     }
     val other = other as ActiveRing
-    return AlarmApiPigeonUtils.deepEquals(this.occurrenceId, other.occurrenceId) && AlarmApiPigeonUtils.deepEquals(this.alarmName, other.alarmName) && AlarmApiPigeonUtils.deepEquals(this.saffId, other.saffId) && AlarmApiPigeonUtils.deepEquals(this.ringStartedElapsedMs, other.ringStartedElapsedMs) && AlarmApiPigeonUtils.deepEquals(this.rampMs, other.rampMs) && AlarmApiPigeonUtils.deepEquals(this.reason, other.reason)
+    return AlarmApiPigeonUtils.deepEquals(this.occurrenceId, other.occurrenceId) && AlarmApiPigeonUtils.deepEquals(this.alarmName, other.alarmName) && AlarmApiPigeonUtils.deepEquals(this.saffId, other.saffId) && AlarmApiPigeonUtils.deepEquals(this.ringStartedElapsedMs, other.ringStartedElapsedMs) && AlarmApiPigeonUtils.deepEquals(this.rampMs, other.rampMs) && AlarmApiPigeonUtils.deepEquals(this.reason, other.reason) && AlarmApiPigeonUtils.deepEquals(this.nowElapsedMs, other.nowElapsedMs)
   }
 
   override fun hashCode(): Int {
@@ -469,6 +473,7 @@ data class ActiveRing (
     result = 31 * result + AlarmApiPigeonUtils.deepHash(this.ringStartedElapsedMs)
     result = 31 * result + AlarmApiPigeonUtils.deepHash(this.rampMs)
     result = 31 * result + AlarmApiPigeonUtils.deepHash(this.reason)
+    result = 31 * result + AlarmApiPigeonUtils.deepHash(this.nowElapsedMs)
     return result
   }
 }
@@ -564,6 +569,8 @@ interface AlarmHostApi {
   fun getActiveRing(): ActiveRing?
   /** Called by the wake engine when its first frame is on screen. */
   fun reportWakeReady()
+  /** The device's IANA timezone id, e.g. Asia/Karachi. */
+  fun getTimezone(): String
 
   companion object {
     /** The codec used by AlarmHostApi. */
@@ -751,6 +758,21 @@ interface AlarmHostApi {
             val wrapped: List<Any?> = try {
               api.reportWakeReady()
               listOf(null)
+            } catch (exception: Throwable) {
+              AlarmApiPigeonUtils.wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.saff_alarm.AlarmHostApi.getTimezone$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> = try {
+              listOf(api.getTimezone())
             } catch (exception: Throwable) {
               AlarmApiPigeonUtils.wrapError(exception)
             }

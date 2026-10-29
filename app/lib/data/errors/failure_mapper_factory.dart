@@ -1,4 +1,5 @@
 import 'package:saff_alarm/saff_alarm.dart';
+import 'package:saff_app/data/errors/firebase_failure_mapper.dart';
 import 'package:saff_core/saff_core.dart';
 
 /// The mapper chain registered once in DI (`docs/ERRORS.md` §4).
@@ -8,6 +9,7 @@ import 'package:saff_core/saff_core.dart';
 FailureMapper buildFailureMapper() => const FailureMapper([
   AppFailureMapper(),
   AlarmFailureMapper(),
+  FirebaseFailureMapper(),
   NetworkExceptionMapper(),
   HttpStatusMapper(),
   FormatExceptionMapper(),

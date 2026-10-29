@@ -10,9 +10,9 @@ import 'package:flutter/services.dart';
 import 'package:meta/meta.dart' show immutable, protected, visibleForTesting;
 
 Object? _extractReplyValueOrThrow(
-    List<Object?>? replyList,
-    String channelName, {
-    required bool isNullValid,
+  List<Object?>? replyList,
+  String channelName, {
+  required bool isNullValid,
 }) {
   if (replyList == null) {
     throw PlatformException(
@@ -34,8 +34,11 @@ Object? _extractReplyValueOrThrow(
   return replyList.firstOrNull;
 }
 
-
-List<Object?> wrapResponse({Object? result, PlatformException? error, bool empty = false}) {
+List<Object?> wrapResponse({
+  Object? result,
+  PlatformException? error,
+  bool empty = false,
+}) {
   if (empty) {
     return <Object?>[];
   }
@@ -44,6 +47,7 @@ List<Object?> wrapResponse({Object? result, PlatformException? error, bool empty
   }
   return <Object?>[error.code, error.message, error.details];
 }
+
 bool _deepEquals(Object? a, Object? b) {
   if (identical(a, b)) {
     return true;
@@ -56,8 +60,9 @@ bool _deepEquals(Object? a, Object? b) {
   }
   if (a is List && b is List) {
     return a.length == b.length &&
-        a.indexed
-            .every(((int, dynamic) item) => _deepEquals(item.$2, b[item.$1]));
+        a.indexed.every(
+          ((int, dynamic) item) => _deepEquals(item.$2, b[item.$1]),
+        );
   }
   if (a is Map && b is Map) {
     if (a.length != b.length) {
@@ -105,7 +110,6 @@ int _deepHash(Object? value) {
   }
   return value.hashCode;
 }
-
 
 /// Why the alarm rings.
 enum RingReason {
@@ -170,7 +174,8 @@ class NativeOccurrence {
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static NativeOccurrence decode(Object result) {
     result as List<Object?>;
@@ -194,7 +199,13 @@ class NativeOccurrence {
     if (identical(this, other)) {
       return true;
     }
-    return _deepEquals(id, other.id) && _deepEquals(ringAtEpochMs, other.ringAtEpochMs) && _deepEquals(alarmName, other.alarmName) && _deepEquals(soundUri, other.soundUri) && _deepEquals(vibrate, other.vibrate) && _deepEquals(rampMs, other.rampMs) && _deepEquals(saffId, other.saffId);
+    return _deepEquals(id, other.id) &&
+        _deepEquals(ringAtEpochMs, other.ringAtEpochMs) &&
+        _deepEquals(alarmName, other.alarmName) &&
+        _deepEquals(soundUri, other.soundUri) &&
+        _deepEquals(vibrate, other.vibrate) &&
+        _deepEquals(rampMs, other.rampMs) &&
+        _deepEquals(saffId, other.saffId);
   }
 
   @override
@@ -233,7 +244,8 @@ class ReadinessReport {
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static ReadinessReport decode(Object result) {
     result as List<Object?>;
@@ -255,7 +267,14 @@ class ReadinessReport {
     if (identical(this, other)) {
       return true;
     }
-    return _deepEquals(exactAlarmAllowed, other.exactAlarmAllowed) && _deepEquals(fullScreenIntentAllowed, other.fullScreenIntentAllowed) && _deepEquals(notificationsAllowed, other.notificationsAllowed) && _deepEquals(batteryOptimisationIgnored, other.batteryOptimisationIgnored) && _deepEquals(manufacturer, other.manufacturer);
+    return _deepEquals(exactAlarmAllowed, other.exactAlarmAllowed) &&
+        _deepEquals(fullScreenIntentAllowed, other.fullScreenIntentAllowed) &&
+        _deepEquals(notificationsAllowed, other.notificationsAllowed) &&
+        _deepEquals(
+          batteryOptimisationIgnored,
+          other.batteryOptimisationIgnored,
+        ) &&
+        _deepEquals(manufacturer, other.manufacturer);
   }
 
   @override
@@ -302,7 +321,8 @@ class RingLogEntry {
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static RingLogEntry decode(Object result) {
     result as List<Object?>;
@@ -326,7 +346,13 @@ class RingLogEntry {
     if (identical(this, other)) {
       return true;
     }
-    return _deepEquals(occurrenceId, other.occurrenceId) && _deepEquals(firedAtEpochMs, other.firedAtEpochMs) && _deepEquals(delayMs, other.delayMs) && _deepEquals(soundStartMs, other.soundStartMs) && _deepEquals(engineReadyMs, other.engineReadyMs) && _deepEquals(usedFallback, other.usedFallback) && _deepEquals(error, other.error);
+    return _deepEquals(occurrenceId, other.occurrenceId) &&
+        _deepEquals(firedAtEpochMs, other.firedAtEpochMs) &&
+        _deepEquals(delayMs, other.delayMs) &&
+        _deepEquals(soundStartMs, other.soundStartMs) &&
+        _deepEquals(engineReadyMs, other.engineReadyMs) &&
+        _deepEquals(usedFallback, other.usedFallback) &&
+        _deepEquals(error, other.error);
   }
 
   @override
@@ -343,6 +369,7 @@ class ActiveRing {
     required this.ringStartedElapsedMs,
     required this.rampMs,
     required this.reason,
+    required this.nowElapsedMs,
   });
 
   String occurrenceId;
@@ -357,6 +384,9 @@ class ActiveRing {
 
   RingReason reason;
 
+  /// The device's monotonic clock when this object was built.
+  int nowElapsedMs;
+
   List<Object?> _toList() {
     return <Object?>[
       occurrenceId,
@@ -365,11 +395,13 @@ class ActiveRing {
       ringStartedElapsedMs,
       rampMs,
       reason,
+      nowElapsedMs,
     ];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static ActiveRing decode(Object result) {
     result as List<Object?>;
@@ -380,6 +412,7 @@ class ActiveRing {
       ringStartedElapsedMs: result[3]! as int,
       rampMs: result[4]! as int,
       reason: result[5]! as RingReason,
+      nowElapsedMs: result[6]! as int,
     );
   }
 
@@ -392,14 +425,19 @@ class ActiveRing {
     if (identical(this, other)) {
       return true;
     }
-    return _deepEquals(occurrenceId, other.occurrenceId) && _deepEquals(alarmName, other.alarmName) && _deepEquals(saffId, other.saffId) && _deepEquals(ringStartedElapsedMs, other.ringStartedElapsedMs) && _deepEquals(rampMs, other.rampMs) && _deepEquals(reason, other.reason);
+    return _deepEquals(occurrenceId, other.occurrenceId) &&
+        _deepEquals(alarmName, other.alarmName) &&
+        _deepEquals(saffId, other.saffId) &&
+        _deepEquals(ringStartedElapsedMs, other.ringStartedElapsedMs) &&
+        _deepEquals(rampMs, other.rampMs) &&
+        _deepEquals(reason, other.reason) &&
+        _deepEquals(nowElapsedMs, other.nowElapsedMs);
   }
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   int get hashCode => _deepHash(<Object?>[runtimeType, ..._toList()]);
 }
-
 
 class _PigeonCodec extends StandardMessageCodec {
   const _PigeonCodec();
@@ -408,25 +446,25 @@ class _PigeonCodec extends StandardMessageCodec {
     if (value is int) {
       buffer.putUint8(4);
       buffer.putInt64(value);
-    }    else if (value is RingReason) {
+    } else if (value is RingReason) {
       buffer.putUint8(129);
       writeValue(buffer, value.index);
-    }    else if (value is StopReason) {
+    } else if (value is StopReason) {
       buffer.putUint8(130);
       writeValue(buffer, value.index);
-    }    else if (value is ReadinessItem) {
+    } else if (value is ReadinessItem) {
       buffer.putUint8(131);
       writeValue(buffer, value.index);
-    }    else if (value is NativeOccurrence) {
+    } else if (value is NativeOccurrence) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
-    }    else if (value is ReadinessReport) {
+    } else if (value is ReadinessReport) {
       buffer.putUint8(133);
       writeValue(buffer, value.encode());
-    }    else if (value is RingLogEntry) {
+    } else if (value is RingLogEntry) {
       buffer.putUint8(134);
       writeValue(buffer, value.encode());
-    }    else if (value is ActiveRing) {
+    } else if (value is ActiveRing) {
       buffer.putUint8(135);
       writeValue(buffer, value.encode());
     } else {
@@ -464,9 +502,13 @@ class AlarmHostApi {
   /// Constructor for [AlarmHostApi].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  AlarmHostApi({BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  AlarmHostApi({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
@@ -475,25 +517,28 @@ class AlarmHostApi {
 
   /// Replaces the whole native schedule (idempotent).
   Future<void> setSchedule(List<NativeOccurrence> occurrences) async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.saff_alarm.AlarmHostApi.setSchedule$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.saff_alarm.AlarmHostApi.setSchedule$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[occurrences]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[occurrences],
+    );
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: true,
-    )
-    ;
+      pigeonVar_replyList,
+      pigeonVar_channelName,
+      isNullValid: true,
+    );
   }
 
   Future<List<NativeOccurrence>> getSchedule() async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.saff_alarm.AlarmHostApi.getSchedule$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.saff_alarm.AlarmHostApi.getSchedule$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -503,70 +548,80 @@ class AlarmHostApi {
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: false,
-    )
-    ;
+      pigeonVar_replyList,
+      pigeonVar_channelName,
+      isNullValid: false,
+    );
     return (pigeonVar_replyValue! as List<Object?>).cast<NativeOccurrence>();
   }
 
-  Future<void> ringNow(RingReason reason, String? occurrenceId, String? message) async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.saff_alarm.AlarmHostApi.ringNow$pigeonVar_messageChannelSuffix';
+  Future<void> ringNow(
+    RingReason reason,
+    String? occurrenceId,
+    String? message,
+  ) async {
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.saff_alarm.AlarmHostApi.ringNow$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[reason, occurrenceId, message]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[reason, occurrenceId, message],
+    );
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: true,
-    )
-    ;
+      pigeonVar_replyList,
+      pigeonVar_channelName,
+      isNullValid: true,
+    );
   }
 
   Future<void> stopRinging(StopReason reason) async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.saff_alarm.AlarmHostApi.stopRinging$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.saff_alarm.AlarmHostApi.stopRinging$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[reason]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[reason],
+    );
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: true,
-    )
-    ;
+      pigeonVar_replyList,
+      pigeonVar_channelName,
+      isNullValid: true,
+    );
   }
 
   Future<void> snooze(int minutes) async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.saff_alarm.AlarmHostApi.snooze$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.saff_alarm.AlarmHostApi.snooze$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[minutes]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[minutes],
+    );
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: true,
-    )
-    ;
+      pigeonVar_replyList,
+      pigeonVar_channelName,
+      isNullValid: true,
+    );
   }
 
   Future<ReadinessReport> getReadiness() async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.saff_alarm.AlarmHostApi.getReadiness$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.saff_alarm.AlarmHostApi.getReadiness$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -576,52 +631,56 @@ class AlarmHostApi {
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: false,
-    )
-    ;
+      pigeonVar_replyList,
+      pigeonVar_channelName,
+      isNullValid: false,
+    );
     return pigeonVar_replyValue! as ReadinessReport;
   }
 
   Future<void> openSettings(ReadinessItem item) async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.saff_alarm.AlarmHostApi.openSettings$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.saff_alarm.AlarmHostApi.openSettings$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[item]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[item],
+    );
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: true,
-    )
-    ;
+      pigeonVar_replyList,
+      pigeonVar_channelName,
+      isNullValid: true,
+    );
   }
 
   Future<void> scheduleTestAlarm(int secondsFromNow) async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.saff_alarm.AlarmHostApi.scheduleTestAlarm$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.saff_alarm.AlarmHostApi.scheduleTestAlarm$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[secondsFromNow]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[secondsFromNow],
+    );
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: true,
-    )
-    ;
+      pigeonVar_replyList,
+      pigeonVar_channelName,
+      isNullValid: true,
+    );
   }
 
   Future<List<RingLogEntry>> drainRingLog() async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.saff_alarm.AlarmHostApi.drainRingLog$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.saff_alarm.AlarmHostApi.drainRingLog$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -631,17 +690,17 @@ class AlarmHostApi {
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: false,
-    )
-    ;
+      pigeonVar_replyList,
+      pigeonVar_channelName,
+      isNullValid: false,
+    );
     return (pigeonVar_replyValue! as List<Object?>).cast<RingLogEntry>();
   }
 
   /// The ring in progress, or null when nothing is ringing.
   Future<ActiveRing?> getActiveRing() async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.saff_alarm.AlarmHostApi.getActiveRing$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.saff_alarm.AlarmHostApi.getActiveRing$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -651,17 +710,17 @@ class AlarmHostApi {
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: true,
-    )
-    ;
+      pigeonVar_replyList,
+      pigeonVar_channelName,
+      isNullValid: true,
+    );
     return pigeonVar_replyValue as ActiveRing?;
   }
 
   /// Called by the wake engine when its first frame is on screen.
   Future<void> reportWakeReady() async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.saff_alarm.AlarmHostApi.reportWakeReady$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.saff_alarm.AlarmHostApi.reportWakeReady$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -671,11 +730,30 @@ class AlarmHostApi {
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: true,
-    )
-    ;
+      pigeonVar_replyList,
+      pigeonVar_channelName,
+      isNullValid: true,
+    );
+  }
+
+  /// The device's IANA timezone id, e.g. Asia/Karachi.
+  Future<String> getTimezone() async {
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.saff_alarm.AlarmHostApi.getTimezone$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
+    final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
+
+    final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
+      pigeonVar_replyList,
+      pigeonVar_channelName,
+      isNullValid: false,
+    );
+    return pigeonVar_replyValue! as String;
   }
 }
 
@@ -687,12 +765,20 @@ abstract class AlarmFlutterApi {
 
   void onRingStopped(StopReason reason);
 
-  static void setUp(AlarmFlutterApi? api, {BinaryMessenger? binaryMessenger, String messageChannelSuffix = '',}) {
-    messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  static void setUp(
+    AlarmFlutterApi? api, {
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) {
+    messageChannelSuffix = messageChannelSuffix.isNotEmpty
+        ? '.$messageChannelSuffix'
+        : '';
     {
       final pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.saff_alarm.AlarmFlutterApi.onRingStarted$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+        'dev.flutter.pigeon.saff_alarm.AlarmFlutterApi.onRingStarted$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
@@ -704,16 +790,20 @@ abstract class AlarmFlutterApi {
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
       final pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.saff_alarm.AlarmFlutterApi.onRingStopped$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+        'dev.flutter.pigeon.saff_alarm.AlarmFlutterApi.onRingStopped$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
@@ -725,8 +815,10 @@ abstract class AlarmFlutterApi {
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }

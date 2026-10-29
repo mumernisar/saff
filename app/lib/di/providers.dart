@@ -1,12 +1,20 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod/src/providers/stream_provider.dart';
 import 'package:saff_app/config/environment_config.dart';
 import 'package:saff_app/data/errors/failure_mapper_factory.dart';
+import 'package:saff_app/data/repositories/alarm_plan_repository.dart';
 import 'package:saff_app/data/repositories/alarm_repository.dart';
+import 'package:saff_app/data/repositories/auth_repository.dart';
+import 'package:saff_app/data/repositories/chat_repository.dart';
 import 'package:saff_app/data/repositories/emulator_status_repository.dart';
+import 'package:saff_app/data/repositories/round_repository.dart';
+import 'package:saff_app/data/repositories/saff_repository.dart';
 import 'package:saff_app/data/services/alarm_service.dart';
 import 'package:saff_app/data/services/crash_reporter.dart';
 import 'package:saff_app/data/services/emulator_probe_service.dart';
+import 'package:saff_app/data/services/firebase_services.dart';
 import 'package:saff_core/saff_core.dart';
+import 'package:saff_domain/saff_domain.dart';
 
 /// The build configuration; overridden at startup.
 final environmentConfigProvider = Provider<EnvironmentConfig>(
@@ -56,3 +64,117 @@ Duration? providerRetry(int retryCount, Object error) {
   if (retryCount + 1 >= policy.maxAttempts) return null;
   return policy.ceiling(retryCount + 1);
 }
+
+/// Firebase Auth.
+final authServiceProvider = Provider<AuthService>((ref) => AuthService());
+
+/// Callable functions.
+final functionsServiceProvider = Provider<FunctionsService>(
+  (ref) => FunctionsService(),
+);
+
+/// Firestore.
+final firestoreServiceProvider = Provider<FirestoreService>(
+  (ref) => FirestoreService(),
+);
+
+/// Sign-in state.
+final authRepositoryProvider = Provider<AuthRepository>(
+  (ref) => AuthRepositoryImpl(
+    ref.watch(authServiceProvider),
+    ref.watch(failureMapperProvider),
+  ),
+);
+
+/// Profile, saffs and members.
+final saffRepositoryProvider = Provider<SaffRepository>(
+  (ref) => SaffRepositoryImpl(
+    ref.watch(firestoreServiceProvider),
+    ref.watch(functionsServiceProvider),
+    ref.watch(failureMapperProvider),
+  ),
+);
+
+/// Chat.
+final chatRepositoryProvider = Provider<ChatRepository>(
+  (ref) => ChatRepositoryImpl(
+    ref.watch(firestoreServiceProvider),
+    ref.watch(failureMapperProvider),
+  ),
+);
+
+/// Alarms, proposals, occurrences.
+final alarmPlanRepositoryProvider = Provider<AlarmPlanRepository>(
+  (ref) => AlarmPlanRepositoryImpl(
+    ref.watch(firestoreServiceProvider),
+    ref.watch(functionsServiceProvider),
+    ref.watch(failureMapperProvider),
+  ),
+);
+
+/// Rounds and reveals.
+final roundRepositoryProvider = Provider<RoundRepository>(
+  (ref) => RoundRepositoryImpl(
+    ref.watch(firestoreServiceProvider),
+    ref.watch(functionsServiceProvider),
+    ref.watch(failureMapperProvider),
+  ),
+);
+
+/// The signed-in uid; null when signed out.
+final uidProvider = StreamProvider<String?>(
+  (ref) => ref.watch(authRepositoryProvider).uid(),
+);
+
+/// The signed-in user's profile; null until created.
+final profileProvider = StreamProvider<Profile?>((ref) {
+  final uid = ref.watch(uidProvider).value;
+  if (uid == null) return Stream.value(null);
+  return ref.watch(saffRepositoryProvider).watchProfile(uid);
+});
+
+/// Saffs of the user.
+final mySaffsProvider = StreamProvider<List<Saff>>((ref) {
+  final ids = ref.watch(profileProvider).value?.saffIds ?? const <String>[];
+  return ref.watch(saffRepositoryProvider).watchSaffs(ids);
+});
+
+/// Members of a saff.
+final StreamProviderFamily<List<Member>, String> membersProvider =
+    StreamProvider.family<List<Member>, String>(
+      (ref, saffId) => ref.watch(saffRepositoryProvider).watchMembers(saffId),
+    );
+
+/// Alarms of a saff.
+final StreamProviderFamily<List<Alarm>, String> alarmsProvider =
+    StreamProvider.family<List<Alarm>, String>(
+      (ref, saffId) =>
+          ref.watch(alarmPlanRepositoryProvider).watchAlarms(saffId),
+    );
+
+/// Proposals of a saff.
+final StreamProviderFamily<List<Proposal>, String> proposalsProvider =
+    StreamProvider.family<List<Proposal>, String>(
+      (ref, saffId) =>
+          ref.watch(alarmPlanRepositoryProvider).watchProposals(saffId),
+    );
+
+/// Upcoming occurrences of a saff.
+final StreamProviderFamily<List<Occurrence>, String> upcomingProvider =
+    StreamProvider.family<List<Occurrence>, String>(
+      (ref, saffId) =>
+          ref.watch(alarmPlanRepositoryProvider).watchUpcoming(saffId),
+    );
+
+/// Upcoming occurrences of every saff the user is in, for the user.
+final myUpcomingProvider = Provider<List<Occurrence>>((ref) {
+  final uid = ref.watch(uidProvider).value;
+  final saffs = ref.watch(mySaffsProvider).value ?? const <Saff>[];
+  final out = <Occurrence>[];
+  for (final s in saffs) {
+    final list = ref.watch(upcomingProvider(s.id)).value ?? const [];
+    out.addAll(list.where((o) => uid != null && o.requires(uid)));
+  }
+  out.sort((a, b) => a.ringAt.compareTo(b.ringAt));
+  return out;
+});

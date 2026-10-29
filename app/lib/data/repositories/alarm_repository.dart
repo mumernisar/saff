@@ -36,6 +36,9 @@ abstract interface class AlarmRepository {
 
   /// Reports that the wake UI is up.
   Future<Result<void>> reportWakeReady();
+
+  /// The device's IANA timezone.
+  Future<Result<String>> timezone();
 }
 
 /// [AlarmRepository] over [AlarmService].
@@ -92,4 +95,7 @@ final class AlarmRepositoryImpl implements AlarmRepository {
   @override
   Future<Result<void>> reportWakeReady() =>
       _g('reportWakeReady', _service.reportWakeReady);
+
+  @override
+  Future<Result<String>> timezone() => _g('timezone', _service.getTimezone);
 }

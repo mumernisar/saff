@@ -152,6 +152,8 @@ class SaffAlarmPlugin : FlutterPlugin, AlarmHostApi {
 
     override fun getActiveRing(): ActiveRing? = ScheduleStore.active(ctx)
 
+    override fun getTimezone(): String = java.util.TimeZone.getDefault().id
+
     override fun reportWakeReady() {
         if (WakeEngine.readyAtElapsedMs == 0L) {
             WakeEngine.readyAtElapsedMs = android.os.SystemClock.elapsedRealtime()

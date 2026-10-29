@@ -40,6 +40,9 @@ class AlarmService {
   /// The ring in progress.
   Future<ActiveRing?> getActiveRing() => _api.getActiveRing();
 
+  /// The device's IANA timezone id.
+  Future<String> getTimezone() => _api.getTimezone();
+
   /// Tells native the wake UI is on screen.
   Future<void> reportWakeReady() => _api.reportWakeReady();
 }

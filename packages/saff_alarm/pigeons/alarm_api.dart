@@ -3,8 +3,7 @@ import 'package:pigeon/pigeon.dart';
 @ConfigurePigeon(
   PigeonOptions(
     dartOut: 'lib/src/alarm_api.g.dart',
-    kotlinOut:
-        'android/src/main/kotlin/app/saff/saff_alarm/AlarmApi.g.kt',
+    kotlinOut: 'android/src/main/kotlin/app/saff/saff_alarm/AlarmApi.g.kt',
     kotlinOptions: KotlinOptions(package: 'app.saff.saff_alarm'),
   ),
 )
@@ -90,6 +89,7 @@ class ActiveRing {
     required this.ringStartedElapsedMs,
     required this.rampMs,
     required this.reason,
+    required this.nowElapsedMs,
   });
 
   String occurrenceId;
@@ -98,6 +98,9 @@ class ActiveRing {
   int ringStartedElapsedMs;
   int rampMs;
   RingReason reason;
+
+  /// The device's monotonic clock when this object was built.
+  int nowElapsedMs;
 }
 
 @HostApi()
@@ -126,6 +129,9 @@ abstract class AlarmHostApi {
 
   /// Called by the wake engine when its first frame is on screen.
   void reportWakeReady();
+
+  /// The device's IANA timezone id, e.g. Asia/Karachi.
+  String getTimezone();
 }
 
 /// Called on the wake engine.

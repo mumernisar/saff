@@ -1,10 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +9,8 @@ import 'package:saff_app/app.dart';
 import 'package:saff_app/config/environment_config.dart';
 import 'package:saff_app/data/services/app_log.dart';
 import 'package:saff_app/data/services/crash_reporter.dart';
+import 'package:saff_app/data/services/firebase_init.dart';
+import 'package:saff_app/data/services/push_handler.dart';
 import 'package:saff_app/di/providers.dart';
 import 'package:saff_app/error_handling.dart';
 import 'package:saff_core/saff_core.dart';
@@ -54,9 +53,8 @@ Future<void> bootstrap({
   required FirebaseOptions firebaseOptions,
 }) async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: firebaseOptions);
-
-  if (config.useEmulators) await _connectEmulators(config.emulatorHost);
+  await initFirebase(config, firebaseOptions);
+  FirebaseMessaging.onBackgroundMessage(firebaseBackgroundHandler);
 
   await FirebaseAppCheck.instance.activate(
     providerAndroid: config.isDev
@@ -87,19 +85,3 @@ Future<void> bootstrap({
 CrashReporter _reporterFor({required bool report}) => report
     ? CrashlyticsReporter(FirebaseCrashlytics.instance)
     : MemoryCrashReporter();
-
-Future<void> _connectEmulators(String host) async {
-  await FirebaseAuth.instance.useAuthEmulator(host, EmulatorPorts.auth);
-  FirebaseFirestore.instance.useFirestoreEmulator(
-    host,
-    EmulatorPorts.firestore,
-  );
-  FirebaseFunctions.instance.useFunctionsEmulator(
-    host,
-    EmulatorPorts.functions,
-  );
-  await FirebaseStorage.instance.useStorageEmulator(
-    host,
-    EmulatorPorts.storage,
-  );
-}

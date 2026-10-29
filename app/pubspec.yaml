@@ -24,6 +24,7 @@ dependencies:
   flutter_riverpod: ^3.0.0
   go_router: ^18.1.1
   intl: any
+  url_launcher: ^6.3.0
   mode_arcade: any
   mode_card_duel: any
   mode_selfie: any
@@ -33,7 +34,9 @@ dependencies:
   saff_domain: any
   saff_modes: any
   saff_ui: any
+  shared_preferences: ^2.3.0
 
+  riverpod: any
 dev_dependencies:
   flutter_test:
     sdk: flutter

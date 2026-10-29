@@ -61,7 +61,18 @@ class RingingService : Service() {
         val message = intent?.getStringExtra(EXTRA_MESSAGE)
         val firedAt = intent?.getLongExtra(EXTRA_FIRED_AT, System.currentTimeMillis())
             ?: System.currentTimeMillis()
-        val occ = ScheduleStore.find(this, id)
+        val occ = ScheduleStore.find(this, id) ?: intent?.let {
+            val name = it.getStringExtra(AlarmReceiver.EXTRA_NAME) ?: return@let null
+            NativeOccurrence(
+                id = id,
+                ringAtEpochMs = firedAt,
+                alarmName = name,
+                soundUri = it.getStringExtra(AlarmReceiver.EXTRA_SOUND),
+                vibrate = it.getBooleanExtra(AlarmReceiver.EXTRA_VIBRATE, true),
+                rampMs = it.getLongExtra(AlarmReceiver.EXTRA_RAMP_MS, 30_000L),
+                saffId = it.getStringExtra(AlarmReceiver.EXTRA_SAFF_ID) ?: "",
+            )
+        }
         val name = occ?.alarmName ?: "Alarm"
         val saffId = occ?.saffId ?: ""
         val rampMs = occ?.rampMs ?: 30_000L
@@ -90,8 +101,10 @@ class RingingService : Service() {
             ringStartedElapsedMs = SystemClock.elapsedRealtime(),
             rampMs = rampMs,
             reason = reason,
+            nowElapsedMs = SystemClock.elapsedRealtime(),
         )
         ScheduleStore.setActive(this, active)
+        if (reason == RingReason.SCHEDULED) runCatching { ScheduleStore.markFired(this, id) }
         if (occ != null && reason == RingReason.SCHEDULED) {
             runCatching { AlarmScheduler.prune(this, id, System.currentTimeMillis() - 60_000) }
         }

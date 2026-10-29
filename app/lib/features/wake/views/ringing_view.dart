@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:saff_app/di/providers.dart';
 import 'package:saff_app/features/wake/view_models/ringing_view_model.dart';
+import 'package:saff_app/features/wake/views/wake_flow_view.dart';
 import 'package:saff_app/features/wake/widgets/hold_to_start_button.dart';
 import 'package:saff_app/l10n/app_localizations.dart';
 import 'package:saff_ui/saff_ui.dart';
@@ -41,6 +43,36 @@ class _RingingViewState extends ConsumerState<RingingView> {
     super.dispose();
   }
 
+  Future<void> _openFlow(BuildContext context) async {
+    final ctx = ref.read(wakeContextProvider);
+    final nav = Navigator.of(context);
+    final occ = ctx.occurrenceId;
+    void exit() {
+      nav.popUntil((r) => r.isFirst);
+      unawaited(SystemNavigator.pop());
+    }
+
+    await nav.push<void>(
+      MaterialPageRoute(
+        builder: (_) => occ == null
+            ? Scaffold(
+                body: EmptyState(
+                  title: AppLocalizations.of(context).testAlarmWorked,
+                  action: PrimaryButton(
+                    label: AppLocalizations.of(context).done,
+                    onPressed: exit,
+                  ),
+                ),
+              )
+            : WakeFlowView(
+                saffId: ctx.saffId,
+                occurrenceId: occ,
+                onExit: exit,
+              ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -49,6 +81,9 @@ class _RingingViewState extends ConsumerState<RingingView> {
       _,
     ) {
       _ringSeen = DateTime.now();
+    });
+    ref.listen(ringingProvider.select((s) => s.started), (was, started) {
+      if (started && was != true) unawaited(_openFlow(context));
     });
     final state = ref.watch(ringingProvider);
     final vm = ref.read(ringingProvider.notifier);

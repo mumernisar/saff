@@ -17,10 +17,11 @@ object AlarmScheduler {
     /** Schedules the next upcoming occurrence from schedule + snoozes. */
     fun scheduleNext(context: Context, nowMs: Long = System.currentTimeMillis()) {
         val all = (ScheduleStore.schedule(context) + ScheduleStore.snoozes(context))
-        val next = all.filter { it.ringAtEpochMs >= nowMs - LATE_GRACE_MS }
+        val fired = ScheduleStore.firedIds(context).toSet()
+        val next = all.filter { it.ringAtEpochMs >= nowMs - LATE_GRACE_MS && it.id !in fired }
             .minByOrNull { it.ringAtEpochMs }
         val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val pi = ringIntent(context, next?.id)
+        val pi = ringIntent(context, next)
         if (next == null) {
             am.cancel(pi)
             return
@@ -29,10 +30,17 @@ object AlarmScheduler {
         am.setAlarmClock(AlarmManager.AlarmClockInfo(at, showIntent(context)), pi)
     }
 
-    private fun ringIntent(context: Context, id: String?): PendingIntent {
+    private fun ringIntent(context: Context, occ: NativeOccurrence?): PendingIntent {
+        // The occurrence travels inside the intent, so ringing never depends on
+        // the stored schedule still holding it (the app may rewrite it any time).
         val intent = Intent(context, AlarmReceiver::class.java)
             .setAction(AlarmReceiver.ACTION_FIRE)
-            .putExtra(AlarmReceiver.EXTRA_OCCURRENCE_ID, id)
+            .putExtra(AlarmReceiver.EXTRA_OCCURRENCE_ID, occ?.id)
+            .putExtra(AlarmReceiver.EXTRA_NAME, occ?.alarmName)
+            .putExtra(AlarmReceiver.EXTRA_SAFF_ID, occ?.saffId)
+            .putExtra(AlarmReceiver.EXTRA_RAMP_MS, occ?.rampMs ?: 30_000L)
+            .putExtra(AlarmReceiver.EXTRA_SOUND, occ?.soundUri)
+            .putExtra(AlarmReceiver.EXTRA_VIBRATE, occ?.vibrate ?: true)
         return PendingIntent.getBroadcast(
             context,
             REQUEST_CODE,

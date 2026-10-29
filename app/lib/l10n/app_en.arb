@@ -104,5 +104,412 @@
   "alarmReadinessNotifications": "Notifications",
   "alarmReadinessBattery": "Battery optimisation off",
   "alarmOk": "OK",
-  "alarmFix": "Fix"
+  "alarmFix": "Fix",
+  "welcomeTitle": "Wake up together",
+  "welcomeBody": "One alarm, one round, one conversation. With the people you stand shoulder to shoulder with.",
+  "devSignInAs": "Sign in as a test user (dev builds)",
+  "signInUnavailable": "Sign-in with Google arrives with the next build.",
+  "profileTitle": "About you",
+  "profileBody": "Your name shows to your saff. Your WhatsApp number only powers the chat and call buttons, and only your saff can see it.",
+  "profileName": "Your name",
+  "profileWhatsapp": "WhatsApp number",
+  "profileWhatsappHelp": "With country code, e.g. +923001234567",
+  "profileSave": "Continue",
+  "todayEmptyTitle": "Meet your people",
+  "todayEmptyBody": "Start a saff and invite someone, or join one with an invite code.",
+  "startSaff": "Start a saff",
+  "haveInvite": "I have an invite",
+  "newSaff": "New saff",
+  "yourSaffs": "YOUR SAFFS",
+  "nextAlarm": "NEXT ALARM",
+  "noUpcomingAlarm": "No alarm yet. Open a chat and propose one.",
+  "waitingForSomeone": "Waiting for someone to join",
+  "waitingForSomeoneToJoin": "Waiting for someone to join…",
+  "memberCount": "{count} people",
+  "@memberCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "streakDays": "{count} days in a row",
+  "@streakDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "roundInProgress": "{name}: round in progress. Tap to play.",
+  "@roundInProgress": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "emulatorsUnreachable": "Some emulators are not reachable.",
+  "now": "now",
+  "inLessThanAMinute": "in less than a minute",
+  "inMinutes": "in {m} min",
+  "@inMinutes": {
+    "placeholders": {
+      "m": {
+        "type": "int"
+      }
+    }
+  },
+  "inHoursMinutes": "in {h}h {m}m",
+  "@inHoursMinutes": {
+    "placeholders": {
+      "h": {
+        "type": "int"
+      },
+      "m": {
+        "type": "int"
+      }
+    }
+  },
+  "saffNewBody": "Give your saff a name, or leave it blank. You'll get a code to share.",
+  "saffNameOptional": "Saff name (optional)",
+  "createSaff": "Create saff",
+  "inviteTitle": "Invite code",
+  "shareInvite": "Share on WhatsApp",
+  "copyCode": "Copy code",
+  "codeCopied": "Code copied",
+  "inviteMessage": "Join my saff on Saff with this code: {code}",
+  "@inviteMessage": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "done": "Done",
+  "joinSaffTitle": "Join a saff",
+  "joinBody": "Enter the 6-character code you were sent.",
+  "inviteCodeLabel": "Invite code",
+  "continueLabel": "Continue",
+  "joinConfirmTitle": "Join {owner}'s saff?",
+  "@joinConfirmTitle": {
+    "placeholders": {
+      "owner": {
+        "type": "String"
+      }
+    }
+  },
+  "join": "Join",
+  "notNow": "Not now",
+  "members": "MEMBERS",
+  "ownerLabel": "Owner",
+  "removeMemberConfirm": "Remove {name} from this saff?",
+  "@removeMemberConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "regenerateInvite": "New invite code",
+  "leaveSaff": "Leave saff",
+  "leaveSaffConfirm": "Leave {name}?",
+  "@leaveSaffConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "renameSaff": "Rename saff",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "save": "Save",
+  "chatsEmptyTitle": "No chats yet",
+  "chatsEmptyBody": "Start or join a saff to chat with them.",
+  "sayHello": "Say salaam",
+  "messageDeleted": "Message deleted",
+  "systemMessagePreview": "Alarm update",
+  "online": "online",
+  "whatsappChat": "Chat on WhatsApp",
+  "whatsappCall": "Call on WhatsApp",
+  "pinnedAlarm": "{name} at {time}, {until}",
+  "@pinnedAlarm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      },
+      "until": {
+        "type": "String"
+      }
+    }
+  },
+  "messageHint": "Message",
+  "deletedUser": "Deleted user",
+  "seenBy": "Seen by",
+  "seenByNobody": "Nobody yet",
+  "deleteMessage": "Delete message",
+  "memberJoined": "{name} joined the saff",
+  "@memberJoined": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "memberLeft": "{name} left the saff",
+  "@memberLeft": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "memberRemoved": "{name} was removed",
+  "@memberRemoved": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "memberSkipping": "{name} is skipping a morning",
+  "@memberSkipping": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "roundResultTitle": "{name} round",
+  "@roundResultTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "roundResultWinner": "{name} won · {count} players",
+  "@roundResultWinner": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "roundResultNoWinner": "{count} players",
+  "@roundResultNoWinner": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "proposeAlarm": "Propose an alarm",
+  "changeAlarm": "Change {name}",
+  "@changeAlarm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteAlarm": "Delete {name}",
+  "@deleteAlarm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "skipMorning": "Skip a morning",
+  "alarmName": "Alarm name",
+  "sendProposal": "Send",
+  "needsToAccept": "{names} needs to accept before this starts.",
+  "@needsToAccept": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "groupOptIn": "Members opt in by accepting. It starts once two people are in.",
+  "proposedAlarm": "{name} proposed an alarm",
+  "@proposedAlarm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "proposedChange": "{name} proposed a change",
+  "@proposedChange": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "proposedDelete": "{name} proposed deleting an alarm",
+  "@proposedDelete": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "proposalAccepted": "Accepted",
+  "proposalDeclined": "Declined",
+  "proposalSuperseded": "Replaced by a newer suggestion",
+  "proposalExpired": "Expired",
+  "everyDay": "Every day",
+  "waitingForAccept": "Waiting for {names} to accept",
+  "@waitingForAccept": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "groupJoined": "{count} in so far",
+  "@groupJoined": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "accept": "Accept",
+  "joinAlarm": "Join this alarm",
+  "suggestOther": "Suggest another time",
+  "no": "No",
+  "dayMon": "Mon",
+  "dayTue": "Tue",
+  "dayWed": "Wed",
+  "dayThu": "Thu",
+  "dayFri": "Fri",
+  "daySat": "Sat",
+  "daySun": "Sun",
+  "nothingToSkip": "No upcoming mornings to skip.",
+  "skipTooLateHint": "{day} is too soon to skip.",
+  "@skipTooLateHint": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "alreadySkipping": "Already skipping",
+  "skipFootnote": "Your streak is frozen, not broken.",
+  "cardOf": "{index} of {total}",
+  "@cardOf": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "sendAnswer": "Send answer",
+  "typeAnswer": "Your answer",
+  "iKnewIt": "I knew it",
+  "iDidNot": "I didn't",
+  "showAnswer": "Show answer",
+  "timeUp": "Time's up",
+  "yourScoreLocked": "Your score is locked in",
+  "scoresRevealTogether": "Scores reveal together.",
+  "modeUnsupported": "This build can't play today's game. Update Saff.",
+  "stillWithUs": "Still with us?",
+  "testAlarmWorked": "Test alarm worked",
+  "offlineFallbackTitle": "No round on this phone",
+  "offlineFallbackBody": "Tap the sun to wake up. You'll count as woke, unranked.",
+  "waitingTitle": "Waiting",
+  "offlineAlert": "{name}'s phone seems to be offline. You may want to call and check on them.",
+  "@offlineAlert": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "ringAgain": "Ring {name} again",
+  "@ringAgain": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "ringAgainIn": "Ring again in {seconds}s",
+  "@ringAgainIn": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "noRingsLeft": "No rings left",
+  "callOnWhatsapp": "Call",
+  "revealAt": "Reveal at {time} if the others don't play",
+  "@revealAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "statusAsleep": "Still asleep",
+  "statusSnoozed": "Snoozed",
+  "statusPlaying": "Playing",
+  "statusDone": "Done",
+  "statusOffline": "Offline",
+  "statusMissed": "Didn't play",
+  "revealTitle": "Results",
+  "soloMorning": "A solo morning. No ranking, just your result.",
+  "you": "You",
+  "didNotPlay": "Didn't play",
+  "playedOffline": "Played offline, unranked",
+  "correctOf": "{correct} of {total} correct",
+  "@correctOf": {
+    "placeholders": {
+      "correct": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "youWokeFirst": "You woke first",
+  "wokeFirst": "{name} woke first",
+  "@wokeFirst": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "streakReset": "Streak reset",
+  "seeTheCards": "See the cards",
+  "goToChat": "Go to chat",
+  "cardReview": "Card review",
+  "correct": "Correct",
+  "wrong": "Wrong",
+  "answerLabel": "Answer",
+  "talkAboutIt": "Talk about it",
+  "nextCard": "Next card",
+  "noAnswer": "No answer",
+  "settingsSaffs": "SAFFS",
+  "settingsReliability": "ALARM RELIABILITY",
+  "settingsAccount": "ACCOUNT",
+  "joinWithCode": "Join with a code",
+  "signOut": "Sign out"
 }

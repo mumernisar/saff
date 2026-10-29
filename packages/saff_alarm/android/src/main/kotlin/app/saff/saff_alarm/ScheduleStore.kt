@@ -17,6 +17,7 @@ object ScheduleStore {
     private const val KEY_LOG = "ring_log"
     private const val KEY_ACTIVE = "active_ring"
     private const val KEY_FORCE_FALLBACK = "force_fallback"
+    private const val KEY_FIRED = "fired_ids"
     private const val LOG_CAP = 100
 
     private fun prefs(context: Context): SharedPreferences {
@@ -28,7 +29,10 @@ object ScheduleStore {
 
     @Synchronized
     fun setSchedule(context: Context, list: List<NativeOccurrence>) {
-        prefs(context).edit().putString(KEY_SCHEDULE, toJson(list).toString()).apply()
+        val fired = firedIds(context).toSet()
+        prefs(context).edit()
+            .putString(KEY_SCHEDULE, toJson(list.filter { it.id !in fired }).toString())
+            .apply()
     }
 
     @Synchronized
@@ -47,6 +51,22 @@ object ScheduleStore {
     /** Looks an occurrence up in the schedule or the snoozes. */
     fun find(context: Context, id: String): NativeOccurrence? =
         (schedule(context) + snoozes(context)).firstOrNull { it.id == id }
+
+    /** Remembers that [id] rang, so a schedule rewrite can never ring it twice. */
+    @Synchronized
+    fun markFired(context: Context, id: String) {
+        val ids = firedIds(context).filter { it != id } + id
+        prefs(context).edit().putString(KEY_FIRED, JSONArray(ids.takeLast(100)).toString()).apply()
+    }
+
+    /** Ids of occurrences that already rang (newest last). */
+    @Synchronized
+    fun firedIds(context: Context): List<String> = try {
+        val arr = JSONArray(prefs(context).getString(KEY_FIRED, "[]"))
+        (0 until arr.length()).map { arr.getString(it) }
+    } catch (_: Exception) {
+        emptyList()
+    }
 
     @Synchronized
     fun setActive(context: Context, ring: ActiveRing?) {
@@ -67,6 +87,7 @@ object ScheduleStore {
                 ringStartedElapsedMs = o.getLong("ringStartedElapsedMs"),
                 rampMs = o.getLong("rampMs"),
                 reason = RingReason.ofRaw(o.getInt("reason")) ?: RingReason.SCHEDULED,
+                nowElapsedMs = android.os.SystemClock.elapsedRealtime(),
             )
         } catch (_: Exception) {
             null

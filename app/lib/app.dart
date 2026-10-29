@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:saff_app/l10n/app_localizations.dart';
 import 'package:saff_app/router.dart';
 import 'package:saff_ui/saff_ui.dart';
 
 /// The root widget.
-class SaffApp extends StatefulWidget {
+class SaffApp extends ConsumerStatefulWidget {
   /// Creates the app. [router] defaults to the real one; tests inject theirs.
   const SaffApp({super.key, this.router});
 
@@ -14,16 +15,14 @@ class SaffApp extends StatefulWidget {
   final GoRouter? router;
 
   @override
-  State<SaffApp> createState() => _SaffAppState();
+  ConsumerState<SaffApp> createState() => _SaffAppState();
 }
 
-class _SaffAppState extends State<SaffApp> {
-  late final GoRouter _router = widget.router ?? buildRouter();
-
+class _SaffAppState extends ConsumerState<SaffApp> {
   @override
   Widget build(BuildContext context) => MaterialApp.router(
     onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
-    routerConfig: _router,
+    routerConfig: widget.router ?? ref.watch(routerProvider),
     localizationsDelegates: const [
       AppLocalizations.delegate,
       GlobalMaterialLocalizations.delegate,

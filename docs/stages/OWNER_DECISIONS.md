@@ -1,0 +1,18 @@
+# Decisions and actions waiting for the owner
+
+Collected while building without the owner present (2026-10-29). Nothing here blocked progress; each item
+has the default I used. Reverse a default by telling me.
+
+## Needs your action (credentials / accounts / devices)
+1. **Google sign-in**: needs the debug and release SHA-1 fingerprints added to the Firebase Android apps
+   (`saff-dev-d9605`, `saff-prod`) and the Google provider enabled in Auth. Until then, dev builds sign in as seeded test users.
+2. **Real FCM pushes from the emulator** (`roundLocked`, `nudge`; `DEV_RELAXATIONS.md` R-5): create a service-account key for
+   `saff-dev-d9605` (role: Firebase Cloud Messaging API Admin) and point `GOOGLE_APPLICATION_CREDENTIALS` at it in
+   `functions/.env.local`. Without it, pushes are logged as failed and nudges cannot ring a killed phone.
+3. **Quran Foundation credentials** (Q-8, also which English and Urdu translation): the content gateway and every
+   surah/learning card need them. Until then only the 20 core-pack cards without placeholders play.
+4. **Blaze plan for `saff-dev`** (Stage 5): needed for deployed Functions, Cloud Tasks and the billing cap.
+5. **More phones / OEMs** for the alarm device checklist (`ALARM.md` §9), a second phone for two-device demos.
+6. **Play Console** (Stage 13/14): subscription products, declarations, service account for purchase verification.
+
+## Decisions I made that the docs did not cover (change on request)
