@@ -31,3 +31,4 @@ has the default I used. Reverse a default by telling me.
 - **Selfie upload queue** does not survive going offline: a failed upload makes the morning count as woke-unranked instead of queueing.
 - **Still blocked on you**: Word mode (word list), learning track and card lessons (Quran content), real purchases (`verifyPurchase` needs the Play API), release signing/store listing, Google sign-in, FCM key, packs by link (needs a decision: allowed hosts and size limit).
 - Pair settings (card mix, mode schedule) apply directly for either member instead of through a proposal (decision; the docs say pairs should propose).
+- **Phone screen stays black over adb** because Samsung's *Accidental touch protection* (Settings > Display) triggers when the proximity sensor is covered. Turn it off or keep the phone face-up before the next device session.
