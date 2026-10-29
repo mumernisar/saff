@@ -147,6 +147,11 @@ class SaffDetailView extends ConsumerWidget {
               title: Text(l10n.regenerateInvite),
               onTap: () => vm.regenerate(saffId),
             ),
+          ListTile(
+            leading: const Icon(Icons.style),
+            title: Text(l10n.morningsTitle),
+            onTap: () => context.push('/mornings/$saffId'),
+          ),
           const Divider(),
           ListTile(
             leading: Icon(Icons.logout, color: c.error),

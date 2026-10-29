@@ -7,6 +7,7 @@ import 'package:saff_app/data/repositories/alarm_repository.dart';
 import 'package:saff_app/data/repositories/auth_repository.dart';
 import 'package:saff_app/data/repositories/chat_repository.dart';
 import 'package:saff_app/data/repositories/emulator_status_repository.dart';
+import 'package:saff_app/data/repositories/import_repository.dart';
 import 'package:saff_app/data/repositories/plant_repository.dart';
 import 'package:saff_app/data/repositories/round_repository.dart';
 import 'package:saff_app/data/repositories/saff_repository.dart';
@@ -210,6 +211,15 @@ final personalStatsProvider = StreamProvider<PersonalStats>((ref) {
 /// Planting.
 final plantRepositoryProvider = Provider<PlantRepository>(
   (ref) => PlantRepositoryImpl(
+    ref.watch(functionsServiceProvider),
+    ref.watch(failureMapperProvider),
+  ),
+);
+
+/// Anki imports and card mix.
+final importRepositoryProvider = Provider<ImportRepository>(
+  (ref) => ImportRepositoryImpl(
+    ref.watch(firestoreServiceProvider),
     ref.watch(functionsServiceProvider),
     ref.watch(failureMapperProvider),
   ),

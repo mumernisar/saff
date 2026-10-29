@@ -12,6 +12,7 @@ final class Saff {
     this.whatsappGroupLink,
     this.ended = false,
     this.overLimit = false,
+    this.customMix = false,
   });
 
   /// Document id.
@@ -43,6 +44,9 @@ final class Saff {
 
   /// Whether the owner's plan no longer covers the member count.
   final bool overLimit;
+
+  /// Whether imported packs feed the rounds.
+  final bool customMix;
 
   /// A pair has exactly two members.
   bool get isPair => memberIds.length == 2;

@@ -1,8 +1,27 @@
 rules_version = '2';
 
-// Stage 0: deny everything (docs/SECURITY.md has the real rules for later).
+// docs/SECURITY.md section 2. Imports: written by the owner only, <= 50 MB, no reads.
+// Selfies: written once by the member before the reveal, readable by saff members after it.
 service firebase.storage {
   match /b/{bucket}/o {
+    match /imports/{uid}/{file} {
+      allow write: if request.auth != null && request.auth.uid == uid
+        && request.resource.size <= 50 * 1024 * 1024;
+      allow read: if false;
+    }
+    match /saffs/{saffId}/rounds/{rid}/{file} {
+      allow create: if request.auth != null
+        && file == request.auth.uid + '.jpg'
+        && request.resource.contentType == 'image/jpeg'
+        && request.resource.size <= 1024 * 1024
+        && request.auth.uid in firestore.get(/databases/(default)/documents/saffs/$(saffId)).data.memberIds
+        && firestore.get(/databases/(default)/documents/saffs/$(saffId)/rounds/$(rid)).data.status == 'locked';
+      allow read: if request.auth != null
+        && request.auth.uid in firestore.get(/databases/(default)/documents/saffs/$(saffId)).data.memberIds
+        && (file == request.auth.uid + '.jpg'
+            || firestore.get(/databases/(default)/documents/saffs/$(saffId)/rounds/$(rid)).data.status == 'revealed');
+      allow update, delete: if false;
+    }
     match /{allPaths=**} {
       allow read, write: if false;
     }

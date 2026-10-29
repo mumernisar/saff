@@ -24,6 +24,7 @@ Saff saffFrom(DocumentSnapshot<Map<String, dynamic>> d) {
     whatsappGroupLink: m['whatsappGroupLink'] as String?,
     ended: m['endedAt'] != null,
     overLimit: (m['overLimit'] as bool?) ?? false,
+    customMix: ((m['cardMix'] as Map?)?['custom'] as bool?) ?? false,
   );
 }
 

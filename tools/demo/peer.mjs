@@ -14,13 +14,14 @@ const require = createRequire(new URL("../../firebase/rules-tests/", import.meta
 const { initializeApp } = require("firebase/app");
 const { getAuth, connectAuthEmulator, createUserWithEmailAndPassword, signInWithEmailAndPassword } = require("firebase/auth");
 const { getFunctions, connectFunctionsEmulator, httpsCallable } = require("firebase/functions");
+const { getStorage, connectStorageEmulator, ref: sref, uploadBytes } = require("firebase/storage");
 const { getFirestore, connectFirestoreEmulator, doc, getDoc, getDocs, collection, setDoc, addDoc, query, where, serverTimestamp } = require("firebase/firestore");
 
 const PROJECT = "saff-dev-d9605";
 const HOST = process.env.EMULATOR_HOST ?? "127.0.0.1";
 const [name, cmd, ...args] = process.argv.slice(2);
 
-const app = initializeApp({ projectId: PROJECT, apiKey: "demo", appId: "demo" }, name);
+const app = initializeApp({ projectId: PROJECT, apiKey: "demo", appId: "demo", storageBucket: `${PROJECT}.firebasestorage.app` }, name);
 const auth = getAuth(app);
 connectAuthEmulator(auth, `http://${HOST}:9099`, { disableWarnings: true });
 const fns = getFunctions(app, "us-central1");
@@ -43,6 +44,21 @@ switch (cmd) {
   case "delete":
     console.log(await call("deleteAccount", {}));
     break;
+  case "import": {
+    const st = getStorage(app);
+    connectStorageEmulator(st, HOST, 9199);
+    const id = `imp${Date.now()}`;
+    const fileName = args[1];
+    const body = args.slice(2).join(" ").replace(/\\n/g, "\n").replace(/\\t/g, "\t");
+    await setDoc(doc(fs, `imports/${id}`), { uid, saffId: args[0], fileName, status: "uploaded", createdAt: serverTimestamp() });
+    await uploadBytes(sref(st, `imports/${uid}/${id}`), new TextEncoder().encode(body));
+    for (let i = 0; i < 20; i++) {
+      await new Promise((r) => setTimeout(r, 1500));
+      const d = await getDoc(doc(fs, `imports/${id}`));
+      if (d.get("status") === "done" || d.get("status") === "failed") { console.log(d.get("status"), d.get("errorCode"), JSON.stringify(d.get("counts")), JSON.stringify(d.get("warnings"))); break; }
+    }
+    break;
+  }
   case "join":
     console.log(await call("joinSaff", { code: args[0] }));
     break;

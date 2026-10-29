@@ -126,7 +126,7 @@ class _TodayBody extends ConsumerWidget {
               ? SaffCard(child: Text(l10n.noUpcomingAlarm))
               : _NextAlarmCard(occurrence: next, saffs: saffs),
         ),
-        for (final o
+        for (final _
             in upcoming
                 .where(
                   (o) =>

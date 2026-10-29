@@ -34,6 +34,7 @@ async function lockRound(db, saffId, occId) {
     const occRef = db.doc(`saffs/${saffId}/occurrences/${occId}`);
     const saffRef = db.doc(`saffs/${saffId}`);
     const pool = await (0, packs_1.officialCards)();
+    const customCards = await importedCards(db, saffId);
     const locked = await db.runTransaction(async (tx) => {
         const [occ, saff, seen, plantSnap] = await Promise.all([
             tx.get(occRef),
@@ -63,6 +64,12 @@ async function lockRound(db, saffId, occId) {
             return undefined;
         }
         cards = cards.slice(0, c.cardsPerRound);
+        if (mode === "cardDuel" && mix?.custom && customCards.length > 0) {
+            const rnd = (0, prng_1.mulberry32)((0, prng_1.hash32)(`${occId}:custom`));
+            const fresh = customCards.filter((x) => !seenIds.has(x.id));
+            const picks = (0, prng_1.shuffled)(fresh.length >= 4 ? fresh : customCards, rnd).slice(0, 4);
+            cards = [...cards.slice(0, Math.max(0, cards.length - picks.length)), ...picks.map((x) => (0, cards_1.withShuffledOptions)(x, occId))];
+        }
         tx.set(saffRef.collection("rounds").doc(occId), {
             mode,
             seed: (0, prng_1.hash32)(occId),
@@ -373,5 +380,16 @@ async function runSweep(db, nowMs = Date.now()) {
     }
     stats.expired = await (0, proposals_1.expireProposals)(db, nowMs);
     return stats;
+}
+/** Cards of the saff's imported packs. */
+async function importedCards(db, saffId) {
+    const chunks = await db.collectionGroup("chunks").get();
+    const out = [];
+    for (const d of chunks.docs) {
+        if (!d.ref.path.startsWith(`saffs/${saffId}/packs/`))
+            continue;
+        out.push(...(d.get("cards") ?? []));
+    }
+    return out;
 }
 //# sourceMappingURL=lifecycle.js.map

@@ -2,7 +2,8 @@ import { FieldValue, Timestamp, type Firestore } from "firebase-admin/firestore"
 import { currentConstants } from "../../core/config";
 import { log } from "../../core/logger";
 import { pickCards, withShuffledOptions } from "../../domain/rounds/cards";
-import { hash32, mulberry32 } from "../../domain/rounds/prng";
+import { hash32, mulberry32, shuffled } from "../../domain/rounds/prng";
+import type { PackCard } from "../../domain/rounds/cards";
 import { matchesTyped } from "../../domain/rounds/normalise";
 import { expireProposals } from "../alarms/proposals";
 import { planAlarm } from "../alarms/planning";
@@ -28,6 +29,7 @@ export async function lockRound(db: Firestore, saffId: string, occId: string): P
   const occRef = db.doc(`saffs/${saffId}/occurrences/${occId}`);
   const saffRef = db.doc(`saffs/${saffId}`);
   const pool = await officialCards();
+  const customCards = await importedCards(db, saffId);
   const locked = await db.runTransaction(async (tx) => {
     const [occ, saff, seen, plantSnap] = await Promise.all([
       tx.get(occRef),
@@ -56,6 +58,12 @@ export async function lockRound(db: Firestore, saffId: string, occId: string): P
       return undefined;
     }
     cards = cards.slice(0, c.cardsPerRound);
+    if (mode === "cardDuel" && (mix as { custom?: boolean } | undefined)?.custom && customCards.length > 0) {
+      const rnd = mulberry32(hash32(`${occId}:custom`));
+      const fresh = customCards.filter((x) => !seenIds.has(x.id));
+      const picks = shuffled(fresh.length >= 4 ? fresh : customCards, rnd).slice(0, 4);
+      cards = [...cards.slice(0, Math.max(0, cards.length - picks.length)), ...picks.map((x) => withShuffledOptions(x, occId))];
+    }
     tx.set(saffRef.collection("rounds").doc(occId), {
       mode,
       seed: hash32(occId),
@@ -412,4 +420,15 @@ export async function runSweep(db: Firestore, nowMs = Date.now()): Promise<Recor
   }
   stats.expired = await expireProposals(db, nowMs);
   return stats;
+}
+
+/** Cards of the saff's imported packs. */
+async function importedCards(db: Firestore, saffId: string): Promise<PackCard[]> {
+  const chunks = await db.collectionGroup("chunks").get();
+  const out: PackCard[] = [];
+  for (const d of chunks.docs) {
+    if (!d.ref.path.startsWith(`saffs/${saffId}/packs/`)) continue;
+    out.push(...((d.get("cards") as PackCard[]) ?? []));
+  }
+  return out;
 }

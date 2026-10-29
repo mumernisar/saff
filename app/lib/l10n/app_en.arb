@@ -694,5 +694,50 @@
   "attributionsBody": "Question cards come from the Duha packs. Quran text, translations and audio will be provided through the Quran Foundation API once connected, with the attribution it requires. Hadith references cite Sahih al-Bukhari and Sahih Muslim.",
   "settingsApp": "APP",
   "askMeGradePrompt": "Was their answer right?",
-  "plantTeaser": "Someone left you something for tomorrow's round."
+  "plantTeaser": "Someone left you something for tomorrow's round.",
+  "morningsTitle": "Mornings",
+  "customMix": "Custom mix",
+  "customMixBody": "Rounds include cards from your imported decks.",
+  "importedPacks": "IMPORTED DECKS",
+  "cardCount": "{count} cards",
+  "@cardCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noImportedPacks": "No imported decks yet.",
+  "importAnki": "Import Anki deck",
+  "importDone": "Imported {count} cards",
+  "@importDone": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importParsing": "Reading your deck…",
+  "importWarnings": "Notes: {codes}",
+  "@importWarnings": {
+    "placeholders": {
+      "codes": {
+        "type": "String"
+      }
+    }
+  },
+  "packAdded": "{by} added the deck {title} ({count} cards)",
+  "@packAdded": {
+    "placeholders": {
+      "by": {
+        "type": "String"
+      },
+      "title": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

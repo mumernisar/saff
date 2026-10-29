@@ -7,6 +7,7 @@ import 'package:saff_app/features/alarms/views/reliability_view.dart';
 import 'package:saff_app/features/auth/views/profile_setup_view.dart';
 import 'package:saff_app/features/auth/views/welcome_view.dart';
 import 'package:saff_app/features/chat/views/chat_view.dart';
+import 'package:saff_app/features/imports/views/mornings_view.dart';
 import 'package:saff_app/features/learn/views/learn_view.dart';
 import 'package:saff_app/features/onboarding/view_models/onboarding_view_model.dart';
 import 'package:saff_app/features/onboarding/views/onboarding_view.dart';
@@ -92,6 +93,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/join/:code',
         builder: (context, state) =>
             SaffJoinView(code: state.pathParameters['code']),
+      ),
+      GoRoute(
+        path: '/mornings/:saffId',
+        builder: (context, state) =>
+            MorningsView(saffId: state.pathParameters['saffId']!),
       ),
       GoRoute(
         path: '/saff/:id',

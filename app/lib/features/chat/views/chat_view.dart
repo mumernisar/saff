@@ -577,6 +577,14 @@ class _MessageRow extends ConsumerWidget {
         return system(l10n.memberLeft(nameOf(m.payload['uid'])));
       case 'member_removed':
         return system(l10n.memberRemoved(nameOf(m.payload['uid'])));
+      case 'pack_added':
+        return system(
+          l10n.packAdded(
+            '${m.payload['by'] ?? ''}',
+            '${m.payload['title'] ?? ''}',
+            (m.payload['cards'] as num?)?.toInt() ?? 0,
+          ),
+        );
       case 'skip':
         return system(l10n.memberSkipping(nameOf(m.payload['uid'])));
       case 'round_result':
