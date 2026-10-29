@@ -126,6 +126,36 @@ class _TodayBody extends ConsumerWidget {
               ? SaffCard(child: Text(l10n.noUpcomingAlarm))
               : _NextAlarmCard(occurrence: next, saffs: saffs),
         ),
+        for (final s in saffs.where((s) => s.isPair))
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: SaffSpacing.lg,
+              vertical: SaffSpacing.xs,
+            ),
+            child: SaffCard(
+              onTap: () => context.push('/plant/${s.id}'),
+              child: Row(
+                children: [
+                  const Icon(Icons.edit_note),
+                  const SizedBox(width: SaffSpacing.md),
+                  Expanded(
+                    child: Text(
+                      l10n.leaveCardAction(
+                        (ref.watch(membersProvider(s.id)).value ?? const [])
+                                .where(
+                                  (m) => m.uid != ref.watch(uidProvider).value,
+                                )
+                                .firstOrNull
+                                ?.displayName ??
+                            '',
+                      ),
+                    ),
+                  ),
+                  const Icon(Icons.chevron_right),
+                ],
+              ),
+            ),
+          ),
         SectionHeader(l10n.yourSaffs),
         for (final s in saffs)
           Padding(

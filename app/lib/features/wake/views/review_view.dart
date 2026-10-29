@@ -44,7 +44,7 @@ class _ReviewViewState extends ConsumerState<ReviewView> {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
     final names = {for (final r in reveal.rows) r.uid: r.name};
-    final cards = round.cards;
+    final cards = [...round.cards, ...reveal.bonusCards];
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(onPressed: vm.closeReview),

@@ -10,6 +10,7 @@ import 'package:saff_app/features/chat/views/chat_view.dart';
 import 'package:saff_app/features/learn/views/learn_view.dart';
 import 'package:saff_app/features/onboarding/view_models/onboarding_view_model.dart';
 import 'package:saff_app/features/onboarding/views/onboarding_view.dart';
+import 'package:saff_app/features/plant/views/plant_view.dart';
 import 'package:saff_app/features/saff/view_models/selected_saff.dart';
 import 'package:saff_app/features/saff/views/saff_detail_view.dart';
 import 'package:saff_app/features/saff/views/saff_join_view.dart';
@@ -67,6 +68,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             initialName: ref.watch(_testUserNameProvider),
           ),
         ),
+      ),
+      GoRoute(
+        path: '/plant/:saffId',
+        builder: (context, state) =>
+            PlantView(saffId: state.pathParameters['saffId']!),
       ),
       GoRoute(
         path: '/onboarding',

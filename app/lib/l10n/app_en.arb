@@ -603,5 +603,50 @@
         "type": "String"
       }
     }
+  },
+  "plantTitle": "Leave {name} a card",
+  "@plantTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "plantSent": "{name} will get this tomorrow",
+  "@plantSent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "plantSend": "Send to {name}",
+  "@plantSend": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "plantOption": "Option {n}",
+  "@plantOption": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "plantQuiz": "Quiz them",
+  "plantChoice": "Multiple choice",
+  "plantAskMe": "Ask me",
+  "plantQuestion": "Your question",
+  "plantAnswer": "The answer you'll check against",
+  "leaveCardAction": "Leave {name} a card",
+  "@leaveCardAction": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   }
 }

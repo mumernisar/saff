@@ -21,5 +21,5 @@ has the default I used. Reverse a default by telling me.
 - **Docs vs mockups**: PRODUCT.md wins on behaviour (hold to start, 8 cards, per-person learning), mockups on look.
 - **No codegen** (freezed/riverpod_generator/Drift): hand-written models, Firestore offline cache instead of Drift `locked_rounds`.
 - **Content**: only core-pack cards without gateway placeholders are playable; surah/learning content waits for Quran Foundation credentials.
-- **Planting**: server `plantCard` + bonus cards in rounds + review are built; client "Leave a card" UI and ask-me grading are NOT built yet.
+- **Planting**: server `plantCard`, bonus cards in rounds, the "Leave a card" screen (quiz, multiple choice, ask-me) and the review are built; ask-me grading by the planter and the recipient teaser are NOT built; not yet exercised on a device.
 - **Not built**: Word/Climber/Rapid Roll/Selfie modes, Learning track, Anki import, Plus billing, account deletion, Google sign-in, packs by link, release pipeline, Drift, tests beyond the emulator smoke (`tools/demo/smoke.mjs`, `peer.mjs`).
