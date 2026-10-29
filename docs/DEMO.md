@@ -91,3 +91,11 @@ Demo timing is on (R-1): night lock 1 min before the alarm, offline check 30 s a
 - Nothing is deployed: Functions, task queues and Storage run only on the laptop. If the laptop sleeps,
   locks, reveals and nudges stop (alarms already scheduled on the phones still ring).
 - App Check isn't enforced (R-7), and there's no billing cap to test while on Spark (R-8).
+
+## Quick start (written 2026-10-29)
+1. Phones and Mac on the same Wi-Fi or hotspot. Samsung: turn off *Settings > Display > Accidental touch protection*.
+2. `tools/demo/start.sh` (starts emulators with persistent data, the sweeper ticker, builds and installs on every attached phone).
+3. Phone A: **Hamza** → name/number → "Done, take me in" → Start a saff → share the code. Phone B: **Ali** → same → I have an invite → code → Join.
+4. Chat → **+** → Propose an alarm: pick a time **4 minutes ahead** (demo timing steps by 1 minute) → Send; on the other phone Accept.
+5. The round locks 1 minute before, the alarm rings on both, hold to start, play, reveal. Nudge: stay asleep on one phone and press "Ring again" on the other (needs the FCM key to ring a killed phone).
+6. If you restart the emulators and see "something went wrong" on About you: the data is persisted now; if it still happens, clear app data on the phone (`adb shell pm clear app.saff.dev`).
