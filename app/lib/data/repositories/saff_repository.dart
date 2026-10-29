@@ -49,6 +49,9 @@ abstract interface class SaffRepository {
 
   /// Registers this device's FCM token.
   Future<Result<void>> registerDevice(String installationId, String token);
+
+  /// Deletes the account and everything tied to it.
+  Future<Result<void>> deleteAccount();
 }
 
 /// [SaffRepository] over Firestore and callables.
@@ -177,6 +180,10 @@ final class SaffRepositoryImpl implements SaffRepository {
     'renameSaff',
     () => _fn.call('renameSaff', {'saffId': saffId, 'name': name}),
   );
+
+  @override
+  Future<Result<void>> deleteAccount() =>
+      _g('deleteAccount', () => _fn.call('deleteAccount'));
 
   @override
   Future<Result<void>> registerDevice(String installationId, String token) =>

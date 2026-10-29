@@ -28,6 +28,14 @@ class AuthViewModel extends Notifier<ActionState> {
 
   /// Signs out.
   Future<void> signOut() => ref.read(authRepositoryProvider).signOut();
+
+  /// Deletes the account; the server removes the Auth user, so the session ends.
+  Future<void> deleteAccount() async {
+    state = const ActionState(running: true);
+    final r = await ref.read(saffRepositoryProvider).deleteAccount();
+    state = ActionState(failure: r is Err<void> ? r.failure : null);
+    if (r is Ok<void>) await ref.read(authRepositoryProvider).signOut();
+  }
 }
 
 /// Provider of [AuthViewModel].

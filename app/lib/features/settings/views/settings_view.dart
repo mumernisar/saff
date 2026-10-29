@@ -67,6 +67,35 @@ class SettingsView extends ConsumerWidget {
             title: Text(l10n.signOut),
             onTap: () => ref.read(authViewModelProvider.notifier).signOut(),
           ),
+          ListTile(
+            leading: Icon(Icons.delete_forever, color: context.saff.error),
+            title: Text(
+              l10n.deleteAccount,
+              style: TextStyle(color: context.saff.error),
+            ),
+            onTap: () async {
+              final ok = await showDialog<bool>(
+                context: context,
+                builder: (ctx) => AlertDialog(
+                  title: Text(l10n.deleteAccount),
+                  content: Text(l10n.deleteAccountBody),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(ctx, false),
+                      child: Text(l10n.cancel),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.pop(ctx, true),
+                      child: Text(l10n.deleteAccount),
+                    ),
+                  ],
+                ),
+              );
+              if (ok == true) {
+                await ref.read(authViewModelProvider.notifier).deleteAccount();
+              }
+            },
+          ),
           if (crash.available)
             ListTile(
               key: const ValueKey('trigger-test-crash'),

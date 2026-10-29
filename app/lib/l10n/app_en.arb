@@ -660,5 +660,7 @@
   },
   "climberLocked": "Your height is locked in.",
   "learnEmptyTitle": "Learn it tonight, get quizzed in the morning",
-  "learnEmptyBody": "Lessons and word-by-word study arrive once Quran text is connected."
+  "learnEmptyBody": "Lessons and word-by-word study arrive once Quran text is connected.",
+  "deleteAccount": "Delete account",
+  "deleteAccountBody": "This removes your profile and you leave every saff. Your messages stay and show as Deleted user. This can't be undone."
 }

@@ -26,3 +26,4 @@ has the default I used. Reverse a default by telling me.
 - **Climber** is built (touch-half steering per mockup, seeded platforms, server grades by metres, shared ranks). It uses plain Flutter painting, not Flame, to avoid a dependency; Rapid Roll, Word and Selfie are not built. **Word mode needs a word list source** (no content may be invented): please choose one.
 - Mode choice is seeded per occurrence (Card Duel 2/3, Climber 1/3) because only two modes exist; owner mode schedules beyond "one mode" are not wired.
 - Learn tab shows an honest empty state until the content gateway has credentials.
+- **Account deletion** (in-app) is built and tested on the emulator; the web deletion URL needed for Play is not (needs a hosting domain).

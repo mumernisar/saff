@@ -40,6 +40,9 @@ switch (cmd) {
   case "create":
     console.log(await call("createSaff", {}));
     break;
+  case "delete":
+    console.log(await call("deleteAccount", {}));
+    break;
   case "join":
     console.log(await call("joinSaff", { code: args[0] }));
     break;
