@@ -23,3 +23,6 @@ has the default I used. Reverse a default by telling me.
 - **Content**: only core-pack cards without gateway placeholders are playable; surah/learning content waits for Quran Foundation credentials.
 - **Planting**: server `plantCard`, bonus cards in rounds, the "Leave a card" screen (quiz, multiple choice, ask-me) and the review are built; ask-me grading by the planter and the recipient teaser are NOT built; not yet exercised on a device.
 - **Not built**: Word/Climber/Rapid Roll/Selfie modes, Learning track, Anki import, Plus billing, account deletion, Google sign-in, packs by link, release pipeline, Drift, tests beyond the emulator smoke (`tools/demo/smoke.mjs`, `peer.mjs`).
+- **Climber** is built (touch-half steering per mockup, seeded platforms, server grades by metres, shared ranks). It uses plain Flutter painting, not Flame, to avoid a dependency; Rapid Roll, Word and Selfie are not built. **Word mode needs a word list source** (no content may be invented): please choose one.
+- Mode choice is seeded per occurrence (Card Duel 2/3, Climber 1/3) because only two modes exist; owner mode schedules beyond "one mode" are not wired.
+- Learn tab shows an honest empty state until the content gateway has credentials.

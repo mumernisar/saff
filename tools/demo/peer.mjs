@@ -37,6 +37,9 @@ switch (cmd) {
   case "profile":
     console.log(await call("setProfile", { displayName: name, whatsapp: "+923007654321" }));
     break;
+  case "create":
+    console.log(await call("createSaff", {}));
+    break;
   case "join":
     console.log(await call("joinSaff", { code: args[0] }));
     break;
