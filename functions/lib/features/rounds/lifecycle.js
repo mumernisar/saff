@@ -19,7 +19,14 @@ const packs_1 = require("./packs");
 const stats_1 = require("./stats");
 const push_1 = require("./push");
 /** Modes the server can currently assemble and grade. */
-exports.IMPLEMENTED_MODES = ["cardDuel"];
+exports.IMPLEMENTED_MODES = ["cardDuel", "climber"];
+function pickMode(occId, schedule) {
+    if (schedule?.type === "single" && exports.IMPLEMENTED_MODES.includes(schedule.single ?? "")) {
+        return schedule.single;
+    }
+    const rnd = (0, prng_1.mulberry32)((0, prng_1.hash32)(`${occId}:mode`));
+    return rnd() < 30 / 45 ? "cardDuel" : "climber";
+}
 /** Locks the round for [occId] if it is still planned (idempotent). */
 async function lockRound(db, saffId, occId) {
     const c = (0, config_1.currentConstants)();
@@ -42,20 +49,21 @@ async function lockRound(db, saffId, occId) {
         }
         const seenIds = new Set(seen.get("ids") ?? []);
         const mix = saff.get("cardMix");
-        let cards = (0, cards_1.pickCards)({
+        const mode = pickMode(occId, saff.get("modeSchedule"));
+        let cards = mode !== "cardDuel" ? [] : (0, cards_1.pickCards)({
             pool,
             seenIds,
             occurrenceId: occId,
             count: c.cardsPerRound,
             generalKnowledge: mix?.generalKnowledge ?? true,
         }).map((card) => (0, cards_1.withShuffledOptions)(card, occId));
-        if (cards.length === 0) {
+        if (mode === "cardDuel" && cards.length === 0) {
             tx.update(occRef, { status: "cancelled" });
             return undefined;
         }
         cards = cards.slice(0, c.cardsPerRound);
         tx.set(saffRef.collection("rounds").doc(occId), {
-            mode: "cardDuel",
+            mode,
             seed: (0, prng_1.hash32)(occId),
             cards,
             bonusCards: plantSnap.docs
@@ -69,7 +77,9 @@ async function lockRound(db, saffId, occId) {
             requiredIds: required,
             alarmName: occ.get("alarmName"),
         });
-        tx.set(saffRef.collection("seenCards").doc("main"), { ids: firestore_1.FieldValue.arrayUnion(...cards.map((x) => x.id)) }, { merge: true });
+        if (cards.length > 0) {
+            tx.set(saffRef.collection("seenCards").doc("main"), { ids: firestore_1.FieldValue.arrayUnion(...cards.map((x) => x.id)) }, { merge: true });
+        }
         tx.update(occRef, { status: "locked" });
         return required;
     });
@@ -155,6 +165,21 @@ async function gradeResult(db, saffId, occId, uid) {
         return { cardId: card.id, correct, points, answered: !!a };
     });
     const offline = result.get("offlineFallback") === true;
+    if (round.get("mode") === "climber") {
+        const score = Math.max(0, Math.floor(result.get("arcadeScore") ?? 0));
+        await roundRef.collection("grades").doc(uid).set({
+            points: score,
+            correct: 0,
+            total: 0,
+            perCard: [],
+            woke: true,
+            ranked: !offline,
+            totalMs: 0,
+            gradedAt: firestore_1.FieldValue.serverTimestamp(),
+        });
+        await roundRef.collection("presence").doc(uid).set({ status: "done", updatedAt: firestore_1.FieldValue.serverTimestamp() }, { merge: true });
+        return;
+    }
     await roundRef.collection("grades").doc(uid).set({
         points: perCard.reduce((s, p) => s + p.points, 0),
         correct: perCard.filter((p) => p.correct).length,

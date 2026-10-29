@@ -8,7 +8,11 @@ class ModeCallbacks {
     required this.onAnswer,
     required this.onDone,
     required this.onActivity,
+    this.onScore,
   });
+
+  /// An arcade run ended with [score] (metres); called before [onDone].
+  final void Function(int score)? onScore;
 
   /// One answer was given (saved locally by the host).
   final void Function(CardAnswer answer) onAnswer;

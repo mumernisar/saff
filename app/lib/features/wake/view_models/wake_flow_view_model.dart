@@ -113,6 +113,7 @@ class WakeFlowViewModel extends Notifier<WakeFlowState> {
   Timer? _idle;
   final Stopwatch _sincePlay = Stopwatch();
   int? _wakeMs;
+  int? _arcadeScore;
   late final int _ringAgeMs;
   late final bool _snoozed;
 
@@ -209,7 +210,14 @@ class WakeFlowViewModel extends Notifier<WakeFlowState> {
   }
 
   /// Any input resets the idle guard.
-  void onActivity() => _armIdle();
+  void onActivity() {
+    _wakeMs ??= _ringAgeMs + _sincePlay.elapsedMilliseconds;
+    _armIdle();
+  }
+
+  /// An arcade run ended with [score] metres.
+  // ignore: use_setters_to_change_properties
+  void onScore(int score) => _arcadeScore = score;
 
   void _armIdle() {
     _idle?.cancel();
@@ -259,6 +267,7 @@ class WakeFlowViewModel extends Notifier<WakeFlowState> {
           wakeMs: _wakeMs ?? _ringAgeMs,
           snoozed: _snoozed,
           offlineFallback: offlineFallback,
+          arcadeScore: _arcadeScore,
         );
     await _savePending(state.answers, submitted: true);
     state = state.copyWith(

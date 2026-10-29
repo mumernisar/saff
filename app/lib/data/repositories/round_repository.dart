@@ -35,6 +35,7 @@ abstract interface class RoundRepository {
     required int wakeMs,
     required bool snoozed,
     required bool offlineFallback,
+    int? arcadeScore,
   });
 
   /// Live reveal; null until revealed.
@@ -122,6 +123,7 @@ final class RoundRepositoryImpl implements RoundRepository {
     required int wakeMs,
     required bool snoozed,
     required bool offlineFallback,
+    int? arcadeScore,
   }) => Result.guard(
     () {
       // Deterministic id (uid): a retry overwrites instead of duplicating.
@@ -134,6 +136,7 @@ final class RoundRepositoryImpl implements RoundRepository {
             'wakeMs': wakeMs,
             'snoozed': snoozed,
             'offlineFallback': offlineFallback,
+            if (arcadeScore != null) 'arcadeScore': arcadeScore,
             'finishedAt': FieldValue.serverTimestamp(),
             'clientVersion': 1,
           });

@@ -2,7 +2,7 @@ import { FieldValue, Timestamp, type Firestore } from "firebase-admin/firestore"
 import { currentConstants } from "../../core/config";
 import { log } from "../../core/logger";
 import { pickCards, withShuffledOptions } from "../../domain/rounds/cards";
-import { hash32 } from "../../domain/rounds/prng";
+import { hash32, mulberry32 } from "../../domain/rounds/prng";
 import { matchesTyped } from "../../domain/rounds/normalise";
 import { expireProposals } from "../alarms/proposals";
 import { planAlarm } from "../alarms/planning";
@@ -11,7 +11,15 @@ import { applyStats } from "./stats";
 import { pushToUser } from "./push";
 
 /** Modes the server can currently assemble and grade. */
-export const IMPLEMENTED_MODES = ["cardDuel"] as const;
+export const IMPLEMENTED_MODES = ["cardDuel", "climber"] as const;
+
+function pickMode(occId: string, schedule: { type?: string; single?: string } | undefined): string {
+  if (schedule?.type === "single" && (IMPLEMENTED_MODES as readonly string[]).includes(schedule.single ?? "")) {
+    return schedule.single!;
+  }
+  const rnd = mulberry32(hash32(`${occId}:mode`));
+  return rnd() < 30 / 45 ? "cardDuel" : "climber";
+}
 
 /** Locks the round for [occId] if it is still planned (idempotent). */
 export async function lockRound(db: Firestore, saffId: string, occId: string): Promise<boolean> {
@@ -34,20 +42,21 @@ export async function lockRound(db: Firestore, saffId: string, occId: string): P
     }
     const seenIds = new Set((seen.get("ids") as string[] | undefined) ?? []);
     const mix = saff.get("cardMix") as { generalKnowledge?: boolean } | undefined;
-    let cards = pickCards({
+    const mode = pickMode(occId, saff.get("modeSchedule") as { type?: string; single?: string } | undefined);
+    let cards = mode !== "cardDuel" ? [] : pickCards({
       pool,
       seenIds,
       occurrenceId: occId,
       count: c.cardsPerRound,
       generalKnowledge: mix?.generalKnowledge ?? true,
     }).map((card) => withShuffledOptions(card, occId));
-    if (cards.length === 0) {
+    if (mode === "cardDuel" && cards.length === 0) {
       tx.update(occRef, { status: "cancelled" });
       return undefined;
     }
     cards = cards.slice(0, c.cardsPerRound);
     tx.set(saffRef.collection("rounds").doc(occId), {
-      mode: "cardDuel",
+      mode,
       seed: hash32(occId),
       cards,
       bonusCards: plantSnap.docs
@@ -61,11 +70,13 @@ export async function lockRound(db: Firestore, saffId: string, occId: string): P
       requiredIds: required,
       alarmName: occ.get("alarmName"),
     });
-    tx.set(
-      saffRef.collection("seenCards").doc("main"),
-      { ids: FieldValue.arrayUnion(...cards.map((x) => x.id)) },
-      { merge: true },
-    );
+    if (cards.length > 0) {
+      tx.set(
+        saffRef.collection("seenCards").doc("main"),
+        { ids: FieldValue.arrayUnion(...cards.map((x) => x.id)) },
+        { merge: true },
+      );
+    }
     tx.update(occRef, { status: "locked" });
     return required;
   });
@@ -170,6 +181,24 @@ export async function gradeResult(db: Firestore, saffId: string, occId: string, 
     return { cardId: card.id, correct, points, answered: !!a };
   });
   const offline = result.get("offlineFallback") === true;
+  if (round.get("mode") === "climber") {
+    const score = Math.max(0, Math.floor((result.get("arcadeScore") as number | undefined) ?? 0));
+    await roundRef.collection("grades").doc(uid).set({
+      points: score,
+      correct: 0,
+      total: 0,
+      perCard: [],
+      woke: true,
+      ranked: !offline,
+      totalMs: 0,
+      gradedAt: FieldValue.serverTimestamp(),
+    });
+    await roundRef.collection("presence").doc(uid).set(
+      { status: "done", updatedAt: FieldValue.serverTimestamp() },
+      { merge: true },
+    );
+    return;
+  }
   await roundRef.collection("grades").doc(uid).set({
     points: perCard.reduce((s, p) => s + p.points, 0),
     correct: perCard.filter((p) => p.correct).length,

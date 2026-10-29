@@ -67,6 +67,7 @@ switch (cmd) {
   case "play": {
     const round = await getDoc(doc(fs, `saffs/${args[0]}/rounds/${args[1]}`));
     const cards = round.get("cards");
+    const arcade = round.get("mode") === "climber";
     await setDoc(doc(fs, `saffs/${args[0]}/rounds/${args[1]}/presence/${uid}`), { status: "playing", updatedAt: serverTimestamp() });
     const answers = cards.map((c, i) => ({
       cardId: c.id,
@@ -74,9 +75,10 @@ switch (cmd) {
       msToAnswer: Number(args[2] ?? 4000) + i * 300,
     }));
     await setDoc(doc(fs, `saffs/${args[0]}/rounds/${args[1]}/results/${uid}`), {
-      answers, wakeMs: 20_000, snoozed: false, offlineFallback: false, finishedAt: serverTimestamp(),
+      answers: arcade ? [] : answers, ...(arcade ? { arcadeScore: 640 } : {}),
+      wakeMs: 20_000, snoozed: false, offlineFallback: false, finishedAt: serverTimestamp(),
     });
-    console.log("submitted");
+    console.log("submitted", round.get("mode"));
     break;
   }
   case "presence": {

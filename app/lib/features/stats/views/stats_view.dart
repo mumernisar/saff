@@ -123,7 +123,7 @@ class _Tiles extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       mainAxisSpacing: SaffSpacing.md,
       crossAxisSpacing: SaffSpacing.md,
-      childAspectRatio: 1.9,
+      childAspectRatio: 1.5,
       children: tiles,
     ),
   );

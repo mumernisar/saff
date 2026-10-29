@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mode_arcade/mode_arcade.dart';
 import 'package:mode_card_duel/mode_card_duel.dart';
 import 'package:saff_app/di/providers.dart';
 import 'package:saff_app/features/wake/view_models/wake_flow_view_model.dart';
@@ -40,6 +41,14 @@ class WakeFlowView extends ConsumerWidget {
     final vm = ref.read(wakeFlowProvider(key).notifier);
     final constants = ref.watch(environmentConfigProvider).constants;
     final registry = ModeRegistry([
+      ClimberMode(
+        ClimberStrings(
+          hint: l10n.climberHint,
+          reached: l10n.climberReached,
+          locked: l10n.climberLocked,
+          continueLabel: l10n.continueLabel,
+        ),
+      ),
       CardDuelMode(
         cardTime: constants.cardSeconds,
         strings: CardDuelStrings(
@@ -85,6 +94,7 @@ class WakeFlowView extends ConsumerWidget {
                       onAnswer: vm.onAnswer,
                       onDone: () => unawaited(vm.onDone()),
                       onActivity: vm.onActivity,
+                      onScore: vm.onScore,
                     ),
                   ),
                 if (state.idle)

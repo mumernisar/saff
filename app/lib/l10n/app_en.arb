@@ -648,5 +648,15 @@
         "type": "String"
       }
     }
-  }
+  },
+  "climberHint": "Hold left or right to steer",
+  "climberReached": "You reached {m} m",
+  "@climberReached": {
+    "placeholders": {
+      "m": {
+        "type": "int"
+      }
+    }
+  },
+  "climberLocked": "Your height is locked in."
 }

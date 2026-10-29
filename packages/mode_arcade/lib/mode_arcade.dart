@@ -1,4 +1,5 @@
-/// Climber and Rapid Roll. Will add flame in its own stage.
+/// Climber and Rapid Roll.
 library;
 
+export 'src/climber_mode.dart';
 export 'src/package_info.dart';

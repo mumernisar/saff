@@ -78,6 +78,8 @@ class RevealView extends ConsumerWidget {
                                 ? l10n.didNotPlay
                                 : r.offlineFallback
                                 ? l10n.playedOffline
+                                : reveal.mode == 'climber'
+                                ? l10n.climberReached(r.points)
                                 : l10n.correctOf(r.correct, r.total),
                             style: TextStyle(color: c.muted),
                           ),
@@ -121,7 +123,10 @@ class RevealView extends ConsumerWidget {
               ),
             ),
           ),
-          if (me != null && me.played && !me.offlineFallback)
+          if (me != null &&
+              me.played &&
+              !me.offlineFallback &&
+              reveal.mode == 'cardDuel')
             Padding(
               padding: const EdgeInsets.only(top: SaffSpacing.md),
               child: PrimaryButton(
