@@ -216,5 +216,9 @@ Reveal revealFrom(DocumentSnapshot<Map<String, dynamic>> d) {
     bonusCards: ((m['bonusCards'] as List?) ?? const [])
         .map((c) => roundCardFrom((c as Map).cast<String, dynamic>()))
         .toList(),
+    selfies: [
+      for (final s in (m['selfies'] as List?) ?? const [])
+        (uid: '${(s as Map)['uid']}', path: '${s['storagePath']}'),
+    ],
   );
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:saff_app/di/providers.dart';
+import 'package:saff_app/features/wake/widgets/selfie_grid.dart';
 import 'package:saff_app/features/wake/view_models/wake_flow_view_model.dart';
 import 'package:saff_app/l10n/app_localizations.dart';
 import 'package:saff_ui/saff_ui.dart';
@@ -43,6 +44,8 @@ class RevealView extends ConsumerWidget {
               style: TextStyle(color: c.muted),
               textAlign: TextAlign.center,
             ),
+          if (reveal.mode == 'selfie' && reveal.selfies.isNotEmpty)
+            SelfieGrid(selfies: reveal.selfies, rows: reveal.rows),
           for (final r in reveal.rows)
             Padding(
               padding: const EdgeInsets.only(bottom: SaffSpacing.md),
@@ -82,6 +85,8 @@ class RevealView extends ConsumerWidget {
                                 ? l10n.climberReached(r.points)
                                 : reveal.mode == 'rapidRoll'
                                 ? l10n.rollReached(r.points)
+                                : reveal.mode == 'selfie'
+                                ? l10n.statusDone
                                 : l10n.correctOf(r.correct, r.total),
                             style: TextStyle(color: c.muted),
                           ),

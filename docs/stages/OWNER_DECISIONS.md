@@ -27,3 +27,7 @@ has the default I used. Reverse a default by telling me.
 - Mode choice is seeded per occurrence (Card Duel 2/3, Climber 1/3) because only two modes exist; owner mode schedules beyond "one mode" are not wired.
 - Learn tab shows an honest empty state until the content gateway has credentials.
 - **Account deletion** (in-app) is built and tested on the emulator; the web deletion URL needed for Play is not (needs a hosting domain).
+- **Built since the last list**: Rapid Roll, Selfie (camera capture, 1080 px / q80 compression, upload, reveal grid, save to gallery, 24 h server deletion by the sweeper; denied camera falls back to Climber, unranked), settings pages (notifications, appearance, feedback, about), ask-me grading and the teaser, Anki/plain-text import (emulator-tested; Plus-gated, `DEV_PLUS` dev switch R-12), custom card mix, Saff Plus entitlement logic with grace/lapse rules, claim ownership, and a dev Plus switch (R-13).
+- **Selfie upload queue** does not survive going offline: a failed upload makes the morning count as woke-unranked instead of queueing.
+- **Still blocked on you**: Word mode (word list), learning track and card lessons (Quran content), real purchases (`verifyPurchase` needs the Play API), release signing/store listing, Google sign-in, FCM key, packs by link (needs a decision: allowed hosts and size limit).
+- Pair settings (card mix, mode schedule) apply directly for either member instead of through a proposal (decision; the docs say pairs should propose).

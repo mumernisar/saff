@@ -8,6 +8,7 @@ exports.gradeResult = gradeResult;
 exports.reveal = reveal;
 exports.runSweep = runSweep;
 const firestore_1 = require("firebase-admin/firestore");
+const storage_1 = require("firebase-admin/storage");
 const config_1 = require("../../core/config");
 const logger_1 = require("../../core/logger");
 const cards_1 = require("../../domain/rounds/cards");
@@ -19,14 +20,14 @@ const packs_1 = require("./packs");
 const stats_1 = require("./stats");
 const push_1 = require("./push");
 /** Modes the server can currently assemble and grade. */
-exports.IMPLEMENTED_MODES = ["cardDuel", "climber", "rapidRoll"];
+exports.IMPLEMENTED_MODES = ["cardDuel", "climber", "rapidRoll", "selfie"];
 function pickMode(occId, schedule) {
     if (schedule?.type === "single" && exports.IMPLEMENTED_MODES.includes(schedule.single ?? "")) {
         return schedule.single;
     }
     const rnd = (0, prng_1.mulberry32)((0, prng_1.hash32)(`${occId}:mode`));
     const r = rnd();
-    return r < 30 / 60 ? "cardDuel" : r < 45 / 60 ? "climber" : "rapidRoll";
+    return r < 30 / 70 ? "cardDuel" : r < 45 / 70 ? "climber" : r < 60 / 70 ? "rapidRoll" : "selfie";
 }
 /** Locks the round for [occId] if it is still planned (idempotent). */
 async function lockRound(db, saffId, occId) {
@@ -173,6 +174,20 @@ async function gradeResult(db, saffId, occId, uid) {
         return { cardId: card.id, correct, points, answered: !!a };
     });
     const offline = result.get("offlineFallback") === true;
+    if (round.get("mode") === "selfie") {
+        await roundRef.collection("grades").doc(uid).set({
+            points: 0,
+            correct: 0,
+            total: 0,
+            perCard: [],
+            woke: true,
+            ranked: false,
+            totalMs: 0,
+            gradedAt: firestore_1.FieldValue.serverTimestamp(),
+        });
+        await roundRef.collection("presence").doc(uid).set({ status: "done", updatedAt: firestore_1.FieldValue.serverTimestamp() }, { merge: true });
+        return;
+    }
     if (["climber", "rapidRoll"].includes(round.get("mode"))) {
         const score = Math.max(0, Math.floor(result.get("arcadeScore") ?? 0));
         await roundRef.collection("grades").doc(uid).set({
@@ -211,13 +226,14 @@ async function reveal(db, saffId, occId, options = {}) {
     const occRef = db.doc(`saffs/${saffId}/occurrences/${occId}`);
     const saffRef = db.doc(`saffs/${saffId}`);
     const revealed = await db.runTransaction(async (tx) => {
-        const [round, occ, saff, grades, results, members] = await Promise.all([
+        const [round, occ, saff, grades, results, members, selfies] = await Promise.all([
             tx.get(roundRef),
             tx.get(occRef),
             tx.get(saffRef),
             tx.get(roundRef.collection("grades")),
             tx.get(roundRef.collection("results")),
             tx.get(saffRef.collection("members")),
+            tx.get(roundRef.collection("selfies")),
         ]);
         if (!round.exists || round.get("status") !== "locked")
             return undefined;
@@ -296,6 +312,12 @@ async function reveal(db, saffId, occId, options = {}) {
             streak: current,
             everyoneWoke,
             perCard,
+            selfies: selfies.docs.map((d) => ({
+                uid: d.id,
+                storagePath: d.get("storagePath"),
+                takenAt: d.get("takenAt") ?? null,
+                msFromRing: d.get("msFromRing") ?? null,
+            })),
             bonusCards: bonus.map((b) => ({ ...b, fromName: memberById.get(b.authorId ?? "")?.get("displayName") ?? "" })),
             mode: round.get("mode"),
             solo: required.length === 1,
@@ -379,6 +401,7 @@ async function runSweep(db, nowMs = Date.now()) {
         }
     }
     stats.expired = await (0, proposals_1.expireProposals)(db, nowMs);
+    await expireSelfies(db, nowMs, c.selfieRetentionMs);
     return stats;
 }
 /** Cards of the saff's imported packs. */
@@ -391,5 +414,27 @@ async function importedCards(db, saffId) {
         out.push(...(d.get("cards") ?? []));
     }
     return out;
+}
+/** Deletes selfies SELFIE_RETENTION after the reveal and marks them expired. */
+async function expireSelfies(db, nowMs, retentionMs) {
+    const rounds = await db.collectionGroup("rounds").where("mode", "==", "selfie").get();
+    for (const r of rounds.docs) {
+        const revealedAt = r.get("revealedAt")?.toMillis();
+        if (!revealedAt || r.get("selfiesExpired") || revealedAt + retentionMs > nowMs)
+            continue;
+        const saffId = r.ref.parent.parent.id;
+        try {
+            await (0, storage_1.getStorage)().bucket().deleteFiles({ prefix: `saffs/${saffId}/rounds/${r.id}/` });
+        }
+        catch (e) {
+            logger_1.log.warn("selfie_delete_failed", { saffId, error: String(e) });
+        }
+        const selfies = await r.ref.collection("selfies").get();
+        const batch = db.batch();
+        for (const s of selfies.docs)
+            batch.update(s.ref, { expired: true });
+        batch.update(r.ref, { selfiesExpired: true });
+        await batch.commit();
+    }
 }
 //# sourceMappingURL=lifecycle.js.map

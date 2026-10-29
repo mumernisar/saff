@@ -120,6 +120,7 @@ class WakeFlowViewModel extends Notifier<WakeFlowState> {
   final Stopwatch _sincePlay = Stopwatch();
   int? _wakeMs;
   int? _arcadeScore;
+  String? _selfiePath;
   late final int _ringAgeMs;
   late final bool _snoozed;
 
@@ -226,6 +227,15 @@ class WakeFlowViewModel extends Notifier<WakeFlowState> {
     _armIdle();
   }
 
+  bool _forceUnranked = false;
+
+  /// The camera was unavailable, so the arcade fallback ran: woke, unranked.
+  void markOfflineFallback() => _forceUnranked = true;
+
+  /// A selfie was captured at [path].
+  // ignore: use_setters_to_change_properties
+  void onFile(String path) => _selfiePath = path;
+
   /// An arcade run ended with [score] metres.
   // ignore: use_setters_to_change_properties
   void onScore(int score) => _arcadeScore = score;
@@ -268,6 +278,20 @@ class WakeFlowViewModel extends Notifier<WakeFlowState> {
   }
 
   Future<void> _submit({required bool offlineFallback}) async {
+    var fallback = offlineFallback || _forceUnranked;
+    final shot = _selfiePath;
+    if (shot != null) {
+      final up = await ref
+          .read(roundRepositoryProvider)
+          .uploadSelfie(
+            _key.saffId,
+            _key.occurrenceId,
+            _uid,
+            shot,
+            msFromRing: _wakeMs ?? _ringAgeMs,
+          );
+      if (up is Err<void>) fallback = true;
+    }
     final r = await ref
         .read(roundRepositoryProvider)
         .submitResult(
@@ -277,7 +301,7 @@ class WakeFlowViewModel extends Notifier<WakeFlowState> {
           answers: state.answers,
           wakeMs: _wakeMs ?? _ringAgeMs,
           snoozed: _snoozed,
-          offlineFallback: offlineFallback,
+          offlineFallback: fallback,
           arcadeScore: _arcadeScore,
         );
     await _savePending(state.answers, submitted: true);

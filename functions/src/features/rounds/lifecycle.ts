@@ -1,4 +1,5 @@
 import { FieldValue, Timestamp, type Firestore } from "firebase-admin/firestore";
+import { getStorage } from "firebase-admin/storage";
 import { currentConstants } from "../../core/config";
 import { log } from "../../core/logger";
 import { pickCards, withShuffledOptions } from "../../domain/rounds/cards";
@@ -12,7 +13,7 @@ import { applyStats } from "./stats";
 import { pushToUser } from "./push";
 
 /** Modes the server can currently assemble and grade. */
-export const IMPLEMENTED_MODES = ["cardDuel", "climber", "rapidRoll"] as const;
+export const IMPLEMENTED_MODES = ["cardDuel", "climber", "rapidRoll", "selfie"] as const;
 
 function pickMode(occId: string, schedule: { type?: string; single?: string } | undefined): string {
   if (schedule?.type === "single" && (IMPLEMENTED_MODES as readonly string[]).includes(schedule.single ?? "")) {
@@ -20,7 +21,7 @@ function pickMode(occId: string, schedule: { type?: string; single?: string } | 
   }
   const rnd = mulberry32(hash32(`${occId}:mode`));
   const r = rnd();
-  return r < 30 / 60 ? "cardDuel" : r < 45 / 60 ? "climber" : "rapidRoll";
+  return r < 30 / 70 ? "cardDuel" : r < 45 / 70 ? "climber" : r < 60 / 70 ? "rapidRoll" : "selfie";
 }
 
 /** Locks the round for [occId] if it is still planned (idempotent). */
@@ -190,6 +191,23 @@ export async function gradeResult(db: Firestore, saffId: string, occId: string, 
     return { cardId: card.id, correct, points, answered: !!a };
   });
   const offline = result.get("offlineFallback") === true;
+  if (round.get("mode") === "selfie") {
+    await roundRef.collection("grades").doc(uid).set({
+      points: 0,
+      correct: 0,
+      total: 0,
+      perCard: [],
+      woke: true,
+      ranked: false,
+      totalMs: 0,
+      gradedAt: FieldValue.serverTimestamp(),
+    });
+    await roundRef.collection("presence").doc(uid).set(
+      { status: "done", updatedAt: FieldValue.serverTimestamp() },
+      { merge: true },
+    );
+    return;
+  }
   if (["climber", "rapidRoll"].includes(round.get("mode") as string)) {
     const score = Math.max(0, Math.floor((result.get("arcadeScore") as number | undefined) ?? 0));
     await roundRef.collection("grades").doc(uid).set({
@@ -240,13 +258,14 @@ export async function reveal(
   const occRef = db.doc(`saffs/${saffId}/occurrences/${occId}`);
   const saffRef = db.doc(`saffs/${saffId}`);
   const revealed = await db.runTransaction(async (tx) => {
-    const [round, occ, saff, grades, results, members] = await Promise.all([
+    const [round, occ, saff, grades, results, members, selfies] = await Promise.all([
       tx.get(roundRef),
       tx.get(occRef),
       tx.get(saffRef),
       tx.get(roundRef.collection("grades")),
       tx.get(roundRef.collection("results")),
       tx.get(saffRef.collection("members")),
+      tx.get(roundRef.collection("selfies")),
     ]);
     if (!round.exists || round.get("status") !== "locked") return undefined;
     const required = occ.get("requiredIds") as string[];
@@ -336,6 +355,12 @@ export async function reveal(
       streak: current,
       everyoneWoke,
       perCard,
+      selfies: selfies.docs.map((d) => ({
+        uid: d.id,
+        storagePath: d.get("storagePath"),
+        takenAt: d.get("takenAt") ?? null,
+        msFromRing: d.get("msFromRing") ?? null,
+      })),
       bonusCards: bonus.map((b) => ({ ...b, fromName: memberById.get((b as { authorId?: string }).authorId ?? "")?.get("displayName") ?? "" })),
       mode: round.get("mode"),
       solo: required.length === 1,
@@ -419,6 +444,7 @@ export async function runSweep(db: Firestore, nowMs = Date.now()): Promise<Recor
     }
   }
   stats.expired = await expireProposals(db, nowMs);
+  await expireSelfies(db, nowMs, c.selfieRetentionMs);
   return stats;
 }
 
@@ -431,4 +457,24 @@ async function importedCards(db: Firestore, saffId: string): Promise<PackCard[]>
     out.push(...((d.get("cards") as PackCard[]) ?? []));
   }
   return out;
+}
+
+/** Deletes selfies SELFIE_RETENTION after the reveal and marks them expired. */
+async function expireSelfies(db: Firestore, nowMs: number, retentionMs: number): Promise<void> {
+  const rounds = await db.collectionGroup("rounds").where("mode", "==", "selfie").get();
+  for (const r of rounds.docs) {
+    const revealedAt = (r.get("revealedAt") as Timestamp | undefined)?.toMillis();
+    if (!revealedAt || r.get("selfiesExpired") || revealedAt + retentionMs > nowMs) continue;
+    const saffId = r.ref.parent.parent!.id;
+    try {
+      await getStorage().bucket().deleteFiles({ prefix: `saffs/${saffId}/rounds/${r.id}/` });
+    } catch (e) {
+      log.warn("selfie_delete_failed", { saffId, error: String(e) });
+    }
+    const selfies = await r.ref.collection("selfies").get();
+    const batch = db.batch();
+    for (const s of selfies.docs) batch.update(s.ref, { expired: true });
+    batch.update(r.ref, { selfiesExpired: true });
+    await batch.commit();
+  }
 }

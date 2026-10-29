@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mode_arcade/mode_arcade.dart';
 import 'package:mode_card_duel/mode_card_duel.dart';
+import 'package:mode_selfie/mode_selfie.dart';
 import 'package:saff_app/di/providers.dart';
 import 'package:saff_app/features/wake/view_models/wake_flow_view_model.dart';
 import 'package:saff_app/features/wake/views/fallback_game_view.dart';
@@ -41,6 +42,32 @@ class WakeFlowView extends ConsumerWidget {
     final vm = ref.read(wakeFlowProvider(key).notifier);
     final constants = ref.watch(environmentConfigProvider).constants;
     final registry = ModeRegistry([
+      SelfieMode(
+        strings: SelfieStrings(
+          title: l10n.selfieTitle,
+          hint: l10n.selfieHint,
+          capture: l10n.selfieCapture,
+          sending: l10n.selfieSending,
+        ),
+        fallback: (ctx, round, callbacks) => ClimberGame(
+          seed: round.seed,
+          callbacks: ModeCallbacks(
+            onAnswer: callbacks.onAnswer,
+            onDone: () {
+              vm.markOfflineFallback();
+              callbacks.onDone();
+            },
+            onActivity: callbacks.onActivity,
+            onScore: vm.onScore,
+          ),
+          strings: ClimberStrings(
+            hint: l10n.climberHint,
+            reached: l10n.climberReached,
+            locked: l10n.climberLocked,
+            continueLabel: l10n.continueLabel,
+          ),
+        ),
+      ),
       RapidRollMode(
         RapidRollStrings(
           hint: l10n.rollHint,
@@ -103,6 +130,7 @@ class WakeFlowView extends ConsumerWidget {
                       onDone: () => unawaited(vm.onDone()),
                       onActivity: vm.onActivity,
                       onScore: vm.onScore,
+                      onFile: vm.onFile,
                     ),
                   ),
                 if (state.idle)

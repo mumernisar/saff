@@ -172,7 +172,10 @@ service cloud.firestore {
         }
         match /selfies/{uid} {
           allow read: if member(saffId);
-          allow write: if false;
+          allow create: if request.auth.uid == uid && member(saffId)
+            && roundDoc(saffId, rid).data.status == 'locked'
+            && roundDoc(saffId, rid).data.mode == 'selfie';
+          allow update, delete: if false;
         }
       }
 

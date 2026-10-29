@@ -1,4 +1,9 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image/image.dart' as img;
 import 'package:saff_app/data/dto/mappers.dart';
 import 'package:saff_app/data/services/firebase_services.dart';
 import 'package:saff_core/saff_core.dart';
@@ -51,6 +56,18 @@ abstract interface class RoundRepository {
     String saffId,
     String occurrenceId,
   );
+
+  /// Compresses and uploads the selfie, then records it.
+  Future<Result<void>> uploadSelfie(
+    String saffId,
+    String occurrenceId,
+    String uid,
+    String path, {
+    required int msFromRing,
+  });
+
+  /// Downloads a selfie's bytes (members, after the reveal).
+  Future<Result<Uint8List?>> selfieBytes(String storagePath);
 
   /// Live reveal; null until revealed.
   Stream<Reveal?> watchReveal(String saffId, String occurrenceId);
@@ -185,6 +202,51 @@ final class RoundRepositoryImpl implements RoundRepository {
       .collection('askMeGrades')
       .snapshots()
       .map((s) => {for (final d in s.docs) d.id: d.data()['correct'] == true});
+
+  @override
+  Future<Result<void>> uploadSelfie(
+    String saffId,
+    String occurrenceId,
+    String uid,
+    String path, {
+    required int msFromRing,
+  }) => Result.guard(
+    () async {
+      final decoded = img.decodeImage(await File(path).readAsBytes());
+      if (decoded == null) throw const FormatException('selfie');
+      final long = decoded.width > decoded.height
+          ? decoded.width
+          : decoded.height;
+      final scaled = long > 1080
+          ? img.copyResize(
+              decoded,
+              width: decoded.width >= decoded.height ? 1080 : null,
+              height: decoded.height > decoded.width ? 1080 : null,
+            )
+          : decoded;
+      final bytes = Uint8List.fromList(img.encodeJpg(scaled, quality: 80));
+      final storagePath = 'saffs/$saffId/rounds/$occurrenceId/$uid.jpg';
+      await FirebaseStorage.instance
+          .ref(storagePath)
+          .putData(bytes, SettableMetadata(contentType: 'image/jpeg'));
+      await _round(saffId, occurrenceId).collection('selfies').doc(uid).set({
+        'storagePath': storagePath,
+        'takenAt': FieldValue.serverTimestamp(),
+        'msFromRing': msFromRing,
+        'width': scaled.width,
+        'height': scaled.height,
+      });
+    },
+    _mapper,
+    context: const {'op': 'uploadSelfie'},
+  );
+
+  @override
+  Future<Result<Uint8List?>> selfieBytes(String storagePath) => Result.guard(
+    () => FirebaseStorage.instance.ref(storagePath).getData(1024 * 1024),
+    _mapper,
+    context: const {'op': 'selfieBytes'},
+  );
 
   @override
   Stream<Reveal?> watchReveal(String saffId, String occurrenceId) =>

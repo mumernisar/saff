@@ -748,5 +748,12 @@
   "plusNoPurchaseYet": "Subscriptions open once the Play Store listing is ready.",
   "devGrantPlus": "Grant Plus (dev)",
   "devRevokePlus": "Revoke Plus (dev)",
-  "claimOwnership": "Take over this saff (Plus)"
+  "claimOwnership": "Take over this saff (Plus)",
+  "selfieTitle": "Selfie",
+  "selfieHint": "Take your morning selfie",
+  "selfieCapture": "Take photo",
+  "selfieSending": "Sending…",
+  "selfieExpired": "Selfie expired",
+  "selfieSave": "Save to gallery",
+  "selfieSaved": "Saved to your gallery"
 }

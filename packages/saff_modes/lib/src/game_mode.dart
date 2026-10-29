@@ -9,7 +9,11 @@ class ModeCallbacks {
     required this.onDone,
     required this.onActivity,
     this.onScore,
+    this.onFile,
   });
+
+  /// A captured file (selfie) is ready at [path].
+  final void Function(String path)? onFile;
 
   /// An arcade run ended with [score] (metres); called before [onDone].
   final void Function(int score)? onScore;

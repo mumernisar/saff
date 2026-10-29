@@ -232,7 +232,11 @@ final class Reveal {
     required this.perCard,
     required this.mode,
     this.bonusCards = const [],
+    this.selfies = const [],
   });
+
+  /// Selfies of a Selfie round: (uid, storagePath).
+  final List<({String uid, String path})> selfies;
 
   /// Ranked rows (unplayed members last).
   final List<RevealRow> rows;
